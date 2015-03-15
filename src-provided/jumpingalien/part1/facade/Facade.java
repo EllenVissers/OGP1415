@@ -3,6 +3,12 @@ package jumpingalien.part1.facade;
 import jumpingalien.model.*;
 import jumpingalien.util.Sprite;
 
+/**
+ * The interface to connect Mazub to the graphical user interface (GUI).
+ * @author Ellen Vissers, Nina Versin
+ * @version 1.0
+ *
+ */
 public class Facade implements IFacade {
 	
 	public Facade() {
