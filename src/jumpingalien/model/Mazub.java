@@ -4,9 +4,8 @@ import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 
-
-//TEAM INFORMATION
-/* Ellen Vissers: 2e bachelor Burgerlijk ingenieur, CW-ELT
+/* TEAM INFORMATION
+ * Ellen Vissers: 2e bachelor Burgerlijk ingenieur, CW-ELT
 * Nina Versin: 2e bachelor Burgerlijk ingenieur, ELT-CW
 * Repository: https://gitlab.com/EllenVissers/JumpingAlien_OGP1415
 */
