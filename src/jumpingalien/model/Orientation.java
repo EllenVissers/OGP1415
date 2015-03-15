@@ -1,8 +1,8 @@
 package jumpingalien.model;
 
 /**
- * A class of ...
- * @author Ellen Vissers
+ * A class of orientation in which a Mazub can be oriented.
+ * @author Ellen Vissers, Nina Versin
  * @version 1.0 
  */
 public enum Orientation {
@@ -10,7 +10,6 @@ public enum Orientation {
 	RIGHT {
 		public char getSymbol() {
 			return 'R';
-			// Ook kunnen de bekende symbolen gebruikt worden, zie modeloplossing
 		}
 	},
 	LEFT {
@@ -24,6 +23,5 @@ public enum Orientation {
 		}
 	};
 	
-	// aankondingen dat we deze methode definiëren voor onze objecten
 	public abstract char getSymbol();
 }
