@@ -109,7 +109,7 @@ public class Mazub {
 	/**
 	 * Variable registering the list of images of Mazub.
 	 */
-	Sprite[] sprites;
+	public Sprite[] sprites;
 	/**
 	 * Variable registering the orientation of Mazub.
 	 */
@@ -155,11 +155,11 @@ public class Mazub {
 	/**
 	 * Variable registering the vertical start velocity that applies to all Mazub's.
 	 */
-	static double startVelY = 8.0;
+	public static double startVelY = 8.0;
 	/**
 	 * Variable registering the default value for the horizontal start velocity.
 	 */
-	private static double startVelX = 1.0;
+	public static double startVelX = 1.0;
 	/**
 	 * Variable registering the time that Mazub does not move after it's last movement (to the right or to the left).
 	 */
