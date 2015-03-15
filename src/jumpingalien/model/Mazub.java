@@ -4,6 +4,13 @@ import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 
+
+//TEAM INFORMATION
+/* Ellen Vissers: 2e bachelor Burgerlijk ingenieur, CW-ELT
+* Nina Versin: 2e bachelor Burgerlijk ingenieur, ELT-CW
+* Repository: https://gitlab.com/EllenVissers/JumpingAlien_OGP1415
+*/
+
 /**
  * A class of aliens called Mazub involving a horizontal and vertical position, a horizontal and verical velocity,
  * a list of images, an orientation, a height, a number pointing to a certain sprite, a start velocity and a maximum speed.
