@@ -1,5 +1,6 @@
-package jumpingalien.model;
+package jumpingalien.model.tests;
 import jumpingalien.model.Mazub;
+import jumpingalien.model.Orientation;
 import jumpingalien.util.ModelException;
 import static org.junit.Assert.*;
 import jumpingalien.common.sprites.JumpingAlienSprites;
