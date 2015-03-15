@@ -8,8 +8,16 @@ import jumpingalien.common.sprites.JumpingAlienSprites;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * A testing class for Mazub.
+ * @author Ellen Vissers, Nina Versin
+ * @version	1.0
+ */
 public class MazubTest {
 	
+	/**
+	 * A variable that registers the range in which two doubles are considered equal.
+	 */
 	private double delta = 1e-3;
 	
 	private static Mazub m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23;
