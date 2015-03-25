@@ -3,31 +3,31 @@ package jumpingalien.model;
 /**
  * An exception that is thrown when a given value does not lie within the given range between low and high.
  * @author Ellen Vissers, Nina Versin
- * @version	1.0
+ * @version	2.0
  */
 public class OutOfRangeException extends Exception {
 
 	private static final long serialVersionUID = 111601815794403609L;
 	
-	private final int low;
-	private final int high;
-	private int wrong;
+	private final double low;
+	private final double high;
+	private double wrong;
 	
-	public OutOfRangeException(int wrong, int low, int high) {
+	public OutOfRangeException(double wrong, double low, double high) {
 		this.wrong = wrong;
 		this.low = low;
 		this.high = high;
 	}
 	
-	public int getLow() {
+	public double getLow() {
 		return low;
 	}
 	
-	public int getHigh() {
+	public double getHigh() {
 		return high;
 	}
 	
-	public int getWrong() {
+	public double getWrong() {
 		return wrong;
 	}
 	
