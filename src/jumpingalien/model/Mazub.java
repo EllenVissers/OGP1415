@@ -1,5 +1,6 @@
 package jumpingalien.model;
 import java.util.Arrays;
+import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
@@ -19,7 +20,7 @@ import jumpingalien.util.Sprite;
  * 			| this.getXVelocity() <= this.getMaxVel()
  * 
  * @author Ellen Vissers, Nina Versin
- * @version 1.0
+ * @version 2.0
  */
 public class Mazub {
 
@@ -35,6 +36,10 @@ public class Mazub {
 	 * 			The horizontal velocity of Mazub.
 	 * @param 	vel_y
 	 * 			The vertical velocity of Mazub.
+	 * @param 	acc_x
+	 * 			The horizontal acceleration of Mazub.
+	 * @param 	acc_y
+	 * 			The vertical acceleration of Mazub.
 	 * @param 	sprites
 	 * 			The list of images for the different states of Mazub.
 	 * @param 	orientation
@@ -50,7 +55,7 @@ public class Mazub {
 	 * @throws  Throws a ModelException if sprites is an emty array.
 	 * 			| sprites == null
 	 */
-	public Mazub(int pos_x, int pos_y, double vel_x, double vel_y, Sprite[] sprites, Orientation orientation ,int YP, int nb,
+	public Mazub(double pos_x, double pos_y, double vel_x, double vel_y, double acc_x, double acc_y, Sprite[] sprites, Orientation orientation ,int YP, int nb,
 			double start_vel, double max_vel) throws ModelException {
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
@@ -58,6 +63,8 @@ public class Mazub {
 		setYPosition(pos_y);
 		setXVelocity(vel_x);
 		setYVelocity(vel_y);
+		setXAcc(acc_x);
+		setYAcc(acc_y);
 		this.sprites = sprites;
 		setOrientation(orientation);
 		setYSize(YP);
@@ -75,12 +82,13 @@ public class Mazub {
 	 * 			The vertical position of Mazub corresponding to the position of the lowest pixel of it's image.
 	 * @param 	sprites
 	 * 			The list of images for the different states of Mazub.
-	 * @effect 	This new Mazub is initialized with 0 as its horizontal and vertical velocity, NONE as its orientation, 0 as its sprite-number,
-	 * 			the standard velocity as the horizontal start velocity and the standard maximum speed as its maximum speed.
-	 *       	| this(pos_x, pos_y, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed) 
+	 * @effect 	This new Mazub is initialized with 0 as its horizontal and vertical velocity and acceleration, NONE as its orientation, 
+	 * 			0 as its sprite-number, the standard velocity as the horizontal start velocity and the standard maximum speed as its 
+	 * 			maximum speed.
+	 *       	| this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed) 
 	 */
 	public Mazub(int pos_x, int pos_y, Sprite[] sprites) {
-		this(pos_x, pos_y, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed);	
+		this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed);	
 	}
 	
 	//ATTRIBUTES OF MAZUB
@@ -99,19 +107,27 @@ public class Mazub {
 	/**
 	 * Variable registering the horizontal position of Mazub.
 	 */
-	private int pos_x;
+	private double pos_x;
 	/**
 	 * Variable registering the vertical position of Mazub.
 	 */
-	private int pos_y;
+	private double pos_y;
 	/**
 	 * Variable registering the horizontal velocity of Mazub.
 	 */
 	private double vel_x;
 	/**
-	 * Variable registering the vertical position of Mazub.
+	 * Variable registering the vertical velocity of Mazub.
 	 */
 	private double vel_y;
+	/**
+	 * Variable registering the horizontal acceleration of Mazub.
+	 */
+	private double acc_x;
+	/**
+	 * Variable registering the vertical acceleration of Mazub.
+	 */
+	private double acc_y;
 	/**
 	 * Variable registering the list of images of Mazub.
 	 */
@@ -137,19 +153,19 @@ public class Mazub {
 	/**
 	 * Variable registering the outer right position of the game world.
 	 */
-	private static int maxX = 1024;
+	private static double maxX = 1024;
 	/**
 	 * Variable registering the top position of the game world.
 	 */
-	private static int maxY = 768;
+	private static double maxY = 768;
 	/**
 	 * Variable registering the outer right position of the game world.
 	 */
-	private static int minX = 0;
+	private static double minX = 0;
 	/**
 	 * Variable registering the bottom position of the game world.
 	 */
-	private static int minY = 0;
+	private static double minY = 0;
 	/**
 	 * Variable registering the maximum speed that applies to all Mazub's (when they are not ducking).
 	 */
@@ -193,7 +209,7 @@ public class Mazub {
 	 */
 	@Basic
 	public int getXPosition() {
-		return this.pos_x;
+		return (int) Math.round(this.pos_x);
 	}
 	
 	/**
@@ -206,7 +222,7 @@ public class Mazub {
 	 * @post 	Mazub's horizontal position is updated to the given position.
 	 * 			| new.pos_x = position
 	 */
-	private void setXPosition(int position) throws ModelException {
+	private void setXPosition(double position) throws ModelException {
 		if (! isValidXPosition(position))
 			throw new ModelException("Invalid horizontal position");
 		this.pos_x = position;
@@ -219,7 +235,7 @@ public class Mazub {
 	 */
 	@Basic
 	public int getYPosition() {
-		return this.pos_y;
+		return (int) Math.round(this.pos_y);
 	}
 	
 	/**
@@ -232,7 +248,7 @@ public class Mazub {
 	 * @post 	Mazub's vertical position is updated to the given position.
 	 * 			| new.pos_y = position
 	 */
-	private void setYPosition(int position) {
+	private void setYPosition(double position) {
 		if (! isValidYPosition(position))
 			throw new ModelException("Invalid vertical position");
 		this.pos_y = position;
@@ -281,23 +297,45 @@ public class Mazub {
 	}
 	
 	/**
-	 * Return the horizontal acceleration that applies to all Mazub's.
-	 * @return	The standard horizontal acceleration.
-	 * 			| accx
+	 * Return Mazub's current horizontal acceleration.
+	 * @return	The horizontal acceleration of Mazub.
+	 * 			|this.acc_x
 	 */
-	@Immutable
-	public static double getAccX() {
-		return accx;
+	@Basic
+	public double getXAcc() {
+		return this.acc_x;
 	}
 	
 	/**
-	 * Return the vertical acceleration that applies to all Mazub's.
-	 * @return	The standard vertical acceleration.
-	 * 			| accy
+	 * Set the horizontal acceleration of Mazub to the given acceleration.
+	 * @param 	acceleration
+	 * 			The new acceleration of Mazub.
+	 * @post 	Mazub's horizontal acceleration is updated to the given acceleration.
+	 * 			| new.acc_x = acceleration
 	 */
-	@Immutable
-	public static double getAccY() {
-		return accy;
+	private void setXAcc(double acceleration) {
+		this.acc_x = acceleration;
+	}
+	
+	/**
+	 * Return Mazub's current vertical acceleration.
+	 * @return	The vertical acceleration.
+	 * 			| this.acc_y
+	 */
+	@Basic
+	public double getYAcc() {
+		return this.acc_y;
+	}
+	
+	/**
+	 * Set the vertical acceleration of Mazub to the given acceleration.
+	 * @param 	acceleration
+	 * 			The new acceleration of Mazub.
+	 * @post 	Mazub's vertical acceleration is updated to the given acceleration.
+	 * 			| new.acc_y = acceleration
+	 */
+	private void setYAcc(double acceleration) {
+		this.acc_y = acceleration;
 	}
 	
 	/**
@@ -446,7 +484,7 @@ public class Mazub {
 	 * @return 	True when Mazub is moving.
 	 * 			| this.vel_x != 0
 	 */
-	private boolean isMoving() {
+	public boolean isMoving() {
 		return (this.vel_x != 0);
 	}
 	
@@ -486,8 +524,8 @@ public class Mazub {
 	 * @return  True when the position is valid.
 	 * 			| (pos < maxX) && (pos >= 0)
 	 */
-	private boolean isValidXPosition(int pos) {
-		return ((pos < maxX) && (pos >= 0));
+	private boolean isValidXPosition(double pos) {
+		return ((Double.compare(pos,maxX) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,0)));
 	}
 	
 	/**
@@ -497,8 +535,8 @@ public class Mazub {
 	 * @return  True when the position is valid.
 	 * 			| (pos < maxY) && (pos >= 0)
 	 */
-	private boolean isValidYPosition(int pos) {
-		return ((pos < maxY) && (pos >= 0));
+	private boolean isValidYPosition(double pos) {
+		return ((Double.compare(pos,maxY) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,0)));
 	}
 	
 	/**
@@ -509,7 +547,7 @@ public class Mazub {
 	 * 			| (time*getAccX() + Math.abs(this.getXVelocity())) >= this.getMaxVel()
 	 */
 	private boolean reachesMaxSpeed(double time) {
-		return ((time*getAccX() + Math.abs(this.getXVelocity())) >= this.getMaxVel());
+		return ((time*getXAcc() + Math.abs(this.getXVelocity())) >= this.getMaxVel());
 	}
 	
 	/**
@@ -586,14 +624,28 @@ public class Mazub {
 	 * 			The orientation in which Mazub starts moving.
 	 * @pre		The orientation must be a valid direction, meaning left or right.
 	 * 			| isValidDirection(Orientation orientation)
-	 * @post	The orientation of the new Mazub is equal to the given orientation.
-	 * 			| new.getOrientation() == orientation
-	 * @post	The velocity of the new Mazub is equal to the start velocity of Mazub, 
+	 * @effect	The orientation of the new Mazub is set to the given orientation with setOrientation.
+	 * 			| setOrientation(orientation)
+	 * @effect	The number of sprites is set to 0 with setNb, for when Mazub is back on the ground.
+	 * 			| setNb(0)
+	 * @effect	The velocity of the new Mazub is set to the start velocity of Mazub with setXVelocity, 
 	 * 			negative if Mazub is moving to the left.
 	 * 			| if (orientation == Orientation.RIGHT)
-	 * 			|   then new.getVelocity() == this.getStartVel()
+	 * 			|   then setVelocity(this.getStartVel())
 	 * 			| else
-	 * 			|	new.getVelocity() = -this.getStartVel()
+	 * 			|	setVelocity(-this.getStartVel())
+	 * @effect	The horizontal acceleration of Mazub is set to the default value for the horizontal acceleration with setXAcc,
+	 * 			negative if Mazub is moving to the left.
+	 * 			| if (orientation == Orientation.RIGHT)
+	 * 			|   then setXAcc(accx)
+	 * 			| else
+	 * 			|   setXAcc(-accx)
+	 * @effect	The maximum velocity of Mazub is set to the default value for the maximum velocity with setMaxVel,
+	 * 			negative if Mazub is moving to the left.
+	 * 			| if (orientation == Orientation.RIGHT)
+	 * 			|   then setMaxVel(maxSpeed)
+	 * 			| else
+	 * 			|   setMaxVel(-maxSpeed)
 	 */
 	public void startMove(Orientation orientation) {
 		assert isValidDirection(orientation);
@@ -603,39 +655,49 @@ public class Mazub {
 		if (orientation == Orientation.RIGHT)
 		{
 			this.setXVelocity(this.getStartVel());
+			this.setXAcc(accx);
+			this.setMaxVel(maxSpeed);
 		}
 		else
 		{
 			this.setXVelocity(-this.getStartVel());
+			this.setXAcc(-accx);
+			this.setMaxVel(-maxSpeed);
 		}
 	}
 	
 	/**
 	 * Stop horizontal movement of Mazub in any direction.
-	 * @post	The new horizontal velocity of Mazub is 0.
-	 * 			| new.getXVelocity() == 0
+	 * @effect	The new horizontal velocity of Mazub is set to 0 with setXVelocity.
+	 * 			| setXVelocity(0)
+	 * @effect	The horizontal acceleration of Mazub is set to 0 for the horizontal acceleration with setXAcc.
+	 * 			| setXAcc(0)
 	 */
 	public void endMove() {
 		this.setXVelocity(0);
+		this.setXAcc(0);
 	}
 	
 	/**
 	 * Initiate Mazub to jump.
-	 * @post	The new vertical velocity of Mazub is the vertical start velocity.
-	 * 			| new.getYVelocity() == startVelY
-	 * @post	The number of sprites is set to 0, for when Mazub is back on the ground
-	 * 			| new.getNb() == 0
+	 * @effect	The new vertical velocity of Mazub is set to the vertical start velocity with setYVelocity.
+	 * 			| setYVelocity(startVelY)
+	 * @effect	The number of sprites is set to 0 with setNb, for when Mazub is back on the ground.
+	 * 			| setNb(0)
+	 * @effect	The vertical acceleration of Mazub is set to the default value for the vertical acceleration with setYAcc.
+	 * 			| setYAcc(accy)
 	 */
 	public void startJump() {
 		this.setYVelocity(startVelY);
+		this.setYAcc(accy);
 		this.setNb(0);
 	}
 	
 	/**
 	 * Stop jumping.
-	 * @post	If Mazub is moving upward, his new vertical velocity will be 0
+	 * @effect	If Mazub is moving upward, his new vertical velocity will be set to 0 with setYVelocity
 	 * 			| if (this.getYVelocity() == 0)
-	 * 			|   then new.getYVelocity() == 0
+	 * 			|   then setYVelocity(0)
 	 */
 	public void endJump() {
 		if (this.getYVelocity() > 0)
@@ -644,12 +706,12 @@ public class Mazub {
 	
 	/**
 	 * Initiate Mazub to duck.
-	 * @post 	The maximum velocity of Mazub is the maximum velocity while ducking.
-	 * 			| new.getMaxVel() == maxSpeedDuck
-	 * @post 	Mazub's size is the size of a sprite where he's ducking.
-	 * 			| new.getYSize() == this.sprites[1].getHeight()
-	 * @post 	The number of the current sprite in a sublist is zero.
-	 * 			| new.getNb() == 0
+	 * @effect 	The maximum velocity of Mazub is set to the maximum velocity while ducking with setMaxVel.
+	 * 			| setMaxVel(maxSpeedDuck)
+	 * @effect 	Mazub's size is set to the size of a sprite where he's ducking with setYSize.
+	 * 			| setYSize(this.sprites[1].getHeight())
+	 * @effect 	The number of the current sprite in a sublist is set to zero with setNb.
+	 * 			| setNb(0)
 	 */
 	public void startDuck() {
 		this.setMaxVel(maxSpeedDuck);
@@ -659,10 +721,10 @@ public class Mazub {
 	
 	/**
 	 * Stop ducking.
-	 * @post 	The maximum velocity is the default value.
-	 * 			| new.getMaxVel() == maxSpeed
-	 * @post 	Mazub's size is the size of a sprite where he is standing.
-	 * 			| new.getYSize() == this.sprites[0].getHeight()
+	 * @effect 	The maximum velocity is set to the default value with setMaxVel.
+	 * 			| setMaxVel(maxSpeed)
+	 * @effect 	Mazub's size is set to the size of a sprite where he is standing with setYSize.
+	 * 			| setYSize(this.sprites[0].getHeight())
 	 */
 	public void endDuck() {
 		this.setMaxVel(maxSpeed);
@@ -673,96 +735,38 @@ public class Mazub {
 	 * Update the position and the velocity of Mazub after a given time duration using its current position and velocity.
 	 * @param 	time
 	 * 			The time duration after which Mazub's new position and velocity are calculated.
-	 * @throws	OutOfRangeException
+	 * @throws 	OutOfRangeException
 	 * 			Mazub's new position lies outside the game world.
 	 * 			| ! isValidXPosition(s)
-	 * @post 	If Mazub reaches his maximum velocity, his position is updated with the extra distance travelled while 
+	 * @effect	If Mazub does not reach his maximum velocity, his position and velocity are updated with setXPosition
+	 * 			and setXVelocity.
+	 * 			| setXVelocity(this.getXVelocity() + this.getXAcc()*time)
+	 * 			| && setXPosition(this.getXPosition() + 100*(this.getXVelocity()*time + 0.5*(accx)*time*time))
+	 * @effect	If Mazub reaches his maximum velocity, his position is updated with the extra distance travelled while 
 	 * 			he was still accelerating and the distance travelled while he was at top-speed. His velocity is set to 
 	 * 			the maximum speed.
-	 * 			| if (reachesMaxSpeed(time))
-	 * 			|	if (this.getXVelocity() >= this.getMaxVel())
-	 * 			|   	then new.getXPosition() == ((int) Math.floor(this.getXPosition() + 100*(this.getMaxVel()*time)))
-	 * 			|	else
-	 * 			|		then new.getXPosition() == ((int) Math.floor(this.getXPosition() + 100*(this.getXVelocity() * t1 + 
-							0.5*(accx)*t1*t1 + this.getMaxVel() * t2)))
-	 *			|   new.getXVelocity() == this.getMaxVel()
-	 *@post 	If Mazub does not reach his maximum velocity, his position and velocity are updated.
-	 *			| if (! reachesMaxSpeed(time))
-	 *			|	then ((new.getXVelocity() == (this.getXVelocity() + accx*time)) && (new.getXPosition() == ((int) Math.floor(this.getXPosition())
-	 *				 			+ 100*(this.getXVelocity()*time + 0.5*(accx)*time*time))))
-	 */	
-	private void MoveRight(double time) throws OutOfRangeException {
-		int s;
+	 * 			| setXVelocity(this.getXPosition() + 100*(this.getXVelocity() * t1 + 0.5*(accx)*t1*t1 + this.getMaxVel() * t2))
+	 * 			| setXVelocity(this.getMaxVel())
+	 */
+	private void Move(double time) throws OutOfRangeException {
+		double s;
 		if (reachesMaxSpeed(time))
 		{
-			double t1 = (this.getMaxVel() - this.getXVelocity())/(accx);
+			double t1 = (this.getMaxVel() - this.getXVelocity())/(getXAcc());
 			double t2 = time - t1;
-			if (this.getXVelocity() >= this.getMaxVel())
+			if (Math.abs(this.getXVelocity()) >= Math.abs(this.getMaxVel()))
 			{
-				s = (int) Math.floor(this.getXPosition() + 100*(this.getMaxVel()*time));
+				s = this.getXPosition() + 100*(this.getMaxVel()*time);
 			}
 			else
-				s = (int) Math.floor(this.getXPosition() + 100*(this.getXVelocity() * t1 + 
-						0.5*accx*t1*t1 + this.getMaxVel() * t2));
+				s = this.getXPosition() + 100*(this.getXVelocity() * t1 + 
+						0.5*(getXAcc())*t1*t1 + this.getMaxVel() * t2);
 			this.setXVelocity(this.getMaxVel());
 		}
 		else
 		{
-			s = ((int) Math.floor(this.getXPosition() + 100*(this.getXVelocity()*time + 0.5*accx*time*time)));
-			this.setXVelocity(this.getXVelocity() + accx*time);
-		}
-		if (! isValidXPosition(s))
-			throw new OutOfRangeException(s,minX,maxX);
-		this.setXPosition(s);
-	}
-	
-	/**
-	 * Update the position and the velocity of Mazub after a given time duration using its current position and velocity.
-	 * @param 	time
-	 * 			The time duration after which Mazub's new position and velocity are calculated.
-	 * @throws	OutOfRangeException
-	 * 			Mazub's new position lies outside the game world.
-	 * 			| ! isValidXPosition(s)
-	 * @post 	If Mazub reaches his maximum velocity, his position is updated with the extra distance travelled while 
-	 * 			he was still accelerating and the distance travelled while he was at top-speed. His velocity is set to 
-	 * 			the maximum speed.
-	 * 			| if (reachesMaxSpeed(time))
-	 * 			|	if (this.getXVelocity() >= this.getMaxVel())
-	 * 			|   	then new.getXPosition() == (int) Math.floor(this.getXPosition() - 100*(this.getMaxVel()*time))
-	 * 			|	else
-	 * 			|		then new.getXPosition() == (int) Math.floor(this.getXPosition() + 100*(this.getXVelocity() * t1 + 
-							0.5*(-accx)*t1*t1 - this.getMaxVel() * t2))
-	 *			|   new.getXVelocity() == -this.getMaxVel()
-	 *@post 	If Mazub does not reach his maximum velocity, his position and velocity are updated.
-	 *			| if (! reachesMaxSpeed(time))
-	 *			|	then ((new.getXVelocity() == (this.getXVelocity() + accx*time)) && (new.getXPosition() == ((int) Math.floor(this.getXPosition())
-	 *				 			+ 100*(this.getXVelocity()*time + (1/2)*(accx)*time*time))))
-	 *
-	 *@post Mazub's velocity and position is updated if Mazub does not reach his maximum speed in the
-	 *		given time period.
-	 *		| if (! reachesMaxSpeed(time))
-	 *		|	then (new.getXPosition() == ((int) Math.ceil(this.getXPosition() + 100*(this.getXVelocity()*time - 0.5*(accx)*time*time))) &&
-	 *					(new.getXVelocity() == this.getXVelocity() - accx*time))
-	 */
-	private void MoveLeft(double time) throws OutOfRangeException {
-		int s;
-		if (reachesMaxSpeed(time))
-		{
-			double t1 = (-this.getMaxVel() - this.getXVelocity())/(-accx);
-			double t2 = time - t1;
-			if (this.getXVelocity() <= -this.getMaxVel())
-			{
-				s = (int) Math.ceil(this.getXPosition() - 100*(this.getMaxVel()*time));
-			}
-			else
-				s = (int) Math.ceil(this.getXPosition() + 100*(this.getXVelocity() * t1 + 
-						0.5*(-accx)*t1*t1 - this.getMaxVel() * t2));
-			this.setXVelocity(-this.getMaxVel());
-		}
-		else
-		{
-			s = ((int) Math.ceil(this.getXPosition() + 100*(this.getXVelocity()*time - 0.5*(accx)*time*time)));
-			this.setXVelocity(this.getXVelocity() - accx*time);
+			s = this.getXPosition() + 100*(this.getXVelocity()*time + 0.5*(getXAcc())*time*time);
+			this.setXVelocity(this.getXVelocity() + (getXAcc())*time);
 		}
 		if (! isValidXPosition(s))
 			throw new OutOfRangeException(s,minX,maxX);
@@ -776,23 +780,22 @@ public class Mazub {
 	 * @throws	OutOfRangeException
 	 * 			Mazub's new position lies outside the game world.
 	 * 			| ! isValidYPosition(s)
-	 * @post 	Mazub's velocity and position are updated.
-	 * 			| new.getYPosition() == ((int) Math.floor(this.getYPosition() + 
-	 * 				(int) Math.floor(100*(this.getYVelocity()*time + accy*(1/2)*time*time))))
-	 *			| && new.getYVelocity() == (this.getYVelocity() + accy*time)
+	 * @effect	Mazub's velocity and position are updated with setYPosition and setYVelocity.
+	 * 			| this.setYPosition(this.getYPosition() + 100*(this.getYVelocity()*time + this.getYAcc()*(1/2)*time*time))
+	 * 			| && this.setYVelocity(this.getYVelocity() + accy*time)
 	 */
 	private void Jump(double time) throws OutOfRangeException {
-		int x;
-		double h = 100*((this.getYVelocity()*time) + (accy*0.5*time*time));
+		double x;
+		double h = 100*((this.getYVelocity()*time) + (this.getYAcc()*0.5*time*time));
 		if (h < 0)
-			x = this.getYPosition() + (int) Math.ceil(h);
+			x = this.getYPosition() + h;
 		else
-			x = this.getYPosition() + (int) Math.floor(h);
+			x = this.getYPosition() + h;
 		if (! isValidYPosition(x))
 			throw new OutOfRangeException(x,minY,maxY);
 		else {
 			this.setYPosition(x);
-			this.setYVelocity(this.getYVelocity() + accy*time);
+			this.setYVelocity(this.getYVelocity() + this.getYAcc()*time);
 		}
 	}
 	
@@ -801,11 +804,11 @@ public class Mazub {
 	 * @param 	time
 	 * 			The time duration between this position and the next one.
 	 * @effect	When Mazub is moving to the right, his new position is set with MoveRight.
-	 * 			| new = this.MoveRight()
+	 * 			| this.MoveRight()
 	 * @effect	When Mazub is moving to the left, his new position is set with MoveLeft.
-	 * 			| new = this.MoveLeft()
+	 * 			| this.MoveLeft()
 	 * @effect	When Mazub is jumping or falling, his new position is set with Jump.
-	 * 			| new = this.Jump()
+	 * 			| this.Jump()
 	 * @throws	ModelException
 	 * 			The given time is not valid (between 0 and 0.2)
 	 * 			| ! isValidTime(time)
@@ -818,26 +821,22 @@ public class Mazub {
 			time1 += time;
 			time2 = 0;
 		}
-		if (isMovingRight())
+		if (isMoving())
 		{
 			time1 = 0;
 			time2 += time;
 			try {
-				this.MoveRight(time);
+				this.Move(time);
 			}
 			catch (OutOfRangeException exc) {
-				this.setXPosition(maxX-1);
-			}
-		}
-		if (isMovingLeft())
-		{
-			time1 = 0;
-			time2 += time;
-			try {
-				this.MoveLeft(time);
-			}
-			catch (OutOfRangeException exc) {
-				this.setXPosition(minX);
+				if (exc.getWrong() < exc.getLow())
+				{
+					this.setXPosition(minX);
+				}
+				else
+				{
+					this.setXPosition(maxX-1);
+				}
 			}
 		}
 		if ((isJumping()) || (this.pos_y > 0) )
@@ -851,6 +850,7 @@ public class Mazub {
 				{
 					this.setYPosition(minY);
 					this.setYVelocity(0);
+					this.setYAcc(0);
 				}
 				else
 				{
