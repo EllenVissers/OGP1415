@@ -72,11 +72,11 @@ public class Facade implements IFacade {
 	public double[] getAcceleration(Mazub alien) {
 		double[] c = {0,0};
 		if (alien.isMovingLeft())
-			c[0] = -Mazub.accx;
+			c[0] = -alien.getXAcc();
 		if (alien.isMovingRight())
-			c[0] = Mazub.accx;
+			c[0] = alien.getXAcc();
 		if (alien.isJumping())
-			c[1] = Mazub.accy;
+			c[1] = alien.getYAcc();
 		return c;
 	}
 	
