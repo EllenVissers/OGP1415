@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/|src-provided/|resources/|tests/|lib/|levels/|levels/" kind="src" path=""/>
+	<classpathentry excluding="player/" kind="src" path="levels"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path="src-provided"/>
+	<classpathentry excluding="readme" kind="src" path="resources"/>
+	<classpathentry kind="src" path="tests"/>
+	<classpathentry kind="lib" path="C:/Users/Ellen Vissers/Documents/Ellen/Leuven/2e bach/2e semester/Objectgericht programmeren/Les/AnnotationsDoclets.jar/AnnotationsDoclets.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
