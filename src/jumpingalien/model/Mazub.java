@@ -145,11 +145,11 @@ public class Mazub {
 	/**
 	 * Variable registering the horizontal acceleration that applies to all Mazub's. 
 	 */
-	public static double accx = 0.9;
+	private static double accx = 0.9;
 	/**
 	 * Variable registering the vertical acceleration that applies to all Mazub's.
 	 */
-	public static double accy = -10.0;
+	private static double accy = -10.0;
 	/**
 	 * Variable registering the outer right position of the game world.
 	 */
@@ -547,7 +547,7 @@ public class Mazub {
 	 * 			| (time*getAccX() + Math.abs(this.getXVelocity())) >= this.getMaxVel()
 	 */
 	private boolean reachesMaxSpeed(double time) {
-		return ((time*getXAcc() + Math.abs(this.getXVelocity())) >= this.getMaxVel());
+		return ((Math.abs(time*getXAcc()) + Math.abs(this.getXVelocity())) >= Math.abs(this.getMaxVel()));
 	}
 	
 	/**
@@ -656,13 +656,19 @@ public class Mazub {
 		{
 			this.setXVelocity(this.getStartVel());
 			this.setXAcc(accx);
-			this.setMaxVel(maxSpeed);
+			if (isDucking())
+				this.setMaxVel(maxSpeedDuck);
+			else
+				this.setMaxVel(maxSpeed);
 		}
-		else
+		if (orientation == Orientation.LEFT)
 		{
 			this.setXVelocity(-this.getStartVel());
 			this.setXAcc(-accx);
-			this.setMaxVel(-maxSpeed);
+			if (isDucking())
+				this.setMaxVel(-maxSpeedDuck);
+			else
+				this.setMaxVel(-maxSpeed);
 		}
 	}
 	
@@ -714,7 +720,10 @@ public class Mazub {
 	 * 			| setNb(0)
 	 */
 	public void startDuck() {
-		this.setMaxVel(maxSpeedDuck);
+		if (isMovingLeft())
+			this.setMaxVel(-maxSpeedDuck);
+		else
+			this.setMaxVel(maxSpeedDuck);
 		this.setYSize(this.sprites[1].getHeight());
 		this.setNb(0);
 	}
@@ -727,7 +736,10 @@ public class Mazub {
 	 * 			| setYSize(this.sprites[0].getHeight())
 	 */
 	public void endDuck() {
-		this.setMaxVel(maxSpeed);
+		if (isMovingLeft())
+			this.setMaxVel(-maxSpeed);
+		else
+			this.setMaxVel(maxSpeed);
 		this.setYSize(this.sprites[0].getHeight());
 	}
 	
