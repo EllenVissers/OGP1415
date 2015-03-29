@@ -56,7 +56,7 @@ public class Mazub {
 	 * 			| sprites == null
 	 */
 	public Mazub(double pos_x, double pos_y, double vel_x, double vel_y, double acc_x, double acc_y, Sprite[] sprites, Orientation orientation ,int YP, int nb,
-			double start_vel, double max_vel) throws ModelException {
+			double start_vel, double max_vel, boolean leftButton, boolean rightButton) throws ModelException {
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
 		setXPosition(pos_x);
@@ -71,6 +71,9 @@ public class Mazub {
 		setNb(nb);
 		setStartVel(start_vel);
 		setMaxVel(max_vel);
+		this.leftButton = leftButton;
+		this.rightButton = rightButton;
+		this.setHitPoints(startHitPoints);
 	}
 	
 	/**
@@ -88,10 +91,18 @@ public class Mazub {
 	 *       	| this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed) 
 	 */
 	public Mazub(int pos_x, int pos_y, Sprite[] sprites) {
-		this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed);	
+		this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed, false, false);	
 	}
 	
 	//ATTRIBUTES OF MAZUB
+	/**
+	 * Variable registering whether the left button key is pressed.
+	 */
+	private boolean leftButton;
+	/**
+	 * Variable registering whether the right button key is pressed.
+	 */
+	private boolean rightButton;
 	/**
 	 * Variable registering the start velocity of Mazub.
 	 */
@@ -140,6 +151,10 @@ public class Mazub {
 	 * Variable registering the height of Mazub.
 	 */
 	private int YP;
+	/**
+	 * Variable registering the number of hitpoints of Mazub.
+	 */
+	private int hitPoints;
 	
 	//VARIABLES
 	/**
@@ -199,17 +214,57 @@ public class Mazub {
 	 * Variable registering the time whereafter the image of Mazub has to change when he is still moving.
 	 */
 	private static double timebetween = 0.075;
+	/**
+	 * The default value of the amount of hitpoints of a newly created Mazub.
+	 */
+	private static int startHitPoints = 100;
 	
 	//GETTERS AND SETTERS
 
+	/**
+	 * Check whether the left button key is pressed.
+	 * @return 	True when the key is pressed.
+	 * 			| this.leftButton
+	 */
+	public boolean getLeftButton() {
+		return this.leftButton;
+	}
+	
+	/**
+	 * Check whether the right button key is pressed.
+	 * @return 	True when the key is pressed.
+	 * 			| this.rightButton
+	 */
+	public boolean getRightButton() {
+		return this.rightButton;
+	}
+	
+	/**
+	 * Set the indicator for the left button key to true of false.
+	 * @param 	left
+	 * 			The variable that indicates whether the left button key is pressed or not.
+	 */
+	private void setLeftButton(boolean left) {
+		this.leftButton = left;
+	}
+	
+	/**
+	 * Set the indicator for the right button key to true of false.
+	 * @param 	right
+	 * 			The variable that indicates whether the right button key is pressed or not.
+	 */
+	private void setRightButton(boolean right) {
+		this.rightButton = right;
+	}
+	
 	/**
 	 * Return Mazub's current horizontal position.
 	 * @return 	The horizontal position.
 	 * 			| this.pos_x
 	 */
 	@Basic
-	public int getXPosition() {
-		return (int) Math.round(this.pos_x);
+	public double getXPosition() {
+		return this.pos_x;
 	}
 	
 	/**
@@ -234,8 +289,8 @@ public class Mazub {
 	 * 			| this.pos_y
 	 */
 	@Basic
-	public int getYPosition() {
-		return (int) Math.round(this.pos_y);
+	public double getYPosition() {
+		return this.pos_y;
 	}
 	
 	/**
@@ -460,6 +515,22 @@ public class Mazub {
 		this.orientation = orientation;
 	}
 	
+	/**
+	 * 
+	 * @param points
+	 */
+	private void setHitPoints(int points) {
+		this.hitPoints = points;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getHitPoints() {
+		return this.hitPoints;
+	}
+	
 	//CHECKERS
 	/**
 	 * Check whether Mazub is moving to the left.
@@ -506,6 +577,10 @@ public class Mazub {
 		return (this.getYSize() < this.sprites[0].getHeight());
 	}
 	
+	private boolean isInTheAir() {
+		return (this.getYPosition() > minY);
+	}
+	
 	/**
 	 * Check whether the given direction is valid.
 	 * @param 	direction
@@ -525,7 +600,7 @@ public class Mazub {
 	 * 			| (pos < maxX) && (pos >= 0)
 	 */
 	private boolean isValidXPosition(double pos) {
-		return ((Double.compare(pos,maxX) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,0)));
+		return ((Double.compare(pos,maxX) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,minX)));
 	}
 	
 	/**
@@ -536,7 +611,7 @@ public class Mazub {
 	 * 			| (pos < maxY) && (pos >= 0)
 	 */
 	private boolean isValidYPosition(double pos) {
-		return ((Double.compare(pos,maxY) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,0)));
+		return ((Double.compare(pos,maxY) < 0) && (Util.fuzzyGreaterThanOrEqualTo(pos,minY)));
 	}
 	
 	/**
@@ -654,6 +729,7 @@ public class Mazub {
 		this.setOrientation(orientation);
 		if (orientation == Orientation.RIGHT)
 		{
+			this.setRightButton(true);
 			this.setXVelocity(this.getStartVel());
 			this.setXAcc(accx);
 			if (isDucking())
@@ -663,6 +739,7 @@ public class Mazub {
 		}
 		if (orientation == Orientation.LEFT)
 		{
+			this.setLeftButton(true);
 			this.setXVelocity(-this.getStartVel());
 			this.setXAcc(-accx);
 			if (isDucking())
@@ -680,8 +757,37 @@ public class Mazub {
 	 * 			| setXAcc(0)
 	 */
 	public void endMove() {
-		this.setXVelocity(0);
-		this.setXAcc(0);
+		if (this.getLeftButton()) {
+			if (! (this.getOrientation() == Orientation.LEFT))
+				this.startMove(Orientation.LEFT);
+		}
+		else if (this.getRightButton()) {
+			if (! (this.getOrientation() == Orientation.RIGHT)) 
+				this.startMove(Orientation.RIGHT);
+		}
+		else {
+			this.setXVelocity(0);
+			this.setXAcc(0);
+		}
+	}
+	
+	public void endMove(Orientation orientation) {
+		if (orientation == Orientation.LEFT) 
+			setLeftButton(false);
+		else
+			setRightButton(false);
+		if (this.getLeftButton()) {
+			if (! (this.getOrientation() == Orientation.LEFT))
+				this.startMove(Orientation.LEFT);
+		}
+		else if (this.getRightButton()) {
+			if (! (this.getOrientation() == Orientation.RIGHT)) 
+				this.startMove(Orientation.RIGHT);
+		}
+		else {
+			this.setXVelocity(0);
+			this.setXAcc(0);
+		}
 	}
 	
 	/**
@@ -694,9 +800,10 @@ public class Mazub {
 	 * 			| setYAcc(accy)
 	 */
 	public void startJump() {
-		this.setYVelocity(startVelY);
-		this.setYAcc(accy);
-		this.setNb(0);
+		if (! isInTheAir())
+			this.setYVelocity(startVelY);
+			this.setYAcc(accy);
+			this.setNb(0);
 	}
 	
 	/**
@@ -797,16 +904,11 @@ public class Mazub {
 	 * 			| && this.setYVelocity(this.getYVelocity() + accy*time)
 	 */
 	private void Jump(double time) throws OutOfRangeException {
-		double x;
-		double h = 100*((this.getYVelocity()*time) + (this.getYAcc()*0.5*time*time));
-		if (h < 0)
-			x = this.getYPosition() + h;
-		else
-			x = this.getYPosition() + h;
-		if (! isValidYPosition(x))
-			throw new OutOfRangeException(x,minY,maxY);
+		double h = this.getYPosition() + 100*((this.getYVelocity()*time) + (this.getYAcc()*0.5*time*time));
+		if (! isValidYPosition(h))
+			throw new OutOfRangeException(h,minY,maxY);
 		else {
-			this.setYPosition(x);
+			this.setYPosition(h);
 			this.setYVelocity(this.getYVelocity() + this.getYAcc()*time);
 		}
 	}
@@ -830,13 +932,11 @@ public class Mazub {
 			throw new ModelException("Invalid time");
 		if (! isMoving())
 		{
-			time1 += time;
-			time2 = 0;
+			time1 += time; time2 = 0;
 		}
 		if (isMoving())
 		{
-			time1 = 0;
-			time2 += time;
+			time1 = 0; time2 += time;
 			try {
 				this.Move(time);
 			}

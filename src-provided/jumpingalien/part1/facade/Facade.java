@@ -40,7 +40,7 @@ public class Facade implements IFacade {
 	 *         coordinates of the given alien's bottom left pixel in the world.
 	 */
 	public int[] getLocation(Mazub alien) {
-		int[] a = {alien.getXPosition(),alien.getYPosition()};
+		int[] a = {(int) Math.round(alien.getXPosition()),(int) Math.round(alien.getYPosition())};
 		return a;
 	}
 	
@@ -147,7 +147,9 @@ public class Facade implements IFacade {
 	 *            The alien that has to stop moving left.
 	 */
 	public void endMoveLeft(Mazub alien) {
-		alien.endMove();
+		/*alien.setLeftButton(false);
+		alien.endMove();*/
+		alien.endMove(Orientation.LEFT);
 	}
 
 	/**
@@ -167,7 +169,9 @@ public class Facade implements IFacade {
 	 *            The alien that has to stop moving right.
 	 */
 	public void endMoveRight(Mazub alien) {
-		alien.endMove();
+		/*alien.setRightButton(false);
+		alien.endMove();*/
+		alien.endMove(Orientation.RIGHT);
 	}
 
 	/**
