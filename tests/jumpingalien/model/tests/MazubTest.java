@@ -24,36 +24,36 @@ public class MazubTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		m0 = new Mazub(587, 767, 0, -6.32, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5);
-		m1 = new Mazub(50, 150, 1.5, 6.4, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 1.1, 3.0);
+		m0 = new Mazub(587, 767, 0, -6.32, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
+		m1 = new Mazub(50, 150, 1.5, 6.4, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 1.1, 3.0, false, true);
 		m2 = new Mazub(623, 412, JumpingAlienSprites.ALIEN_SPRITESET);
-		m3 = new Mazub(999, 150, -1.5, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 70, 1, 1.0, 4.0);
+		m3 = new Mazub(999, 150, -1.5, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 70, 1, 1.0, 4.0, true, false);
 		m4 = new Mazub(0, 0, JumpingAlienSprites.ALIEN_SPRITESET);
-		m5 = new Mazub(587, 767, 0, -6.32, 0, 0, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5);
-		m6 = new Mazub(1023, 395, 2.43, 8.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 2.0, 3.0);
-		m7 = new Mazub(1023, 767, -2.725, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2);
-		m8 = new Mazub(842, 248, 0, 2.1, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 2, 1.0, 2.5);
-		m9 = new Mazub(512, 383, 3.0, -4.4, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 0, 1.2, 3.2);
-		m10 = new Mazub(843, 327, 0, 1.85, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.5, 3.0);
-		m11 = new Mazub(210, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1);
-		m12 = new Mazub(340, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0);
-		m13 = new Mazub(210, 0, 2.95, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0);
-		m14 = new Mazub(340, 580, -2.95, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0);
-		m15 = new Mazub(1020, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1);
-		m16 = new Mazub(15, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0);
-		m17 = new Mazub(210, 760, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1);
-		m18 = new Mazub(340, 20, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0);
-		m19 = new Mazub(1023, 767, 2.725, -3.8, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2);
+		m5 = new Mazub(587, 767, 0, -6.32, 0, 0, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
+		m6 = new Mazub(1023, 395, 2.43, 8.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 2.0, 3.0, false, true);
+		m7 = new Mazub(1023, 767, -2.725, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2, true, false);
+		m8 = new Mazub(842, 248, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 1.0, 2.5, false, false);
+		m9 = new Mazub(512, 0, 3.0, 0 , 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 0, 1.2, 3.2, false, true);
+		m10 = new Mazub(843, 327, 0, 1.85, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.5, 3.0, false, false);
+		m11 = new Mazub(210, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
+		m12 = new Mazub(340, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
+		m13 = new Mazub(210, 0, 2.95, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, false, false);
+		m14 = new Mazub(340, 580, -2.95, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
+		m15 = new Mazub(1020, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
+		m16 = new Mazub(15, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
+		m17 = new Mazub(210, 760, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
+		m18 = new Mazub(340, 20, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
+		m19 = new Mazub(1023, 767, 2.725, -3.8, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2, false, true);
 		m20 = new Mazub(0, 0, JumpingAlienSprites.ALIEN_SPRITESET);
-		m21 = new Mazub(623, 0, 2.0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 70, 1, 1.0, 4.0);
-		m22 = new Mazub(587, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5);
-		m23 = new Mazub(842, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.0, 2.5);
+		m21 = new Mazub(623, 0, 2.0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 0, 1.0, 4.0, false, true);
+		m22 = new Mazub(587, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
+		m23 = new Mazub(842, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.0, 2.5, false, false);
 	}
 
 	@Test
 	public final void extendedConstructor_LegalCase() throws ModelException {
-		assertEquals(50,m1.getXPosition());
-		assertEquals(150,m1.getYPosition());
+		assertEquals(50,(int) Math.round(m1.getXPosition()));
+		assertEquals(150,(int) Math.round(m1.getYPosition()));
 		assertEquals(1.5,m1.getXVelocity(),delta);
 		assertEquals(6.4,m1.getYVelocity(),delta);
 		assertTrue((m1.sprites == JumpingAlienSprites.ALIEN_SPRITESET));
@@ -66,13 +66,13 @@ public class MazubTest {
 
 	@Test(expected = ModelException.class)
 	public final void extendedConstructor_IllegalCase() throws ModelException {
-		new Mazub(50, 150, 1.5, 6.4, 0.9, -10, null, Orientation.RIGHT , 92, 2, 1.1, 3.0);
+		new Mazub(50, 150, 1.5, 6.4, 0.9, -10, null, Orientation.RIGHT , 92, 2, 1.1, 3.0, false, true);
 	}
 
 	@Test
 	public final void secondConstructor_LegalCase() throws ModelException {
-		assertEquals(623,m2.getXPosition());
-		assertEquals(412,m2.getYPosition());
+		assertEquals(623,(int) Math.round(m2.getXPosition()));
+		assertEquals(412,(int) Math.round(m2.getYPosition()));
 		assertEquals(0,m2.getXVelocity(),delta);
 		assertEquals(0,m2.getYVelocity(),delta);
 		assertTrue((m2.sprites == JumpingAlienSprites.ALIEN_SPRITESET));
@@ -89,28 +89,40 @@ public class MazubTest {
 	}
 	
 	@Test
+	public final void getLeftButton_SingleCase() {
+		assertTrue(m3.getLeftButton());
+		assertFalse(m13.getLeftButton());
+	}
+	
+	@Test
+	public final void getRightButton_SingleCase() {
+		assertTrue(m11.getRightButton());
+		assertFalse(m16.getRightButton());
+	}
+	
+	@Test
 	public final void getXPosition_SimpleCase() {
-		assertEquals(999,m3.getXPosition());
-		assertEquals(1023,m19.getXPosition());
+		assertEquals(999,(int) Math.round(m3.getXPosition()));
+		assertEquals(1023,(int) Math.round(m19.getXPosition()));
 	}
 	
 	@Test
 	public final void getXPosition_BoundaryCase() {
-		assertEquals(0,m20.getXPosition());
-		assertEquals(1023,m7.getXPosition());
-		assertEquals(1023,m6.getXPosition());
+		assertEquals(0,(int) Math.round(m20.getXPosition()));
+		assertEquals(1023,(int) Math.round(m7.getXPosition()));
+		assertEquals(1023,(int) Math.round(m6.getXPosition()));
 	}
 	
 	@Test
 	public final void getYPosition_SimpleCase() {
-		assertEquals(150,m1.getYPosition());
-		assertEquals(395,m6.getYPosition());
+		assertEquals(150,(int) Math.round(m1.getYPosition()));
+		assertEquals(395,(int) Math.round(m6.getYPosition()));
 	}
 	
 	@Test
 	public final void getYPosition_BoundaryCase() {
-		assertEquals(0,m20.getYPosition());
-		assertEquals(767,m7.getYPosition());
+		assertEquals(0,(int) Math.round(m20.getYPosition()));
+		assertEquals(767,(int) Math.round(m7.getYPosition()));
 	}
 	
 	@Test
@@ -201,6 +213,10 @@ public class MazubTest {
 		assertEquals(-m8.getStartVel(),m8.getXVelocity(),delta);
 		assertEquals(0,m8.getNb());
 		assertTrue(Orientation.LEFT == m8.getOrientation());
+		m8.endMove(Orientation.LEFT);
+		for (int i = 0; i < 10; i++) {
+			m8.advanceTime(0.1);
+		}
 	}
 	
 	@Test
@@ -213,8 +229,8 @@ public class MazubTest {
 	
 	@Test
 	public final void endMove_SingleCase() {
-		m5.endMove();
-		m8.endMove();
+		m5.endMove(Orientation.RIGHT);
+		m8.endMove(Orientation.LEFT);
 		assertEquals(0,m5.getXVelocity(),delta);
 		assertEquals(0,m8.getXVelocity(),delta);
 	}
@@ -258,13 +274,15 @@ public class MazubTest {
 	
 	@Test
 	public final void advanceTime_NotMoving() throws ModelException {
-		int posx = m21.getXPosition();
-		int posy = m21.getYPosition();
+		//m21.setRightButton(false);
+		m21.endMove(Orientation.RIGHT);
+		int posx = (int) Math.round(m21.getXPosition());
+		int posy = (int) Math.round(m21.getYPosition());
 		double velx = m21.getXVelocity();
 		double vely = m21.getYVelocity();
 		m21.advanceTime(0.1);
-		assertEquals(posx,m21.getXPosition());
-		assertEquals(posy,m21.getYPosition());
+		assertEquals(posx,(int) Math.round(m21.getXPosition()));
+		assertEquals(posy,(int) Math.round(m21.getYPosition()));
 		assertEquals(velx,m21.getXVelocity(),delta);
 		assertEquals(vely,m21.getYVelocity(),delta);
 	}
@@ -272,8 +290,8 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_NormalRightJump() {
 		m11.advanceTime(0.1);
-		assertEquals(226,m11.getXPosition());
-		assertEquals(195,m11.getYPosition());
+		assertEquals(226,(int) Math.round(m11.getXPosition()));
+		assertEquals(195,(int) Math.round(m11.getYPosition()));
 		assertEquals(1.69,m11.getXVelocity(),delta);
 		assertEquals(3.0,m11.getYVelocity(),delta);
 	}
@@ -281,16 +299,16 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_NormalLeftJump() {
 		m12.advanceTime(0.1);
-		assertEquals(319,m12.getXPosition());
-		assertEquals(538,m12.getYPosition());
+		assertEquals(319,(int) Math.round(m12.getXPosition()));
+		assertEquals(538,(int) Math.round(m12.getYPosition()));
 		assertEquals(-4.7,m12.getYVelocity(),delta);
 	}
 	
 	@Test
 	public final void advanceTime_Right_ReachMaxSpeed() {
 		m13.advanceTime(0.1);
-		assertEquals(240,m13.getXPosition());
-		assertEquals(0,m13.getYPosition());
+		assertEquals(240,(int) Math.round(m13.getXPosition()));
+		assertEquals(0,(int) Math.round(m13.getYPosition()));
 		assertEquals(3.0,m13.getXVelocity(),delta);
 		assertEquals(0,m13.getYVelocity(),delta);
 	}
@@ -298,8 +316,8 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_Left_ReachMaxSpeed() {
 		m11.advanceTime(0.1);
-		assertEquals(243,m11.getXPosition());
-		assertEquals(220,m11.getYPosition());
+		assertEquals(244,(int) Math.round(m11.getXPosition()));
+		assertEquals(220,(int) Math.round(m11.getYPosition()));
 		assertEquals(1.78,m11.getXVelocity(),delta);
 		assertEquals(2.0,m11.getYVelocity(),delta);
 	}
@@ -307,8 +325,8 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_Right_OutOfBounds() {
 		m15.advanceTime(0.1);
-		assertEquals(1023,m15.getXPosition());
-		assertEquals(195,m15.getYPosition());
+		assertEquals(1023,(int) Math.round(m15.getXPosition()));
+		assertEquals(195,(int) Math.round(m15.getYPosition()));
 		assertEquals(1.69,m15.getXVelocity(),delta);
 		assertEquals(3.0,m15.getYVelocity(),delta);
 	}
@@ -316,16 +334,16 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_Left_OutOfBounds() {
 		m16.advanceTime(0.1);
-		assertEquals(0,m16.getXPosition());
-		assertEquals(538,m16.getYPosition());
+		assertEquals(0,(int) Math.round(m16.getXPosition()));
+		assertEquals(538,(int) Math.round(m16.getYPosition()));
 		assertEquals(-4.7,m16.getYVelocity(),delta);
 	}
 	
 	@Test
 	public final void advanceTime_Jump_OutOfBoundsTop() {
 		m17.advanceTime(0.1);
-		assertEquals(226,m17.getXPosition());
-		assertEquals(767,m17.getYPosition());
+		assertEquals(226,(int) Math.round(m17.getXPosition()));
+		assertEquals(767,(int) Math.round(m17.getYPosition()));
 		assertEquals(1.69,m17.getXVelocity(),delta);
 		assertEquals(0,m17.getYVelocity(),delta);
 	}
@@ -333,15 +351,15 @@ public class MazubTest {
 	@Test
 	public final void advanceTime_Jump_OutOfBoundsBottom() {
 		m18.advanceTime(0.1);
-		assertEquals(319,m18.getXPosition());
-		assertEquals(0,m18.getYPosition());
+		assertEquals(319,(int) Math.round(m18.getXPosition()));
+		assertEquals(0,(int) Math.round(m18.getYPosition()));
 		assertEquals(-2.01,m18.getXVelocity(),delta);
 		assertEquals(0,m18.getYVelocity(),delta);
 	}
 	
 	@Test
 	public final void advanceTime_Duck_NotMoving() {
-		m14.endMove();
+		m14.endMove(Orientation.LEFT);
 		for (int i = 0; i < 10; i++) {
 			m14.advanceTime(0.1);
 		}
@@ -357,36 +375,19 @@ public class MazubTest {
 	public final void advanceTime_Duck_MovingRight() {
 		m21.startDuck();
 		m21.advanceTime(0.1);
-		assertEquals(633,m21.getXPosition());
-		assertEquals(0,m21.getYPosition());
+		assertEquals(633,(int) Math.round(m21.getXPosition()));
+		assertEquals(0,(int) Math.round(m21.getYPosition()));
 		assertEquals(1.0,m21.getXVelocity(),delta);
 		assertEquals(0,m21.getYVelocity(),delta);
 		m21.endDuck();
-		m21.endMove();
+		m21.endMove(Orientation.RIGHT);
 	}
-	
-/*	@Test
-	public final void advanceTime_Duck_MovingLeft() {
-		System.out.print(m3.getXVelocity());
-		m3.startDuck();
-		m3.advanceTime(0.1);
-		System.out.print(m3.getXVelocity());
-		assertEquals(989,m3.getXPosition());
-		assertEquals(0,m3.getYPosition());
-		assertEquals(-1.0,m3.getXVelocity(),delta);
-		assertEquals(0,m3.getYVelocity(),delta);
-	}
-	
-	@Test
-	public final void advanceTime_Duck_Jumping() {
-		
-	}*/
 	
 	@Test
 	public final void getCurrentSprite_Zero(){
 		m5.endDuck();
 		m5.endJump();
-		m5.endMove();
+		m5.endMove(Orientation.RIGHT);
 		for (int i = 0; i < 15; i++)
 			m5.advanceTime(0.1);
 		assertTrue(m5.getCurrentSprite() == m5.sprites[0]);
@@ -404,7 +405,7 @@ public class MazubTest {
 	@Test
 	public final void getCurrentSprite_Two() {
 		m5.startMove(Orientation.RIGHT);
-		m5.endMove();
+		m5.endMove(Orientation.RIGHT);
 		m5.advanceTime(0.1);
 		assertTrue(m5.sprites[2] == m5.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
@@ -416,7 +417,7 @@ public class MazubTest {
 	@Test
 	public final void getCurrentSprite_Three() {
 		m0.startMove(Orientation.LEFT);
-		m0.endMove();
+		m0.endMove(Orientation.LEFT);
 		m0.advanceTime(0.1);
 		assertTrue(m0.sprites[3] == m0.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
@@ -431,7 +432,7 @@ public class MazubTest {
 		m4.startJump();
 		assertTrue(m4.sprites[4] == m4.getCurrentSprite());
 		m4.endJump();
-		m4.endMove();
+		m4.endMove(Orientation.RIGHT);
 	}
 	
 	@Test
@@ -440,7 +441,7 @@ public class MazubTest {
 		m4.startJump();
 		assertTrue(m4.sprites[5] == m4.getCurrentSprite());
 		m4.endJump();
-		m4.endMove();
+		m4.endMove(Orientation.LEFT);
 	}
 	
 	@Test
@@ -448,7 +449,7 @@ public class MazubTest {
 		m8.startDuck();
 		m8.startMove(Orientation.RIGHT);
 		assertTrue(m8.sprites[6] == m8.getCurrentSprite());
-		m8.endMove();
+		m8.endMove(Orientation.RIGHT);
 		m8.advanceTime(0.1);
 		assertTrue(m8.sprites[6] == m8.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
@@ -462,7 +463,7 @@ public class MazubTest {
 		m23.startDuck();
 		m23.startMove(Orientation.LEFT);
 		assertTrue(m23.sprites[7] == m23.getCurrentSprite());
-		m23.endMove();
+		m23.endMove(Orientation.LEFT);
 		m23.advanceTime(0.1);
 		assertTrue(m23.sprites[7] == m23.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
