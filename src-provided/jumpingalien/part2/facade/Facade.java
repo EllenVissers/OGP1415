@@ -130,7 +130,7 @@ public class Facade implements IFacadePart2 {
 	 */
 	public World createWorld(int tileSize, int nbTilesX, int nbTilesY, int visibleWindowWidth, int visibleWindowHeight, 
 			int targetTileX, int targetTileY) {
-		
+		return new World(tileSize,nbTilesX,nbTilesY,visibleWindowWidth,visibleWindowHeight,targetTileX,targetTileY);
 	}
 
 	/**
@@ -142,7 +142,8 @@ public class Facade implements IFacadePart2 {
 	 *         elements: width (X) and height (Y), in that order.
 	 */
 	public int[] getWorldSizeInPixels(World world) {
-		
+		int[] result = {world.getTileLength()*world.nbTilesX, world.getTileLength()*world.nbTilesY};
+		return result;
 	}
 
 	/**
@@ -155,7 +156,7 @@ public class Facade implements IFacadePart2 {
 	 *         pixels.
 	 */
 	public int getTileLength(World world) {
-		
+		return world.getTileLength();
 	}
 
 	/**
@@ -168,8 +169,8 @@ public class Facade implements IFacadePart2 {
 	 * will be changed via
 	 * {@link IFacadePart2#setGeologicalFeature(World, int, int, int)}.
 	 * 
-	 * @param The
-	 *            world for which to start the game.
+	 * @param world
+	 * 			The world for which to start the game.
 	 */
 	public void startGame(World world) {
 		
@@ -251,7 +252,8 @@ public class Facade implements IFacadePart2 {
 	 *         bottom left pixel of the given tile, in that order.
 	 */
 	public int[] getBottomLeftPixelOfTile(World world, int tileX, int tileY) {
-		
+		int[] result = {tileX*world.getTileLength(),tileY*world.getTileLength()};
+		return result;
 	}
 
 	/**
@@ -311,7 +313,8 @@ public class Facade implements IFacadePart2 {
 	 *        bottom left pixel of a tile.
 	 */
 	public int getGeologicalFeature(World world, int pixelX, int pixelY) throws ModelException {
-		
+		int[] tilepos = world.getTile(pixelX,pixelY);
+		return world.getFeatureAt(tilepos[0], tilepos[1]); // geeft nog tiletype ipv nummer gelinkt aan tiletype
 	}
 
 	/**
@@ -362,7 +365,7 @@ public class Facade implements IFacadePart2 {
 	 *         there are no interactions between the alien and enemy objects).
 	 */
 	public boolean isImmune(Mazub alien) {
-		
+		return alien.isImmune();
 	}
 
 	/**
@@ -405,7 +408,7 @@ public class Facade implements IFacadePart2 {
 	 *         collection, but each plant may only be returned once.
 	 */
 	public Collection<Plant> getPlants(World world) {
-		
+		return world.getAllPlants();
 	}
 
 	/**
@@ -474,7 +477,7 @@ public class Facade implements IFacadePart2 {
 	 *         collection, but each shark may only be returned once.
 	 */
 	public Collection<Shark> getSharks(World world) {
-		
+		return world.getAllSharks();
 	}
 
 	/**
@@ -554,7 +557,7 @@ public class Facade implements IFacadePart2 {
 	 *         collection, but each slime may only be returned once.
 	 */
 	public Collection<Slime> getSlimes(World world) {
-		
+		return world.getAllSlimes();
 	}
 
 	/**

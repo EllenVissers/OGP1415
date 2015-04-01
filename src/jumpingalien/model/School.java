@@ -2,30 +2,34 @@ package jumpingalien.model;
 
 import jumpingalien.model.Slime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 //import java.lang.Iterable;
 
 public class School {
 
-	public School(List<Slime> slimes) {
-		this.slimes = slimes;
+	public School(Collection<Slime> slimes) {
+		this.setSlimes(slimes);
 	}
 	
 	public School() {
 		this(new ArrayList<Slime>());
 	}
 	
-	private List<Slime> slimes;
+	private Collection<Slime> slimes;
 	
-	public List<Slime> getSlimes() {
+	public Collection<Slime> getSlimes() {
 		return this.slimes;
 	}
 	
-	private void setSlimes(List<Slime> slimes) {
+	private void setSlimes(Collection<Slime> slimes) {
 		this.slimes = slimes;
 	}
 	
-	private void addSlime(Slime slime) {
+	public int getSize() {
+		return getSlimes().size();
+	}
+	
+	public void addSlime(Slime slime) {
 		//if ( ( ! (this.getSlimes().contains(slime))) && (slime.getSchool() == null) )
 		if ( ! (this.getSlimes().contains(slime)))
 		{
@@ -38,7 +42,7 @@ public class School {
 		}
 	}
 	
-	private void removeSlime(Slime slime) {
+	public void removeSlime(Slime slime) {
 		if (this.getSlimes().contains(slime))
 		{
 			this.getSlimes().remove(slime);

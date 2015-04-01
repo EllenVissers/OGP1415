@@ -1,9 +1,16 @@
 package jumpingalien.model;
+//import java.util.ArrayList;
 import java.util.Arrays;
+//import java.util.List;
+
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
+//import jumpingalien.model.ImpassableTerrainException;
+import jumpingalien.model.CollisionException;
+
+//import java.util.Collection;
 
 /* TEAM INFORMATION
 * Ellen Vissers: 2e bachelor Burgerlijk ingenieur, CW-ELT
@@ -22,7 +29,7 @@ import jumpingalien.util.Sprite;
  * @author Ellen Vissers, Nina Versin
  * @version 2.0
  */
-public class Mazub {
+public class Mazub extends GameObject {
 
 	// CONSTRUCTORS
 	/**
@@ -55,25 +62,20 @@ public class Mazub {
 	 * @throws  Throws a ModelException if sprites is an emty array.
 	 * 			| sprites == null
 	 */
-	public Mazub(double pos_x, double pos_y, double vel_x, double vel_y, double acc_x, double acc_y, Sprite[] sprites, Orientation orientation ,int YP, int nb,
-			double start_vel, double max_vel, boolean leftButton, boolean rightButton) throws ModelException {
-		if (sprites == null)
-			throw new ModelException("Empty array of sprites");
-		setXPosition(pos_x);
-		setYPosition(pos_y);
-		setXVelocity(vel_x);
-		setYVelocity(vel_y);
-		setXAcc(acc_x);
-		setYAcc(acc_y);
-		this.sprites = sprites;
-		setOrientation(orientation);
-		setYSize(YP);
+	public Mazub(double pos_x, double pos_y, double vel_x, double vel_y, double acc_x, double acc_y, Sprite[] sprites, Orientation orientation, int nb,
+			double start_vel, double max_vel, boolean leftButton, boolean rightButton, World world, double immune,boolean duck) throws ModelException {
+		super(pos_x,pos_y,vel_x,vel_y,acc_x,acc_y,Orientation.NONE,sprites,startHitPoints,world,false);
 		setNb(nb);
 		setStartVel(start_vel);
 		setMaxVel(max_vel);
 		this.leftButton = leftButton;
 		this.rightButton = rightButton;
-		this.setHitPoints(startHitPoints);
+		this.setImmune(immune);
+		this.setDuck(duck);
+	}
+	
+	public Mazub(double pos_x, double pos_y, Sprite[] sprites) throws ModelException {
+		this(pos_x,pos_y,0,0,0,0,sprites,Orientation.NONE,0,startVelX,maxSpeed,false,false,(World) null,0,false);
 	}
 	
 	/**
@@ -90,9 +92,9 @@ public class Mazub {
 	 * 			maximum speed.
 	 *       	| this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed) 
 	 */
-	public Mazub(int pos_x, int pos_y, Sprite[] sprites) {
-		this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, sprites[0].getHeight(), 0, startVelX, maxSpeed, false, false);	
-	}
+//	public Mazub(int pos_x, int pos_y, Sprite[] sprites) {
+//		this(pos_x, pos_y, 0, 0, 0, 0, sprites, Orientation.NONE, 0, startVelX, maxSpeed, false, false, null);	
+//	}
 	
 	//ATTRIBUTES OF MAZUB
 	/**
@@ -115,46 +117,49 @@ public class Mazub {
 	 * Variable registering the number the sprite of Mazub when Mazub is walking (without ducking) to the left or to the right.
 	 */
 	private int nb;
-	/**
-	 * Variable registering the horizontal position of Mazub.
-	 */
-	private double pos_x;
-	/**
-	 * Variable registering the vertical position of Mazub.
-	 */
-	private double pos_y;
-	/**
-	 * Variable registering the horizontal velocity of Mazub.
-	 */
-	private double vel_x;
-	/**
-	 * Variable registering the vertical velocity of Mazub.
-	 */
-	private double vel_y;
-	/**
-	 * Variable registering the horizontal acceleration of Mazub.
-	 */
-	private double acc_x;
-	/**
-	 * Variable registering the vertical acceleration of Mazub.
-	 */
-	private double acc_y;
-	/**
-	 * Variable registering the list of images of Mazub.
-	 */
-	public Sprite[] sprites;
-	/**
-	 * Variable registering the orientation of Mazub.
-	 */
-	private Orientation orientation;
-	/**
-	 * Variable registering the height of Mazub.
-	 */
-	private int YP;
-	/**
-	 * Variable registering the number of hitpoints of Mazub.
-	 */
-	private int hitPoints;
+	private boolean duck;
+//	/**
+//	 * Variable registering the horizontal position of Mazub.
+//	 */
+//	private double pos_x;
+//	/**
+//	 * Variable registering the vertical position of Mazub.
+//	 */
+//	private double pos_y;
+//	/**
+//	 * Variable registering the horizontal velocity of Mazub.
+//	 */
+//	private double vel_x;
+//	/**
+//	 * Variable registering the vertical velocity of Mazub.
+//	 */
+//	private double vel_y;
+//	/**
+//	 * Variable registering the horizontal acceleration of Mazub.
+//	 */
+//	private double acc_x;
+//	/**
+//	 * Variable registering the vertical acceleration of Mazub.
+//	 */
+//	private double acc_y;
+//	/**
+//	 * Variable registering the list of images of Mazub.
+//	 */
+//	public Sprite[] sprites;
+//	/**
+//	 * Variable registering the orientation of Mazub.
+//	 */
+//	private Orientation orientation;
+//	/**
+//	 * Variable registering the height of Mazub.
+//	 */
+//	private int YP;
+//	/**
+//	 * Variable registering the number of hitpoints of Mazub.
+//	 */
+//	private int hitPoints;
+//	private World world;
+	private double immune;
 	
 	//VARIABLES
 	/**
@@ -257,141 +262,141 @@ public class Mazub {
 		this.rightButton = right;
 	}
 	
-	/**
-	 * Return Mazub's current horizontal position.
-	 * @return 	The horizontal position.
-	 * 			| this.pos_x
-	 */
-	@Basic
-	public double getXPosition() {
-		return this.pos_x;
-	}
-	
-	/**
-	 * Set the horizontal position of Mazub to the given position.
-	 * @param 	position  
-	 * 			The position we want to set Mazub's horizontal position to.
-	 * @throws 	ModelException
-	 * 			The given position is not a valid one.
-	 * 			| isValidXPosition(position)
-	 * @post 	Mazub's horizontal position is updated to the given position.
-	 * 			| new.pos_x = position
-	 */
-	private void setXPosition(double position) throws ModelException {
-		if (! isValidXPosition(position))
-			throw new ModelException("Invalid horizontal position");
-		this.pos_x = position;
-	}
-	
-	/**
-	 * Return Mazub's current vertical position.
-	 * @return	The verical position.
-	 * 			| this.pos_y
-	 */
-	@Basic
-	public double getYPosition() {
-		return this.pos_y;
-	}
-	
-	/**
-	 * Set the vertical position of Mazub to the given position.
-	 * @param 	position 
-	 * 			The position we want to set Mazub's vertical position to.
-	 * @throws 	ModelException
-	 * 			The given position is not a valid one.
-	 * 			| isValidYPosition(position)
-	 * @post 	Mazub's vertical position is updated to the given position.
-	 * 			| new.pos_y = position
-	 */
-	private void setYPosition(double position) {
-		if (! isValidYPosition(position))
-			throw new ModelException("Invalid vertical position");
-		this.pos_y = position;
-	}
-	
-	/**
-	 * Return Mazub's current horizontal velocity.
-	 * @return	The horizontal velocity of Mazub.
-	 * 			|this.vel_x
-	 */
-	@Basic
-	public double getXVelocity() {
-		return this.vel_x;
-	}
-	
-	/**
-	 * Set the horizontal velocity of Mazub to the given velocity.
-	 * @param 	velocity
-	 * 			The new velocity of Mazub.
-	 * @post 	Mazub's horizontal velocity is updated to the given velocity.
-	 * 			| new.vel_x = velocity
-	 */
-	private void setXVelocity(double velocity) {
-		this.vel_x = velocity;
-	}
-	
-	/**
-	 * Return Mazub's current vertical velocity.
-	 * @return	The vertical velocity.
-	 * 			| this.vel_y
-	 */
-	@Basic
-	public double getYVelocity() {
-		return this.vel_y;
-	}
-	
-	/**
-	 * Set the vertical velocity of Mazub to the given velocity.
-	 * @param 	velocity
-	 * 			The new velocity of Mazub.
-	 * @post 	Mazub's vertical velocity is updated to the given velocity.
-	 * 			| new.vel_y = velocity
-	 */
-	private void setYVelocity(double velocity) {
-		this.vel_y = velocity;
-	}
-	
-	/**
-	 * Return Mazub's current horizontal acceleration.
-	 * @return	The horizontal acceleration of Mazub.
-	 * 			|this.acc_x
-	 */
-	@Basic
-	public double getXAcc() {
-		return this.acc_x;
-	}
-	
-	/**
-	 * Set the horizontal acceleration of Mazub to the given acceleration.
-	 * @param 	acceleration
-	 * 			The new acceleration of Mazub.
-	 * @post 	Mazub's horizontal acceleration is updated to the given acceleration.
-	 * 			| new.acc_x = acceleration
-	 */
-	private void setXAcc(double acceleration) {
-		this.acc_x = acceleration;
-	}
-	
-	/**
-	 * Return Mazub's current vertical acceleration.
-	 * @return	The vertical acceleration.
-	 * 			| this.acc_y
-	 */
-	@Basic
-	public double getYAcc() {
-		return this.acc_y;
-	}
-	
-	/**
-	 * Set the vertical acceleration of Mazub to the given acceleration.
-	 * @param 	acceleration
-	 * 			The new acceleration of Mazub.
-	 * @post 	Mazub's vertical acceleration is updated to the given acceleration.
-	 * 			| new.acc_y = acceleration
-	 */
-	private void setYAcc(double acceleration) {
-		this.acc_y = acceleration;
-	}
+//	/**
+//	 * Return Mazub's current horizontal position.
+//	 * @return 	The horizontal position.
+//	 * 			| this.pos_x
+//	 */
+//	@Basic
+//	public double getXPosition() {
+//		return this.pos_x;
+//	}
+//	
+//	/**
+//	 * Set the horizontal position of Mazub to the given position.
+//	 * @param 	position  
+//	 * 			The position we want to set Mazub's horizontal position to.
+//	 * @throws 	ModelException
+//	 * 			The given position is not a valid one.
+//	 * 			| isValidXPosition(position)
+//	 * @post 	Mazub's horizontal position is updated to the given position.
+//	 * 			| new.pos_x = position
+//	 */
+//	private void setXPosition(double position) throws ModelException {
+//		if (! isValidXPosition(position))
+//			throw new ModelException("Invalid horizontal position");
+//		this.pos_x = position;
+//	}
+//	
+//	/**
+//	 * Return Mazub's current vertical position.
+//	 * @return	The verical position.
+//	 * 			| this.pos_y
+//	 */
+//	@Basic
+//	public double getYPosition() {
+//		return this.pos_y;
+//	}
+//	
+//	/**
+//	 * Set the vertical position of Mazub to the given position.
+//	 * @param 	position 
+//	 * 			The position we want to set Mazub's vertical position to.
+//	 * @throws 	ModelException
+//	 * 			The given position is not a valid one.
+//	 * 			| isValidYPosition(position)
+//	 * @post 	Mazub's vertical position is updated to the given position.
+//	 * 			| new.pos_y = position
+//	 */
+//	private void setYPosition(double position) {
+//		if (! isValidYPosition(position))
+//			throw new ModelException("Invalid vertical position");
+//		this.pos_y = position;
+//	}
+//	
+//	/**
+//	 * Return Mazub's current horizontal velocity.
+//	 * @return	The horizontal velocity of Mazub.
+//	 * 			|this.vel_x
+//	 */
+//	@Basic
+//	public double getXVelocity() {
+//		return this.vel_x;
+//	}
+//	
+//	/**
+//	 * Set the horizontal velocity of Mazub to the given velocity.
+//	 * @param 	velocity
+//	 * 			The new velocity of Mazub.
+//	 * @post 	Mazub's horizontal velocity is updated to the given velocity.
+//	 * 			| new.vel_x = velocity
+//	 */
+//	private void setXVelocity(double velocity) {
+//		this.vel_x = velocity;
+//	}
+//	
+//	/**
+//	 * Return Mazub's current vertical velocity.
+//	 * @return	The vertical velocity.
+//	 * 			| this.vel_y
+//	 */
+//	@Basic
+//	public double getYVelocity() {
+//		return this.vel_y;
+//	}
+//	
+//	/**
+//	 * Set the vertical velocity of Mazub to the given velocity.
+//	 * @param 	velocity
+//	 * 			The new velocity of Mazub.
+//	 * @post 	Mazub's vertical velocity is updated to the given velocity.
+//	 * 			| new.vel_y = velocity
+//	 */
+//	private void setYVelocity(double velocity) {
+//		this.vel_y = velocity;
+//	}
+//	
+//	/**
+//	 * Return Mazub's current horizontal acceleration.
+//	 * @return	The horizontal acceleration of Mazub.
+//	 * 			|this.acc_x
+//	 */
+//	@Basic
+//	public double getXAcc() {
+//		return this.acc_x;
+//	}
+//	
+//	/**
+//	 * Set the horizontal acceleration of Mazub to the given acceleration.
+//	 * @param 	acceleration
+//	 * 			The new acceleration of Mazub.
+//	 * @post 	Mazub's horizontal acceleration is updated to the given acceleration.
+//	 * 			| new.acc_x = acceleration
+//	 */
+//	private void setXAcc(double acceleration) {
+//		this.acc_x = acceleration;
+//	}
+//	
+//	/**
+//	 * Return Mazub's current vertical acceleration.
+//	 * @return	The vertical acceleration.
+//	 * 			| this.acc_y
+//	 */
+//	@Basic
+//	public double getYAcc() {
+//		return this.acc_y;
+//	}
+//	
+//	/**
+//	 * Set the vertical acceleration of Mazub to the given acceleration.
+//	 * @param 	acceleration
+//	 * 			The new acceleration of Mazub.
+//	 * @post 	Mazub's vertical acceleration is updated to the given acceleration.
+//	 * 			| new.acc_y = acceleration
+//	 */
+//	private void setYAcc(double acceleration) {
+//		this.acc_y = acceleration;
+//	}
 	
 	/**
 	 * Returns the value of the begin velocity of Mazub.
@@ -449,23 +454,7 @@ public class Mazub {
 	 */
 	@Basic
 	public int getYSize() {
-		return this.YP;
-	}
-	
-	/**
-	 * Set the y-coordinate of Mazub's upper right position to a given one.
-	 * @param 	size
-	 * 			The new height of Mazub.
-	 * @throws	ModelException
-	 * 			The given size is not valid.
-	 * 			| isValidSize(size)
-	 * @post 	Mazub's upper right position is updated to the given size.
-	 * 			| new.YP = size
-	 */
-	private void setYSize(int size) throws ModelException {
-		if (! isValidSize(size))
-			throw new ModelException("Invalid height");
-		this.YP = size;
+		return this.getCurrentSprite().getHeight();
 	}
 	
 	/**
@@ -494,41 +483,60 @@ public class Mazub {
 		this.nb = i;
 	}
 	
-	/**
-	 * Get the orientation of Mazub.
-	 * @return 	The orientation of Mazub.
-	 * 			| this.orientation
-	 */
-	@Basic
-	public Orientation getOrientation() {
-		return this.orientation;
+	private void setDuck(boolean duck) {
+		this.duck = duck;
 	}
 	
-	/**
-	 * Set the orientation of Mazub to the given orientation.
-	 * @param 	orientation
-	 * 			The new orientation of Mazub.
-	 * @post 	Mazub's orientation is updated to the given orientation.
-	 * 			| new.orientation = orientation
-	 */
-	private void setOrientation(Orientation orientation) {
-		this.orientation = orientation;
+	private boolean getDuck() {
+		return this.duck;
 	}
 	
-	/**
-	 * 
-	 * @param points
-	 */
-	private void setHitPoints(int points) {
-		this.hitPoints = points;
+//	/**
+//	 * Get the orientation of Mazub.
+//	 * @return 	The orientation of Mazub.
+//	 * 			| this.orientation
+//	 */
+//	@Basic
+//	public Orientation getOrientation() {
+//		return this.orientation;
+//	}
+//	
+//	/**
+//	 * Set the orientation of Mazub to the given orientation.
+//	 * @param 	orientation
+//	 * 			The new orientation of Mazub.
+//	 * @post 	Mazub's orientation is updated to the given orientation.
+//	 * 			| new.orientation = orientation
+//	 */
+//	private void setOrientation(Orientation orientation) {
+//		this.orientation = orientation;
+//	}
+//	
+	private int maxHitPoints = 500;
+	
+//	
+//	/**
+//	 * 
+//	 * @return
+//	 */
+//	public int getHitPoints() {
+//		return this.hitPoints;
+//	}
+//	
+//	private World getWorld() {
+//		return this.world;
+//	}
+//	
+//	private void setWorld(World world) {
+//		this.world = world;
+//	}
+	
+	private double getImmune() {
+		return this.immune;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getHitPoints() {
-		return this.hitPoints;
+	public void setImmune(double i) {
+		this.immune = i;
 	}
 	
 	//CHECKERS
@@ -538,7 +546,7 @@ public class Mazub {
 	 * 			| this.vel_x < 0
 	 */
 	public boolean isMovingLeft() {
-		return this.vel_x < 0;
+		return (this.getXVelocity() < 0);
 	}
 	
 	/**
@@ -547,7 +555,7 @@ public class Mazub {
 	 * 			| this.vel_x > 0
 	 */
 	public boolean isMovingRight() {
-		return this.vel_x > 0;
+		return (this.getXVelocity() > 0);
 	}
 	
 	/**
@@ -556,7 +564,7 @@ public class Mazub {
 	 * 			| this.vel_x != 0
 	 */
 	public boolean isMoving() {
-		return (this.vel_x != 0);
+		return (this.getXVelocity() != 0);
 	}
 	
 	/**
@@ -565,7 +573,7 @@ public class Mazub {
 	 * 			| this.vel_y != 0
 	 */
 	public boolean isJumping() {
-		return (this.vel_y != 0);
+		return (this.getYVelocity() != 0);
 	}
 	
 	/**
@@ -574,12 +582,12 @@ public class Mazub {
 	 * 			| this.getYSize() < this.sprites[0].getHeight()
 	 */
 	private boolean isDucking() {
-		return (this.getYSize() < this.sprites[0].getHeight());
+		return this.getDuck();
 	}
 	
-	private boolean isInTheAir() {
-		return (this.getYPosition() > minY);
-	}
+	//private boolean isInTheAir() {
+	//	return (this.getYPosition() > minY);
+	//}
 	
 	/**
 	 * Check whether the given direction is valid.
@@ -669,16 +677,16 @@ public class Mazub {
 		return (vel > this.getStartVel());
 	}
 	
-	/**
-	 * Check wether the given size is a valid size for Mazub.
-	 * @param	size
-	 * 			The size that has to be checked.
-	 * @return	True when the given size is valid.
-	 * 			| ((size > 0) || (size > maxY))
-	 */
-	private boolean isValidSize(int size) {
-		return ((size > 0) || (size > maxY));
-	}
+//	/**
+//	 * Check wether the given size is a valid size for Mazub.
+//	 * @param	size
+//	 * 			The size that has to be checked.
+//	 * @return	True when the given size is valid.
+//	 * 			| ((size > 0) || (size > maxY))
+//	 */
+//	private boolean isValidSize(int size) {
+//		return ((size > 0) || (size > maxY));
+//	}
 	
 	/**
 	 * Check wether the given number is a valid index for the sublist of sprites for 
@@ -689,7 +697,34 @@ public class Mazub {
 	 * 			| ((nb >= 0) && (nb <= ((this.sprites.length - 10)/2)))
 	 */
 	private boolean isValidNb(int nb) {
-		return ((nb >= 0) && (nb <= ((this.sprites.length - 10)/2)));
+		return ((nb >= 0) && (nb <= ((getSprites().length - 10)/2)));
+	}
+	
+	public boolean isImmune() {
+		return (getImmune() > 0);
+	}
+	
+	private boolean onGround() {
+		int[] tileposfirst = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()));
+		if (getWorld().getFeatureAt(tileposfirst[0],tileposfirst[1]) == 1)
+			return true;
+		int[] tileposlast = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()),(int) Math.round(getYPosition()));
+		if (getWorld().getFeatureAt(tileposlast[0],tileposlast[1]) == 1)
+			return true;
+		else
+		{
+			int d = tileposlast[0] - tileposfirst[0];
+			if (d < 2)
+				return false;
+			else
+			{
+				for (int i = 1; i < d; i++) {
+					if (getWorld().getFeatureAt(tileposfirst[0] + i, tileposfirst[1]) == 1)
+						return true;
+				}
+				return false;
+			}
+		}
 	}
 	
 	// METHODS
@@ -800,7 +835,7 @@ public class Mazub {
 	 * 			| setYAcc(accy)
 	 */
 	public void startJump() {
-		if (! isInTheAir())
+		if (onGround())
 			this.setYVelocity(startVelY);
 			this.setYAcc(accy);
 			this.setNb(0);
@@ -831,7 +866,7 @@ public class Mazub {
 			this.setMaxVel(-maxSpeedDuck);
 		else
 			this.setMaxVel(maxSpeedDuck);
-		this.setYSize(this.sprites[1].getHeight());
+		this.setDuck(true);
 		this.setNb(0);
 	}
 	
@@ -847,7 +882,12 @@ public class Mazub {
 			this.setMaxVel(-maxSpeed);
 		else
 			this.setMaxVel(maxSpeed);
-		this.setYSize(this.sprites[0].getHeight());
+		this.setDuck(false);
+	}
+	
+	@Override
+	protected void terminate() {
+		
 	}
 	
 	/**
@@ -889,7 +929,11 @@ public class Mazub {
 		}
 		if (! isValidXPosition(s))
 			throw new OutOfRangeException(s,minX,maxX);
-		this.setXPosition(s);
+		try {
+			this.CheckCollisionH(s);
+		} catch (CollisionException exc) {
+			fixCollisionH(exc,s,maxHitPoints);
+		}
 	}
 	
 	/**
@@ -908,9 +952,59 @@ public class Mazub {
 		if (! isValidYPosition(h))
 			throw new OutOfRangeException(h,minY,maxY);
 		else {
-			this.setYPosition(h);
-			this.setYVelocity(this.getYVelocity() + this.getYAcc()*time);
+			try {
+				CheckCollisionV(h);
+				this.setYVelocity(this.getYVelocity() + this.getYAcc()*time);
+			} catch (CollisionException exc) {
+				// alleen vel = 0 als vel > 0
+				fixCollisionV(exc,h,maxHitPoints);
+			}
 		}
+	}
+
+	
+	public void advance(double t) {
+		if (! isMoving())
+			time1 += t; time2 = 0;
+		if (isMoving())
+		{
+			time1 = 0; time2 += t;
+			try {
+				this.Move(t);
+			}
+			catch (OutOfRangeException exc) {
+				if (exc.getWrong() < exc.getLow())
+				{
+					this.setXPosition(minX);
+				}
+				else
+				{
+					this.setXPosition(maxX-1);
+				}
+			}
+		}
+		if ((isJumping()) || (! onGround()) )
+		{
+			time2 = 0;
+			try {
+				this.Jump(t);
+			}
+			catch (OutOfRangeException exc) {
+				if (exc.getWrong() < exc.getLow())
+				{
+					this.setYPosition(minY);
+					this.setYVelocity(0);
+					this.setYAcc(0);
+				}
+				else
+				{
+					this.setYPosition(maxY-1);
+					this.setYVelocity(0);
+				}
+			}
+		}
+		if (isImmune())
+			setImmune(getImmune() - t);
 	}
 	
 	/**
@@ -930,47 +1024,13 @@ public class Mazub {
 	public void advanceTime(double time) throws ModelException {
 		if (! isValidTime(time))
 			throw new ModelException("Invalid time");
-		if (! isMoving())
-		{
-			time1 += time; time2 = 0;
+		double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
+		int i = (int) (time/dt);
+		double r = time%dt;
+		for (int p = 0; p<i; p++) {
+			advance(dt);
 		}
-		if (isMoving())
-		{
-			time1 = 0; time2 += time;
-			try {
-				this.Move(time);
-			}
-			catch (OutOfRangeException exc) {
-				if (exc.getWrong() < exc.getLow())
-				{
-					this.setXPosition(minX);
-				}
-				else
-				{
-					this.setXPosition(maxX-1);
-				}
-			}
-		}
-		if ((isJumping()) || (this.pos_y > 0) )
-		{
-			time2 = 0;
-			try {
-				this.Jump(time);
-			}
-			catch (OutOfRangeException exc) {
-				if (exc.getWrong() < exc.getLow())
-				{
-					this.setYPosition(minY);
-					this.setYVelocity(0);
-					this.setYAcc(0);
-				}
-				else
-				{
-					this.setYPosition(maxY-1);
-					this.setYVelocity(0);
-				}
-			}
-		}
+		advance(r);
 	}
 	
 	/**
@@ -991,6 +1051,26 @@ public class Mazub {
 		return list[this.getNb()];
 	}
 	
+	private boolean touchingEarth(int[] p1, int[] p2) {
+		int b = p2[0]-p1[0];
+		int h = p2[1]-p1[1];
+		for (int i = 0; i<b+1; i++)
+			for (int j=0; j<h+1; j++)
+				if (getWorld().getFeatureAt(p1[0] + i,p1[1] + j) == 1)
+					return true;
+		return false;
+	}
+	
+	private boolean canStandUp() {
+		int h = this.getSprites()[0].getHeight();
+		int b = this.getSprites()[0].getWidth();
+		int[] t1 = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()));
+		int[] t2 = getWorld().getTile((int) Math.round(getXPosition()+b),(int) Math.round(getYPosition()+h));
+		if (touchingEarth(t1,t2))
+			return false;
+		return true;
+	}
+	
 	/**
 	 * A method that returns Mazub's current sprite.
 	 * @pre 	The length of the sprites array must be even.
@@ -998,63 +1078,57 @@ public class Mazub {
 	 * @return 	Mazub's current sprite.
 	 * @post 	Mazub's current sprite is updated.
 	 */
-	@Basic
+	@Basic @Override
 	public Sprite getCurrentSprite() {
-		assert isEven(this.sprites.length);
-		assert (this.sprites.length >= 10);
+		assert isEven(getSprites().length);
+		assert (getSprites().length >= 10);
 		if ((! this.isMoving()) && (! this.isDucking()) && (time1 > timelastmovement) )
 		{
 			this.setOrientation(Orientation.NONE);
-			this.setYSize(sprites[0].getHeight());
-			return this.sprites[0];
+			return getSprites()[0];
 		}
-		if ((! this.isMoving()) && (this.isDucking()) && (time1 > timelastmovement) )
+		if ((! this.isMoving()) && ((this.isDucking()) || (! canStandUp()) ) && (time1 > timelastmovement) )
 		{
-			this.setYSize(sprites[1].getHeight());
 			this.setOrientation(Orientation.NONE);
-			return this.sprites[1];
+			return getSprites()[1];
 		}
 		if ((! this.isMoving()) && (! this.isDucking()) && (this.getOrientation() == Orientation.RIGHT)) 
 		{
-			this.setYSize(sprites[2].getHeight());
-			return this.sprites[2];
+			return getSprites()[2];
 		}
 		if ((! this.isMoving()) && (! this.isDucking()) && (this.getOrientation() == Orientation.LEFT))
 		{
-			this.setYSize(sprites[3].getHeight());
-			return this.sprites[3];
+			return getSprites()[3];
 		}
 		if ((this.isMovingRight()) && (this.isJumping()) && (! this.isDucking()))
 		{
-			this.setYSize(sprites[4].getHeight());
-			return this.sprites[4];
+			return getSprites()[4];
 		}
 		if ((this.isMovingLeft()) && (this.isJumping()) && (! this.isDucking()))
 		{
-			this.setYSize(sprites[5].getHeight());
-			return this.sprites[5];
+			return getSprites()[5];
 		}
-		if ((this.isDucking()) && ( (this.isMovingRight())|| ((time1 < timelastmovement) && (this.getOrientation() == Orientation.RIGHT))))
+		if ((this.isDucking()) || (! canStandUp())  && ( (this.isMovingRight())|| ((time1 < timelastmovement) && 
+				(this.getOrientation() == Orientation.RIGHT))))
 		{
-			this.setYSize(sprites[6].getHeight());
-			return this.sprites[6];
+			return getSprites()[6];
 		}
-		if ((this.isDucking()) && ( (this.isMovingLeft())|| ((time1 < timelastmovement) && (this.getOrientation() == Orientation.LEFT))))
+		if ((this.isDucking()) || (! canStandUp())  && ( (this.isMovingLeft())|| ((time1 < timelastmovement) && 
+				(this.getOrientation() == Orientation.LEFT))))
 		{
-			this.setYSize(sprites[7].getHeight());
-			return this.sprites[7];
+			return getSprites()[7];
 		}
-		int m = (this.sprites.length-10)/2;
+		int m = (getSprites().length-10)/2;
 		if ((this.isMovingRight()) && (! this.isJumping()|| (this.getYPosition() == 0)) && (! this.isDucking())) 
 		{
-			Sprite[] sublist = Arrays.copyOfRange(this.sprites,8,8+m+1);
+			Sprite[] sublist = Arrays.copyOfRange(getSprites(),8,8+m+1);
 			return this.Next(sublist);
 		}
 		if ((this.isMovingLeft()) && (! this.isJumping() || (this.getYPosition() == 0)) && (! this.isDucking()))
 		{
-			Sprite[] sublist = Arrays.copyOfRange(this.sprites,9+m,9+2*m+1);
+			Sprite[] sublist = Arrays.copyOfRange(getSprites(),9+m,9+2*m+1);
 			return this.Next(sublist);
 		}
-		return this.sprites[0];
+		return getSprites()[0];
 	}
 }
