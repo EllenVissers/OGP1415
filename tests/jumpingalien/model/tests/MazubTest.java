@@ -1,9 +1,11 @@
 package jumpingalien.model.tests;
 import jumpingalien.model.Mazub;
+import jumpingalien.model.World;
 import jumpingalien.model.Orientation;
 import jumpingalien.util.ModelException;
 import static org.junit.Assert.*;
 import jumpingalien.common.sprites.JumpingAlienSprites;
+//import jumpingalien.model.GameObject;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,33 +23,37 @@ public class MazubTest {
 	private static double delta = 1e-3;
 	
 	private static Mazub m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22, m23;
+	private static World w1, w2, w3;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		m0 = new Mazub(587, 767, 0, -6.32, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
-		m1 = new Mazub(50, 150, 1.5, 6.4, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 1.1, 3.0, false, true);
+		w1 = new World(15,200,75,750,375,185,60);
+		w2 = new World(15,250,100,750,375,235,45);
+		w3 = new World(15,200,75,750,375,160,73);
+		m0 = new Mazub(587, 767, 0, -6.32, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.5, 3.5, false, false, w1, 0, false);
+		m1 = new Mazub(50, 150, 1.5, 6.4, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 2, 1.1, 3.0, false, true, w1, 0, false);
 		m2 = new Mazub(623, 412, JumpingAlienSprites.ALIEN_SPRITESET);
-		m3 = new Mazub(999, 150, -1.5, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 70, 1, 1.0, 4.0, true, false);
+		m3 = new Mazub(999, 150, -1.5, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 1, 1.0, 4.0, true, false, w3, 0, false);
 		m4 = new Mazub(0, 0, JumpingAlienSprites.ALIEN_SPRITESET);
-		m5 = new Mazub(587, 767, 0, -6.32, 0, 0, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
-		m6 = new Mazub(1023, 395, 2.43, 8.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 2.0, 3.0, false, true);
-		m7 = new Mazub(1023, 767, -2.725, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2, true, false);
-		m8 = new Mazub(842, 248, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 2, 1.0, 2.5, false, false);
-		m9 = new Mazub(512, 0, 3.0, 0 , 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 0, 1.2, 3.2, false, true);
-		m10 = new Mazub(843, 327, 0, 1.85, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.5, 3.0, false, false);
-		m11 = new Mazub(210, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
-		m12 = new Mazub(340, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
-		m13 = new Mazub(210, 0, 2.95, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, false, false);
-		m14 = new Mazub(340, 580, -2.95, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
-		m15 = new Mazub(1020, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
-		m16 = new Mazub(15, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
-		m17 = new Mazub(210, 760, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.1, false, true);
-		m18 = new Mazub(340, 20, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 92, 0, 1.0, 3.0, true, false);
-		m19 = new Mazub(1023, 767, 2.725, -3.8, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 70, 3, 1.2, 3.2, false, true);
+		m5 = new Mazub(587, 767, 0, -6.32, 0, 0, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.5, 3.5, false, false, w2, 0, false);
+		m6 = new Mazub(1023, 395, 2.43, 8.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 2, 2.0, 3.0, false, true, w2, 0, false);
+		m7 = new Mazub(1023, 767, -2.725, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT, 3, 1.2, 3.2, true, false, w3, 0, true);
+		m8 = new Mazub(842, 248, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 2, 1.0, 2.5, false, false, w1, 0, false);
+		m9 = new Mazub(512, 0, 3.0, 0 , 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 0, 1.2, 3.2, false, true, w3, 0, false);
+		m10 = new Mazub(843, 327, 0, 1.85, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT, 0, 1.5, 3.0, false, false, w1, 0, false);
+		m11 = new Mazub(210, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.1, false, true, w2, 0, false);
+		m12 = new Mazub(340, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.0, true, false, w2, 0, false);
+		m13 = new Mazub(210, 0, 2.95, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.0, false, false, w1, 0, false);
+		m14 = new Mazub(340, 580, -2.95, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.0, true, false, w3, 0, false);
+		m15 = new Mazub(1020, 160, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.1, false, true, w1, 0, false);
+		m16 = new Mazub(15, 580, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.0, true, false, w3, 0, false);
+		m17 = new Mazub(210, 760, 1.6, 4.0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.1, false, true, w3, 0, false);
+		m18 = new Mazub(340, 20, -2.1, -3.7, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.0, 3.0, true, false, w2, 0, false);
+		m19 = new Mazub(1023, 767, 2.725, -3.8, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT, 3, 1.2, 3.2, false, true, w1, 0, false);
 		m20 = new Mazub(0, 0, JumpingAlienSprites.ALIEN_SPRITESET);
-		m21 = new Mazub(623, 0, 2.0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT , 92, 0, 1.0, 4.0, false, true);
-		m22 = new Mazub(587, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE , 92, 0, 1.5, 3.5, false, false);
-		m23 = new Mazub(842, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT , 92, 0, 1.0, 2.5, false, false);
+		m21 = new Mazub(623, 0, 2.0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.RIGHT, 0, 1.0, 4.0, false, true, w2, 0, false);
+		m22 = new Mazub(587, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.NONE, 0, 1.5, 3.5, false, false, w2, 0, false);
+		m23 = new Mazub(842, 0, 0, 0, 0.9, -10, JumpingAlienSprites.ALIEN_SPRITESET, Orientation.LEFT, 0, 1.0, 2.5, false, false, w1, 0, false);
 	}
 
 	@Test
@@ -56,7 +62,7 @@ public class MazubTest {
 		assertEquals(150,(int) Math.round(m1.getYPosition()));
 		assertEquals(1.5,m1.getXVelocity(),delta);
 		assertEquals(6.4,m1.getYVelocity(),delta);
-		assertTrue((m1.sprites == JumpingAlienSprites.ALIEN_SPRITESET));
+		assertTrue((m1.getSprites() == JumpingAlienSprites.ALIEN_SPRITESET));
 		assertTrue((Orientation.RIGHT == m1.getOrientation()));
 		assertEquals(92,m1.getYSize());
 		assertEquals(2,m1.getNb());
@@ -66,7 +72,7 @@ public class MazubTest {
 
 	@Test(expected = ModelException.class)
 	public final void extendedConstructor_IllegalCase() throws ModelException {
-		new Mazub(50, 150, 1.5, 6.4, 0.9, -10, null, Orientation.RIGHT , 92, 2, 1.1, 3.0, false, true);
+		new Mazub(50, 150, 1.5, 6.4, 0.9, -10, null, Orientation.RIGHT, 2, 1.1, 3.0, false, true, w1, 0, false);
 	}
 
 	@Test
@@ -75,7 +81,7 @@ public class MazubTest {
 		assertEquals(412,(int) Math.round(m2.getYPosition()));
 		assertEquals(0,m2.getXVelocity(),delta);
 		assertEquals(0,m2.getYVelocity(),delta);
-		assertTrue((m2.sprites == JumpingAlienSprites.ALIEN_SPRITESET));
+		assertTrue((m2.getSprites() == JumpingAlienSprites.ALIEN_SPRITESET));
 		assertTrue((Orientation.NONE == m2.getOrientation()));
 		assertEquals(92,m2.getYSize());
 		assertEquals(0,m2.getNb());
@@ -255,7 +261,7 @@ public class MazubTest {
 	public final void startDuck_SingleCase() {
 		m10.startDuck();
 		assertEquals(Mazub.maxSpeedDuck,m10.getMaxVel(),delta);
-		assertEquals(m10.sprites[1].getHeight(),m10.getYSize());
+		assertEquals(m10.getSprites()[1].getHeight(),m10.getYSize());
 		assertEquals(0,m10.getNb());
 	}
 	
@@ -263,7 +269,7 @@ public class MazubTest {
 	public final void endDuck_SingleCase() {
 		m10.endDuck();
 		assertEquals(Mazub.maxSpeed,m10.getMaxVel(),delta);
-		assertEquals(m10.sprites[0].getHeight(),m10.getYSize());
+		assertEquals(m10.getSprites()[0].getHeight(),m10.getYSize());
 	}
 	
 	@Test(expected = ModelException.class)
@@ -365,7 +371,7 @@ public class MazubTest {
 		}
 		m14.startDuck();
 		m14.advanceTime(0.1);
-		assertTrue(m14.sprites[1] == m14.getCurrentSprite());
+		assertTrue(m14.getSprites()[1] == m14.getCurrentSprite());
 		assertEquals(m14.getMaxVel(),Mazub.maxSpeedDuck,delta);
 		assertEquals(m14.getNb(),0);
 		m14.endDuck();
@@ -390,7 +396,7 @@ public class MazubTest {
 		m5.endMove(Orientation.RIGHT);
 		for (int i = 0; i < 15; i++)
 			m5.advanceTime(0.1);
-		assertTrue(m5.getCurrentSprite() == m5.sprites[0]);
+		assertTrue(m5.getCurrentSprite() == m5.getSprites()[0]);
 	}
 	
 	@Test
@@ -398,7 +404,7 @@ public class MazubTest {
 		m4.startDuck();
 		for (int i = 0; i<15; i++)
 			m4.advanceTime(0.1);
-		assertTrue(m4.sprites[1] == m4.getCurrentSprite());
+		assertTrue(m4.getSprites()[1] == m4.getCurrentSprite());
 		m4.endDuck();
 	}
 	
@@ -407,11 +413,11 @@ public class MazubTest {
 		m5.startMove(Orientation.RIGHT);
 		m5.endMove(Orientation.RIGHT);
 		m5.advanceTime(0.1);
-		assertTrue(m5.sprites[2] == m5.getCurrentSprite());
+		assertTrue(m5.getSprites()[2] == m5.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
 			m5.advanceTime(0.1);
 		}
-		assertTrue(m5.sprites[0] == m5.getCurrentSprite());
+		assertTrue(m5.getSprites()[0] == m5.getCurrentSprite());
 	}
 	
 	@Test
@@ -419,18 +425,18 @@ public class MazubTest {
 		m0.startMove(Orientation.LEFT);
 		m0.endMove(Orientation.LEFT);
 		m0.advanceTime(0.1);
-		assertTrue(m0.sprites[3] == m0.getCurrentSprite());
+		assertTrue(m0.getSprites()[3] == m0.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
 			m0.advanceTime(0.1);
 		}
-		assertTrue(m0.sprites[0] == m0.getCurrentSprite());
+		assertTrue(m0.getSprites()[0] == m0.getCurrentSprite());
 	}
 	
 	@Test
 	public final void getCurrentSprite_Four() {
 		m4.startMove(Orientation.RIGHT);
 		m4.startJump();
-		assertTrue(m4.sprites[4] == m4.getCurrentSprite());
+		assertTrue(m4.getSprites()[4] == m4.getCurrentSprite());
 		m4.endJump();
 		m4.endMove(Orientation.RIGHT);
 	}
@@ -439,7 +445,7 @@ public class MazubTest {
 	public final void getCurrentSprite_Five() {
 		m4.startMove(Orientation.LEFT);
 		m4.startJump();
-		assertTrue(m4.sprites[5] == m4.getCurrentSprite());
+		assertTrue(m4.getSprites()[5] == m4.getCurrentSprite());
 		m4.endJump();
 		m4.endMove(Orientation.LEFT);
 	}
@@ -448,37 +454,37 @@ public class MazubTest {
 	public final void getCurrentSprite_Six() {
 		m8.startDuck();
 		m8.startMove(Orientation.RIGHT);
-		assertTrue(m8.sprites[6] == m8.getCurrentSprite());
+		assertTrue(m8.getSprites()[6] == m8.getCurrentSprite());
 		m8.endMove(Orientation.RIGHT);
 		m8.advanceTime(0.1);
-		assertTrue(m8.sprites[6] == m8.getCurrentSprite());
+		assertTrue(m8.getSprites()[6] == m8.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
 			m8.advanceTime(0.1);
 		}
-		assertTrue(m8.sprites[1] == m8.getCurrentSprite());
+		assertTrue(m8.getSprites()[1] == m8.getCurrentSprite());
 	}
 	
 	@Test
 	public final void getCurrentSprite_Seven() {
 		m23.startDuck();
 		m23.startMove(Orientation.LEFT);
-		assertTrue(m23.sprites[7] == m23.getCurrentSprite());
+		assertTrue(m23.getSprites()[7] == m23.getCurrentSprite());
 		m23.endMove(Orientation.LEFT);
 		m23.advanceTime(0.1);
-		assertTrue(m23.sprites[7] == m23.getCurrentSprite());
+		assertTrue(m23.getSprites()[7] == m23.getCurrentSprite());
 		for (int i = 0; i < 10; i++) {
 			m23.advanceTime(0.1);
 		}
-		assertTrue(m23.sprites[1] == m23.getCurrentSprite());
+		assertTrue(m23.getSprites()[1] == m23.getCurrentSprite());
 	}
 	
 	@Test
 	public final void getCurrentSprite_Eight() {
 		m22.startMove(Orientation.RIGHT);
-		assertTrue(m22.getCurrentSprite() == m22.sprites[8]);
-		for (int i = 9; i < 9+(m22.sprites.length-10)/2; i++) {
+		assertTrue(m22.getCurrentSprite() == m22.getSprites()[8]);
+		for (int i = 9; i < 9+(m22.getSprites().length-10)/2; i++) {
 			m22.advanceTime(0.076);
-			assertTrue(m22.sprites[i] == m22.getCurrentSprite());
+			assertTrue(m22.getSprites()[i] == m22.getCurrentSprite());
 		}
 	}
 	
@@ -489,11 +495,11 @@ public class MazubTest {
 			m6.advanceTime(0.1);
 		}
 		m6.startMove(Orientation.LEFT);
-		assertTrue(m6.getCurrentSprite() == m6.sprites[9+(m6.sprites.length-10)/2]);
-		for (int i = 9+(m6.sprites.length-10)/2; i < 10+(m6.sprites.length-10); i++) 
+		assertTrue(m6.getCurrentSprite() == m6.getSprites()[9+(m6.getSprites().length-10)/2]);
+		for (int i = 9+(m6.getSprites().length-10)/2; i < 10+(m6.getSprites().length-10); i++) 
 		{
 			m6.advanceTime(0.075);
-			assertTrue(m6.sprites[i] == m6.getCurrentSprite());
+			assertTrue(m6.getSprites()[i] == m6.getCurrentSprite());
 		}
 	}
 	

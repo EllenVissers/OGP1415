@@ -1,15 +1,12 @@
 package jumpingalien.model;
 
-//import java.util.ArrayList;
-//import java.util.List;
-
-import java.util.Collection;
-
 import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
 import jumpingalien.util.Util;
+
+import java.util.ArrayList;
 
 public abstract class GameObject {
 
@@ -40,9 +37,21 @@ public abstract class GameObject {
 	private Sprite[] sprites;
 	private World world;
 	private int hitPoints;
-	//private double maxVel;
-	//private double startVel;
-	private boolean terminated;
+	protected boolean terminated;
+	
+	protected boolean isValidXPosition(double pos) {
+		if (getWorld() == null)
+			return true;
+		int xmax = getWorld().getNbTilesX() * getWorld().getTileSize();
+		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,xmax-1));
+	}
+	
+	protected boolean isValidYPosition(double pos) {
+		if (getWorld() == null)
+			return true;
+		int ymax = getWorld().getNbTilesY() * getWorld().getTileSize();
+		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,ymax-1));
+	}
 	
 	/**
 	 * Return Mazub's current horizontal position.
@@ -65,8 +74,8 @@ public abstract class GameObject {
 	 * 			| new.pos_x = position
 	 */
 	protected void setXPosition(double position) throws ModelException {
-		//if (! isValidXPosition(position))
-			//throw new ModelException("Invalid horizontal position");
+		if (! isValidXPosition(position))
+			terminate();
 		this.x = position;
 	}
 	
@@ -91,8 +100,8 @@ public abstract class GameObject {
 	 * 			| new.pos_y = position
 	 */
 	protected void setYPosition(double position) {
-		//if (! isValidYPosition(position))
-			//throw new ModelException("Invalid vertical position");
+		if (! isValidYPosition(position))
+			terminate();
 		this.y = position;
 	}
 	
@@ -180,58 +189,9 @@ public abstract class GameObject {
 		this.ay = acceleration;
 	}
 	
-	protected Sprite[] getSprites() {
+	public Sprite[] getSprites() {
 		return this.sprites;
 	}
-	
-//	/**
-//	 * Returns the value of the begin velocity of Mazub.
-//	 * @return 	Mazub's begin velocity.
-//	 * 			| this.start_vel
-//	 */
-//	@Basic
-//	public double getStartVel()
-//	{
-//		return this.startVel;
-//	}
-//	
-//	/**
-//	 * Set the begin velocity of Mazub to a given velocity.
-//	 * @param 	vel
-//	 * 			The new begin velocity of Mazub.
-//	 * @pre 	The start velocity is a valid start velocity.
-//	 * 			| isValidStartVelocity(vel)
-//	 * @post 	Mazub's start velocity is updated to the given velocity.
-//	 * 			| new.start_vel = vel
-//	 */
-//	protected void setStartVel(double vel) {
-//		//assert isValidStartVelocity(vel);
-//		this.startVel = vel;
-//	}
-//	
-//	/**
-//	 * Return the value of the maximum velocity of Mazub.
-//	 * @return 	Mazub's maximum velocity.
-//	 * 			| this.max_vel
-//	 */
-//	@Basic
-//	public double getMaxVel() {
-//		return this.maxVel;
-//	}
-//	
-//	/**
-//	 * Set the maximun velocity of Mazub to a given velocity.
-//	 * @param 	vel
-//	 * 			The new maximum velocity of Mazub.
-//	 * @pre 	The given velocity is a valid maximum velocity.
-//	 * 			| this.isValidMaxVelocity(vel)
-//	 * @post 	Mazub's maximum velocity is updated to the given velocity.
-//	 * 			| new.max_vel = vel
-//	 */
-//	protected void setMaxVel(double vel) {
-//		//assert this.isValidMaxVelocity(vel);
-//		this.maxVel = vel;
-//	}
 	
 	/**
 	 * Get the orientation of Mazub.
@@ -239,7 +199,7 @@ public abstract class GameObject {
 	 * 			| this.orientation
 	 */
 	@Basic
-	protected Orientation getOrientation() {
+	public Orientation getOrientation() {
 		return this.orientation;
 	}
 	
@@ -275,73 +235,44 @@ public abstract class GameObject {
 	}
 	
 	protected void setWorld(World world) {
-		this.world = world;
+		if (world != getWorld())
+		{
+			if (world == null)
+			{
+				if (this instanceof Mazub)
+					getWorld().getAllAliens().remove(this);
+				else if (this instanceof Plant)
+					getWorld().getAllPlants().remove(this);
+				else if (this instanceof Shark)
+					getWorld().getAllSharks().remove(this);
+				else if (this instanceof Slime)
+				{
+					getWorld().getAllSlimes().remove(this);
+					((Slime)this).getSchool().removeSlime((Slime) this);
+				}
+			}
+			else
+				this.world = world;
+		}
 	}
 	
 	public Sprite getCurrentSprite() {
-		assert (getSprites().length == 2);
+		assert (this.getSprites().length == 2);
+		assert (this.getSprites() != null);
 		if (this.getOrientation() == Orientation.LEFT)
-			return getSprites()[0];
+			return this.sprites[0];
 		else
-			return getSprites()[1];
+			return this.sprites[1];
 	}
 	
 	protected void terminate() {
 		this.terminated = true;
+		this.setWorld(null);
+		//delay 0.6s
 	}
 	
 	protected boolean isTerminated() {
 		return this.terminated;
-	}
-	
-	protected void CheckWorld(double s) throws ImpassableTerrainException {
-		if (getOrientation() == Orientation.RIGHT) 
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new ImpassableTerrainException(this,Orientation.RIGHT);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()),
-					(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new ImpassableTerrainException(this,Orientation.RIGHT);
-			else
-			{
-				int h = tilepos2[1] - tilepos1[1];
-				if (h < 2)
-					this.setXPosition(s);
-				else
-				{
-					for (int i = 1; i < h; i++) {
-						if (getWorld().getFeatureAt(tilepos1[0], tilepos1[1] + i) == 1)
-							throw new ImpassableTerrainException(this,Orientation.RIGHT);
-					}
-					this.setXPosition(s);
-				}
-			}
-		}
-		if (getOrientation() == Orientation.LEFT)
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new ImpassableTerrainException(this,Orientation.LEFT);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new ImpassableTerrainException(this,Orientation.LEFT);
-			else
-			{
-				int h = tilepos2[1] - tilepos1[1];
-				if (h < 2)
-					this.setXPosition(s);
-				else
-				{
-					for (int i = 1; i < h; i++) {
-						if (getWorld().getFeatureAt(tilepos1[0], tilepos1[1] + i) == 1)
-							throw new ImpassableTerrainException(this,Orientation.LEFT);
-					}
-					this.setXPosition(s);
-				}
-			}
-		}
 	}
 	
 	protected double getDT(double time, double vx, double vy, double ax, double ay) {
@@ -350,179 +281,53 @@ public abstract class GameObject {
 		return Math.min(0.01/(Math.abs(vx) + Math.abs(ax)*time),0.01/(Math.abs(vy) + Math.abs(ay)*time));
 	}
 	
-	private void CheckWorldVertical(double s) throws CollisionException {
-		if (getYVelocity() > 0) 
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new CollisionException(this,true);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()),
-					(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new CollisionException(this,true);
-			int h = tilepos2[0] - tilepos1[0];
-			if (h >= 2)
-			{
-				for (int i = 1; i < h; i++) {
-					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
-						throw new CollisionException(this,true);
-					}
-			}
-		}
-		if (getYVelocity() < 0) 
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new CollisionException(this,false);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()) + getCurrentSprite().getWidth(),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new CollisionException(this,false);
-			int h = tilepos2[0] - tilepos1[0];
-			if (h >= 2)
-			{
-				for (int i = 1; i < h; i++) {
-					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
-						throw new CollisionException(this,false);
-					}
-			}
-		}
+	protected double getDT2(double time, double vx, double vy, double ax, double ay) {
+		return 0.000009;
 	}
 	
-	private void CheckWorldHorizontal(double s) throws CollisionException {
-		if (getOrientation() == Orientation.RIGHT) 
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(s+getCurrentSprite().getWidth()),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new CollisionException(this,Orientation.RIGHT);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(s+getCurrentSprite().getWidth()),
-					(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new CollisionException(this,Orientation.RIGHT);
-			int h = tilepos2[1] - tilepos1[1];
-			if (h>=2)
-			{
-				for (int i = 1; i < h; i++) {
-					if (getWorld().getFeatureAt(tilepos1[0], tilepos1[1] + i) == 1)
-						throw new CollisionException(this,Orientation.RIGHT);
-				}
-			}
-		}
-		if (getOrientation() == Orientation.LEFT)
-		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(s),(int) Math.round(getYPosition()));
-			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
-				throw new CollisionException(this,Orientation.LEFT);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(s),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()));
-			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
-				throw new CollisionException(this,Orientation.LEFT);
-			int h = tilepos2[1] - tilepos1[1];
-			if (h >= 2)
-			{
-				for (int i = 1; i < h; i++) {
-					if (getWorld().getFeatureAt(tilepos1[0], tilepos1[1] + i) == 1)
-						throw new CollisionException(this,Orientation.LEFT);
-					}
-			}
-		}
+	public boolean onGround() {
+		int[][] bottom = getWorld().getTilePositions((int) Math.round(getXPosition()+1),(int) Math.round(getYPosition()),
+				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()));
+		boolean a = false;
+		for (int[] pos : bottom)
+			if (getWorld().getFeatureAt(pos[0],pos[1]) == 1)
+				a = true;
+		if (! a)
+			return false;
+		int[][] tilepos = getWorld().getTilePositions((int) Math.round(getXPosition()+1),(int) Math.round(getYPosition()+1),
+				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-2));
+		for (int[] pos : tilepos)
+			if (getWorld().getFeatureAt(pos[0],pos[1]) == 1)
+				return false;
+		return true;
 	}
 	
-	protected void CheckCollisionH(double s) throws CollisionException {
-		CheckWorldHorizontal(s);
-		CheckCollisionHorizontal(s);
-		setXPosition(s);
-	}
-	
-	protected void CheckCollisionV(double s) throws CollisionException {
-		CheckWorldVertical(s);
-		CheckCollisionVertical(s);
-		setYPosition(s);
-	}
-	
-	private void CheckCollisionVertical(double s) throws CollisionException {
-		Collection<Plant> plants = getWorld().getAllPlants();
-		Collection<Slime> slimes = getWorld().getAllSlimes();
-		Collection<Shark> sharks = getWorld().getAllSharks();
-		Collection<Mazub> aliens = getWorld().getAllAliens();
-		double y1 = s;
-		double y2 = s+getCurrentSprite().getHeight();
-		if (getYVelocity() > 0)
+	public boolean onGameObject() {
+		ArrayList<Slime> slimes = getWorld().getAllSlimes();
+		ArrayList<Shark> sharks = getWorld().getAllSharks();
+		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
+		allobjects.addAll(aliens);
+		allobjects.addAll(sharks);
+		allobjects.addAll(slimes);
+		allobjects.remove(this);
+		int xmin = (int) Math.round(getXPosition()+1);
+		int xmax = (int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2);
+		int ymin = (int) Math.round(getYPosition());
+		for (int i = 0; i<allobjects.size(); i++)
 		{
-			for (Plant plant : plants)
-				// is dit nodig of kan ook: plant != this ??
-				if (((this instanceof Plant) && (plant != this)) &&(plant.getYPosition() < y2))
-					throw new CollisionException(plant,true);
-			for (Slime slime : slimes)
-				if (((this instanceof Slime) && (slime != this)) &&(slime.getYPosition() < y2))
-					throw new CollisionException(slime,true);
-			for (Shark shark : sharks)
-				if (((this instanceof Shark) && (shark != this)) && (shark.getYPosition() < y2))
-					throw new CollisionException(shark,true);
-			for (Mazub alien : aliens)
-				if (((this instanceof Mazub) && (alien != this)) && (alien.getYPosition() < y2))
-					throw new CollisionException(alien,true);
+			GameObject obj = allobjects.get(i);
+			int xomin = (int) Math.round(obj.getXPosition()+1);
+			int xomax = (int) Math.round(obj.getXPosition()+obj.getCurrentSprite().getWidth()-2);
+			int yomax = (int) Math.round(obj.getYPosition()+obj.getCurrentSprite().getHeight()-1);
+			if ((ymin == yomax) && (((xmin>=xomin) && (xmin<=xomax)) || ((xmax<=xomax) && (xmax>=xomin)) ))
+				return true;
 		}
-		if (getYVelocity() < 0)
-		{
-			for (Plant plant : plants)
-				if (((this instanceof Plant) && (plant != this)) &&((plant.getYPosition()+plant.getCurrentSprite().getHeight()) > y1))
-					throw new CollisionException(plant,false);
-			for (Slime slime : slimes)
-				if (((this instanceof Slime) && (slime != this)) &&((slime.getYPosition()+slime.getCurrentSprite().getHeight()) > y1))
-					throw new CollisionException(slime,false);
-			for (Shark shark : sharks)
-				if (((this instanceof Shark) && (shark != this)) &&((shark.getYPosition()+shark.getCurrentSprite().getHeight()) > y1))
-					throw new CollisionException(shark,false);
-			for (Mazub alien : aliens)
-				if (((this instanceof Mazub) && (alien != this)) && ((alien.getYPosition()+alien.getCurrentSprite().getHeight()) > y1))
-					throw new CollisionException(alien,false);
-		}
+		return false;
 	}
-	
-	private void CheckCollisionHorizontal(double s) throws CollisionException {
-		Collection<Plant> plants = getWorld().getAllPlants();
-		Collection<Slime> slimes = getWorld().getAllSlimes();
-		Collection<Shark> sharks = getWorld().getAllSharks();
-		Collection<Mazub> aliens = getWorld().getAllAliens();
-		double x1 = s;
-		double x2 = s+getCurrentSprite().getWidth();
-		if (getOrientation() == Orientation.RIGHT)
-		{
-			for (Plant plant : plants)
-				if (((this instanceof Plant) && (plant != this)) && (plant.getXPosition() < x2))
-					throw new CollisionException(plant,Orientation.RIGHT);
-			for (Slime slime : slimes)
-				if (((this instanceof Slime) && (slime != this)) && (slime.getXPosition() < x2))
-					throw new CollisionException(slime,Orientation.RIGHT);
-			for (Shark shark : sharks)
-				if (((this instanceof Shark) && (shark != this)) && (shark.getXPosition() < x2))
-					throw new CollisionException(shark,Orientation.RIGHT);
-			for (Mazub alien : aliens)
-				if (((this instanceof Mazub) && (alien != this)) && (alien.getXPosition() < x2))
-					throw new CollisionException(alien,Orientation.RIGHT);
-		}
-		if (getOrientation() == Orientation.LEFT)
-		{
-			for (Plant plant : plants)
-				if (((this instanceof Plant) && (plant != this)) && ((plant.getXPosition()+plant.getCurrentSprite().getWidth()) > x1))
-					throw new CollisionException(plant,Orientation.LEFT);
-			for (Slime slime : slimes)
-				if (((this instanceof Slime) && (slime != this)) && ((slime.getXPosition()+slime.getCurrentSprite().getWidth()) > x1))
-					throw new CollisionException(slime,Orientation.LEFT);
-			for (Shark shark : sharks)
-				if (((this instanceof Shark) && (shark != this)) && ((shark.getXPosition()+shark.getCurrentSprite().getWidth()) > x1))
-					throw new CollisionException(shark,Orientation.LEFT);
-			for (Mazub alien : aliens)
-				if (((this instanceof Mazub) && (alien != this)) && ((alien.getXPosition()+alien.getCurrentSprite().getWidth()) > x1))
-					throw new CollisionException(alien,Orientation.LEFT);
-		}
-	}
-	
-	protected void addHitPoints(int points, int maxHitPoints) {
-		if (getHitPoints() < maxHitPoints)
-			if ((getHitPoints() + points) > maxHitPoints)
-				setHitPoints(maxHitPoints);
-			else
-				setHitPoints(getHitPoints() + points);
+
+	protected void addHitPoints(int points) {
+		setHitPoints(getHitPoints() + points);
 	}
 	
 	protected void reduceHitPoints(int points) {
@@ -532,180 +337,370 @@ public abstract class GameObject {
 			setHitPoints(getHitPoints()-points);
 	}
 	
-	protected void fixCollisionH(CollisionException exc, double s, int maxHitPoints) {
-		if (this != exc.getObject())
+	protected int CheckMedium() {
+		int[][] tiles = getWorld().getTilePositions((int) Math.round(getXPosition()),(int) Math.round(getYPosition()),
+				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-1),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-1));
+		for (int[] tile : tiles)
+			if (getWorld().getFeatureAt(tile[0],tile[1]) != 1)
+				return getWorld().getFeatureAt(tile[0],tile[1]);
+		return -1;
+	}
+	
+	protected boolean collidesWith(double xa, double ya, GameObject other) {
+		return (!((xa + (getCurrentSprite().getWidth() - 1) < other.getXPosition())
+				|| (other.getXPosition() + (other.getCurrentSprite().getWidth()-1) < xa)
+				|| (ya + (getCurrentSprite().getHeight() - 1) < other.getYPosition())
+				|| (other.getYPosition() + (other.getCurrentSprite().getHeight()-1) < ya) ));
+	}
+	
+	protected void CheckWorldH(double s) throws CollisionException {
+		if (getOrientation() == Orientation.RIGHT) 
 		{
-			if (exc.getObject() instanceof Plant)
+			int[] tilebottom = getWorld().getTile((int) Math.round(s+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()+1));
+			if (getWorld().getFeatureAt(tilebottom[0],tilebottom[1]) == 1)
+				throw new CollisionException(this,Orientation.RIGHT);
+			int[] tiletop = getWorld().getTile((int) Math.round(s+getCurrentSprite().getWidth()-2),
+					(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-2));
+			if (getWorld().getFeatureAt(tiletop[0],tiletop[1]) == 1)
+				throw new CollisionException(this,Orientation.RIGHT);
+			int h = tiletop[1] - tilebottom[1];
+			if (h>1)
 			{
-				if ((this instanceof Slime) || (this instanceof Shark) || (this instanceof Plant))
-					setXPosition(s);
-				if (this instanceof Mazub)
-					if (getHitPoints() < maxHitPoints)
-					{
-						addHitPoints(50,maxHitPoints);
-						exc.getObject().terminate();
-					}
-			}
-			if (exc.getObject() instanceof Slime)
-			{
-				if (this instanceof Plant)
-					setXPosition(s);
-				if (this instanceof Slime)
-				{
-					if (((Slime)this).getSchool().getSize() < ((Slime)exc.getObject()).getSchool().getSize())
-					{
-						((Slime)this).getSchool().removeSlime((Slime)this);
-						((Slime)exc.getObject()).getSchool().addSlime((Slime)this);
-					}
-					else if (((Slime)this).getSchool().getSize() > ((Slime)exc.getObject()).getSchool().getSize())
-					{
-						((Slime)exc.getObject()).getSchool().removeSlime((Slime)exc.getObject());
-						((Slime)this).getSchool().addSlime((Slime)exc.getObject());
-					}
-				}		
-				if (this instanceof Shark)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50); //gebeurt dit nu dubbel (bij de beweging van beide objecten?
-				}
-				if (this instanceof Mazub)
-				{
-					reduceHitPoints(50);
-					((Mazub) this).setImmune(0.6);
-					exc.getObject().reduceHitPoints(50);
+				for (int i = 1; i < h; i++) {
+					if (getWorld().getFeatureAt(tilebottom[0], tilebottom[1] + i) == 1)
+						throw new CollisionException(this,Orientation.RIGHT);
 				}
 			}
-			if (exc.getObject() instanceof Shark)
+		}
+		if (getOrientation() == Orientation.LEFT)
+		{
+			int[] tilebottom = getWorld().getTile((int) Math.round(s+1),(int) Math.round(getYPosition()+1));
+			if (getWorld().getFeatureAt(tilebottom[0],tilebottom[1]) == 1)
+				throw new CollisionException(this,Orientation.LEFT);
+			int[] tiletop = getWorld().getTile((int) Math.round(s+1),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-2));
+			if (getWorld().getFeatureAt(tiletop[0],tiletop[1]) == 1)
+				throw new CollisionException(this,Orientation.LEFT);
+			int h = tiletop[1] - tilebottom[1];
+			if (h > 1)
 			{
-				if (this instanceof Plant)
-					setXPosition(s);
-				if (this instanceof Slime)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-				}
-				if (this instanceof Mazub)
-				{
-					reduceHitPoints(50);
-					((Mazub)this).setImmune(0.6);
-					exc.getObject().reduceHitPoints(50);
-				}
-			}
-			if (exc.getObject() instanceof Mazub)
-			{
-				if (this instanceof Plant)
-				{
-					terminate();
-					exc.getObject().addHitPoints(50, maxHitPoints);
-				}
-				if (this instanceof Slime)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-					((Mazub)exc.getObject()).setImmune(0.6);
-				}
-				if (this instanceof Shark)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-					((Mazub)exc.getObject()).setImmune(0.6);
-				}
+				for (int i = 1; i < h; i++) {
+					if (getWorld().getFeatureAt(tilebottom[0], tilebottom[1] + i) == 1)
+						throw new CollisionException(this,Orientation.LEFT);
+					}
 			}
 		}
 	}
 	
-	protected void fixCollisionV(CollisionException exc, double s, int maxHitPoints) {
-		if (this != exc.getObject())
+	protected double fixWorldH(CollisionException exc, double s) {
+		if (this instanceof Slime)
 		{
-			if (exc.getObject() instanceof Plant)
+			if (getOrientation() == Orientation.RIGHT)
 			{
-				if ((this instanceof Slime) || (this instanceof Shark) || (this instanceof Plant))
-					setYPosition(s);
-				if (this instanceof Mazub)
-					if (getHitPoints() < maxHitPoints)
-					{
-						addHitPoints(50,maxHitPoints);
-						exc.getObject().terminate();
-					}
+				setOrientation(Orientation.LEFT);
+				setXVelocity(0);
+				((Slime)this).setMaxVel(-(Slime.maxSpeed));
+				setXAcc(-(Slime.accx));
 			}
-			if (exc.getObject() instanceof Slime)
+			else
 			{
-				if (this instanceof Plant)
-					setYPosition(s);
-				if (this instanceof Slime)
-				{
-					if (((Slime)this).getSchool().getSize() < ((Slime)exc.getObject()).getSchool().getSize())
-					{
-						((Slime)this).getSchool().removeSlime((Slime)this);
-						((Slime)exc.getObject()).getSchool().addSlime((Slime)this);
-					}
-					else if (((Slime)this).getSchool().getSize() > ((Slime)exc.getObject()).getSchool().getSize())
-					{
-						((Slime)exc.getObject()).getSchool().removeSlime((Slime)exc.getObject());
-						((Slime)this).getSchool().addSlime((Slime)exc.getObject());
-					}
-				}		
-				if (this instanceof Shark)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50); //gebeurt dit nu dubbel (bij de beweging van beide objecten?
-				}
-				if (this instanceof Mazub)
-				{
-					reduceHitPoints(50);
-					((Mazub) this).setImmune(0.6);
-					exc.getObject().reduceHitPoints(50);
-				}
+				setOrientation(Orientation.RIGHT);
+				setXVelocity(0);
+				((Slime)this).setMaxVel(Slime.maxSpeed);
+				setXAcc(Slime.accx);
 			}
-			if (exc.getObject() instanceof Shark)
+		}
+		if (this instanceof Shark)
+		{
+			if (getOrientation() == Orientation.RIGHT)
 			{
-				if (this instanceof Plant)
-					setYPosition(s);
-				if (this instanceof Slime)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-				}
-				if (this instanceof Mazub)
-				{
-					reduceHitPoints(50);
-					((Mazub)this).setImmune(0.6);
-					exc.getObject().reduceHitPoints(50);
-				}
+				setOrientation(Orientation.LEFT);
+				setXVelocity(0);
+				((Shark)this).setMaxVel(-(Shark.maxSpeed));
+				setXAcc(-(Shark.accx));
 			}
-			if (exc.getObject() instanceof Mazub)
+			else
 			{
-				if (this instanceof Plant)
-				{
-					terminate();
-					exc.getObject().addHitPoints(50, maxHitPoints);
-				}
-				if (this instanceof Slime)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-					((Mazub)exc.getObject()).setImmune(0.6);
-				}
-				if (this instanceof Shark)
-				{
-					reduceHitPoints(50);
-					exc.getObject().reduceHitPoints(50);
-					((Mazub)exc.getObject()).setImmune(0.6);
-				}
+				setOrientation(Orientation.RIGHT);
+				setXVelocity(0);
+				((Shark)this).setMaxVel(Shark.maxSpeed);
+				setXAcc(Shark.accx);
+			}
+		}
+		return getXPosition();
+	}
+	
+	protected void CheckCollH(double s) throws CollisionException {
+		ArrayList<Plant> plants = getWorld().getAllPlants();
+		ArrayList<Slime> slimes = getWorld().getAllSlimes();
+		ArrayList<Shark> sharks = getWorld().getAllSharks();
+		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
+		allobjects.addAll(aliens);
+		allobjects.addAll(plants);
+		allobjects.addAll(sharks);
+		allobjects.addAll(slimes);
+		if (getOrientation() == Orientation.RIGHT)
+		{
+			for (GameObject obj : allobjects)
+				if (collidesWith(s,getYPosition(),obj))
+					if (this != obj)
+						throw new CollisionException(obj,Orientation.RIGHT);
+		}
+		if (getOrientation() == Orientation.LEFT)
+		{
+			for (GameObject obj : allobjects)
+				if (collidesWith(s,getYPosition(),obj))
+					if (this != obj)
+						throw new CollisionException(obj,Orientation.LEFT);
+		}
+	}
+	
+	private void CollisionMazubPlant(Plant plant) {
+		if (getHitPoints() < Mazub.maxHitPoints)
+		{
+			((Mazub)this).addHitPoints(50,Mazub.maxHitPoints);
+			plant.terminate();
+		}
+	}
+	
+	private void CollisionMazubShark(Shark shark) {
+		if (! ((Mazub)this).isImmune())
+		{
+			((Mazub)this).reduceHitPoints(50);
+			shark.reduceHitPoints(50);
+			((Mazub)this).setImmuneTime(0.6);
+		}
+	}
+	
+	private void CollisionMazubSlime(Slime slime) {
+		if (! ((Mazub)this).isImmune())
+		{
+			((Mazub)this).reduceHitPoints(50);
+			slime.reduceHitPoints(50);
+			((Mazub)this).setImmuneTime(0.6);
+		}
+	}
+	
+	private void CollisionSharkSlime(Slime slime) {
+		((Shark)this).reduceHitPoints(50);
+		slime.reduceHitPoints(50);
+	}
+	
+	private void CollisionSlimeSlime(Slime slime) {
+		if (((Slime)this).getSchool().getSize() < slime.getSchool().getSize())
+		{
+			((Slime)this).getSchool().removeSlime((Slime)this);
+			slime.getSchool().addSlime((Slime)this);
+		}
+		else if (((Slime)this).getSchool().getSize() > slime.getSchool().getSize())
+		{
+			slime.getSchool().removeSlime(slime);
+			((Slime)this).getSchool().addSlime(slime);
+		}
+		if (getOrientation() == Orientation.RIGHT)
+		{
+			setOrientation(Orientation.LEFT);
+			setXVelocity(0);
+			((Slime)this).setMaxVel(-(Slime.maxSpeed));
+			setXAcc(-(Slime.accx));
+			if (slime.getOrientation() == Orientation.LEFT)
+			{
+				slime.setOrientation(Orientation.RIGHT);
+				slime.setXVelocity(0);
+				slime.setMaxVel(Slime.maxSpeed);
+				slime.setXAcc(Slime.accx);	
 			}
 		}
 		else
 		{
-			if ((exc.getVertical()) && (getYVelocity() > 0))
-				setYVelocity(0);
-			if (! exc.getVertical())
+			setOrientation(Orientation.RIGHT);
+			setXVelocity(0);
+			((Slime)this).setMaxVel(Slime.maxSpeed);
+			setXAcc(Slime.accx);
+			if (slime.getOrientation() == Orientation.RIGHT)
 			{
-				setYVelocity(0);
-				setYAcc(0);
+				slime.setOrientation(Orientation.LEFT);
+				slime.setXVelocity(0);
+				slime.setMaxVel(-(Slime.maxSpeed));
+				slime.setXAcc(-(Slime.accx));	
 			}
-				
+		}
+		Slime.timer = 0;
+		Slime.timeslot = Slime.randomTime();
+	}
+	
+	protected double fixCollH(CollisionException exc, double s) {
+		if (this instanceof Mazub)
+		{
+			if (exc.getObject() instanceof Mazub)
+				s = getXPosition();
+			else if (exc.getObject() instanceof Plant)
+				CollisionMazubPlant((Plant)exc.getObject());
+			else if (exc.getObject() instanceof Shark)
+			{
+				CollisionMazubShark((Shark)exc.getObject());
+				s = getXPosition();
+			}
+			else if (exc.getObject() instanceof Slime)
+			{
+				CollisionMazubSlime((Slime)exc.getObject());
+				s = getXPosition();
+			}
+		}
+		if (this instanceof Shark)
+		{
+			if (exc.getObject() instanceof Shark)
+				s = getXPosition();
+			else if (exc.getObject() instanceof Slime)
+			{
+				CollisionSharkSlime((Slime)exc.getObject());
+				s = getXPosition();
+			}
+			else if (exc.getObject() instanceof Mazub)
+				s = getXPosition();
+		}
+		if (this instanceof Slime)
+		{
+			if (exc.getObject() instanceof Slime)
+			{
+				CollisionSlimeSlime((Slime)exc.getObject());
+				s = getXPosition();
+			}
+			else if ((exc.getObject() instanceof Mazub) || (exc.getObject() instanceof Shark))
+				s = getXPosition();
+		}
+		return s;
+	}
+	
+	protected void CheckWorldVertical(double s) throws CollisionException {
+		if (getYVelocity() > 0) 
+		{
+			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(s+getCurrentSprite().getHeight()-2));
+			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
+				throw new CollisionException(this,true);
+			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),
+					(int) Math.round(s+getCurrentSprite().getHeight()-2));
+			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
+				throw new CollisionException(this,true);
+			int h = tilepos2[0] - tilepos1[0];
+			if (h > 1)
+			{
+				for (int i = 1; i < h; i++) {
+					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
+						throw new CollisionException(this,true);
+					}
+			}
+		}
+		if (getYVelocity() <= 0) 
+		{
+			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(s+1));
+			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
+				throw new CollisionException(this,false);
+			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(s+1));
+			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
+				throw new CollisionException(this,false);
+			int h = tilepos2[0] - tilepos1[0];
+			if (h > 1)
+			{
+				for (int i = 1; i < h; i++) {
+					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
+						throw new CollisionException(this,false);
+					}
+			}
 		}
 	}
 	
+	protected double fixWorldV(CollisionException exc, double h) {
+		if ((exc.getVertical()) && (getYVelocity() > 0))
+			setYVelocity(0);
+		if (! exc.getVertical())
+		{
+			setYVelocity(0);
+			setYAcc(0);
+		}
+		return getYPosition();
+	}
+	
+	protected void CheckCollV(double s) throws CollisionException {
+		ArrayList<Plant> plants = getWorld().getAllPlants();
+		ArrayList<Slime> slimes = getWorld().getAllSlimes();
+		ArrayList<Shark> sharks = getWorld().getAllSharks();
+		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
+		allobjects.addAll(aliens);
+		allobjects.addAll(plants);
+		allobjects.addAll(sharks);
+		allobjects.addAll(slimes);
+		if (getYVelocity() > 0)
+		{
+			for (GameObject obj : allobjects)
+				if (collidesWith(getXPosition(),s,obj))
+					if (this != obj)
+						throw new CollisionException(obj,Orientation.RIGHT);
+		}
+		if (getYVelocity() <= 0)
+		{
+			for (GameObject obj : allobjects)
+				if (collidesWith(getXPosition(),s,obj))
+					if (this != obj)
+						throw new CollisionException(obj,Orientation.RIGHT);
+		}
+	}
+	
+	protected double fixCollV(CollisionException exc, double h) {
+		if (this instanceof Mazub)
+		{
+			if (exc.getObject() instanceof Mazub)
+				h = getYPosition();
+			else if (exc.getObject() instanceof Plant)
+				CollisionMazubPlant((Plant)exc.getObject());
+			else if (exc.getObject() instanceof Shark)
+			{
+				CollisionMazubShark((Shark)exc.getObject());
+				h = getYPosition();
+			}
+			else if (exc.getObject() instanceof Slime)
+			{
+				CollisionMazubSlime((Slime)exc.getObject());
+				h = getYPosition();
+			}
+		}
+		if (this instanceof Shark)
+		{
+			if (exc.getObject() instanceof Shark)
+				h = getYPosition();
+			else if (exc.getObject() instanceof Slime)
+			{
+				CollisionSharkSlime((Slime)exc.getObject());
+				h = getYPosition();
+			}
+			else if (exc.getObject() instanceof Mazub)
+				h = getYPosition();
+		}
+		if (this instanceof Slime)
+		{
+			if (exc.getObject() instanceof Slime)
+			{
+				CollisionSlimeSlime((Slime)exc.getObject());
+				h = getYPosition();
+			}
+			else if ((exc.getObject() instanceof Mazub) || (exc.getObject() instanceof Shark))
+				h = getYPosition();
+		}
+		return h;
+	}
+	
+	/**
+	 * Check whether the given time duration is valid.
+	 * @param 	time
+	 * 			The time duration that has to be checked.
+	 * @return  True when the time is valid.
+	 * 			| (time >= 0) && (time < 0.2)
+	 */
+	protected boolean isValidTime(double time) {
+		return ((time >= 0) && (time < 0.2));
+	}
+	
+	abstract void advanceTime(double time);
 	
 }

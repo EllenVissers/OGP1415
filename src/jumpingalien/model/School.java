@@ -2,12 +2,10 @@ package jumpingalien.model;
 
 import jumpingalien.model.Slime;
 import java.util.ArrayList;
-import java.util.Collection;
-//import java.lang.Iterable;
 
 public class School {
 
-	public School(Collection<Slime> slimes) {
+	public School(ArrayList<Slime> slimes) {
 		this.setSlimes(slimes);
 	}
 	
@@ -15,13 +13,13 @@ public class School {
 		this(new ArrayList<Slime>());
 	}
 	
-	private Collection<Slime> slimes;
+	private ArrayList<Slime> slimes;
 	
-	public Collection<Slime> getSlimes() {
+	public ArrayList<Slime> getSlimes() {
 		return this.slimes;
 	}
 	
-	private void setSlimes(Collection<Slime> slimes) {
+	private void setSlimes(ArrayList<Slime> slimes) {
 		this.slimes = slimes;
 	}
 	

@@ -9,6 +9,7 @@ import jumpingalien.model.School;
 import jumpingalien.model.Shark;
 import jumpingalien.model.Slime;
 import jumpingalien.model.World;
+//import jumpingalien.part2.internal.Resources;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 
@@ -42,7 +43,7 @@ public class Facade implements IFacadePart2 {
 			c[0] = -alien.getXAcc();
 		if (alien.isMovingRight())
 			c[0] = alien.getXAcc();
-		if (alien.isJumping())
+		if ((! alien.onGround()) || (! alien.onGameObject()))
 			c[1] = alien.getYAcc();
 		return c;
 	}
@@ -60,10 +61,7 @@ public class Facade implements IFacadePart2 {
 
 	@Override
 	public void startJump(Mazub alien) {
-		try {
-			alien.startJump();
-		} catch (IllegalStateException e) {
-		}
+		alien.startJump();
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class Facade implements IFacadePart2 {
 	 *         elements: width (X) and height (Y), in that order.
 	 */
 	public int[] getWorldSizeInPixels(World world) {
-		int[] result = {world.getTileLength()*world.nbTilesX, world.getTileLength()*world.nbTilesY};
+		int[] result = {world.getWorldWidth(), world.getWorldHeight()};
 		return result;
 	}
 
@@ -156,7 +154,7 @@ public class Facade implements IFacadePart2 {
 	 *         pixels.
 	 */
 	public int getTileLength(World world) {
-		return world.getTileLength();
+		return world.getTileSize();
 	}
 
 	/**
@@ -173,7 +171,8 @@ public class Facade implements IFacadePart2 {
 	 * 			The world for which to start the game.
 	 */
 	public void startGame(World world) {
-		
+		world.startGame();
+		//world.changeGameState(true);
 	}
 
 	/**
@@ -185,7 +184,8 @@ public class Facade implements IFacadePart2 {
 	 * @return true if the game is over, false otherwise.
 	 */
 	public boolean isGameOver(World world) {
-		
+		return world.getGameOver();
+		//return world.isGameOver();
 	}
 
 	/**
@@ -197,7 +197,8 @@ public class Facade implements IFacadePart2 {
 	 * @return true if the game is over and the player has won; false otherwise.
 	 */
 	public boolean didPlayerWin(World world) {
-		
+		return world.getWon();
+		//return world.hasWon();
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class Facade implements IFacadePart2 {
 	 *            world's time.
 	 */
 	public void advanceTime(World world, double dt) {
-		
+		world.advanceTime(dt);
 	}
 
 	/**
@@ -235,7 +236,7 @@ public class Facade implements IFacadePart2 {
 	 *         <b>left, bottom, right, top</b>.
 	 */
 	public int[] getVisibleWindow(World world) {
-		
+		return world.getVisibleWindow();
 	}
 
 	/**
@@ -252,8 +253,7 @@ public class Facade implements IFacadePart2 {
 	 *         bottom left pixel of the given tile, in that order.
 	 */
 	public int[] getBottomLeftPixelOfTile(World world, int tileX, int tileY) {
-		int[] result = {tileX*world.getTileLength(),tileY*world.getTileLength()};
-		return result;
+		return world.getBottomLeftPixelOfTile(tileX, tileY);
 	}
 
 	/**
@@ -280,7 +280,8 @@ public class Facade implements IFacadePart2 {
 	 * 
 	 */
 	public int[][] getTilePositionsIn(World world, int pixelLeft, int pixelBottom, int pixelRight, int pixelTop) {
-		
+		return world.getTilePositions(pixelLeft,pixelBottom,pixelRight,pixelTop);
+		//return world.getTilePositions(pixelLeft,pixelTop,pixelRight,pixelBottom);
 	}
 
 	/**
@@ -314,9 +315,11 @@ public class Facade implements IFacadePart2 {
 	 */
 	public int getGeologicalFeature(World world, int pixelX, int pixelY) throws ModelException {
 		int[] tilepos = world.getTile(pixelX,pixelY);
-		return world.getFeatureAt(tilepos[0], tilepos[1]); // geeft nog tiletype ipv nummer gelinkt aan tiletype
+		return world.getFeatureAt(tilepos[0], tilepos[1]);
 	}
 
+	// return world.getFeatureAt(pixelX,pixelY);
+	
 	/**
 	 * Modify the geological type of a specific tile in the given world to a
 	 * given type.
@@ -340,7 +343,7 @@ public class Facade implements IFacadePart2 {
 	 *            </ul>
 	 */
 	public void setGeologicalFeature(World world, int tileX, int tileY, int tileType) {
-		
+		world.setFeatureAt(tileX,tileY,tileType);
 	}
 
 	/**
@@ -352,7 +355,7 @@ public class Facade implements IFacadePart2 {
 	 *            The alien to be set as the player's character.
 	 */
 	public void setMazub(World world, Mazub alien) {
-		
+		world.setMazub(alien);
 	}
 
 	/**
@@ -383,7 +386,7 @@ public class Facade implements IFacadePart2 {
 	 *         should not belong to a world.
 	 */
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		return new Plant(x,y,sprites);
+		return new Plant((double) x,(double) y,sprites);
 	}
 
 	/**
@@ -395,7 +398,7 @@ public class Facade implements IFacadePart2 {
 	 *            The plant that needs to be added to the world.
 	 */
 	public void addPlant(World world, Plant plant) {
-		
+		world.addPlant(plant);
 	}
 
 	/**
@@ -464,7 +467,7 @@ public class Facade implements IFacadePart2 {
 	 *            The shark that needs to be added to the world.
 	 */
 	public void addShark(World world, Shark shark) {
-		
+		world.addShark(shark);
 	}
 
 	/**
@@ -544,7 +547,7 @@ public class Facade implements IFacadePart2 {
 	 *            The slime that needs to be added to the world.
 	 */
 	public void addSlime(World world, Slime slime) {
-		
+		world.addSlime(slime);
 	}
 
 	/**
