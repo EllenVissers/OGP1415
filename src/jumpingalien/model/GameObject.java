@@ -1136,17 +1136,17 @@ public class GameObject {
 				CollisionMazubPlant((Mazub)this,(Plant)exc.getObject());
 			else if (obj instanceof Shark)
 			{
-				if (! exc.getVertical())
-					CollisionMazubShark((Mazub)this,(Shark)obj,false);
-				else
+				if (exc.getVertical())
 					CollisionMazubShark((Mazub)this,(Shark)obj,true);
+				else
+					CollisionMazubShark((Mazub)this,(Shark)obj,false);
 			}
 			else if (obj instanceof Slime)
 			{
-				if (! exc.getVertical())
-					CollisionMazubSlime((Mazub)this,(Slime)obj,false);
-				else
+				if (exc.getVertical())
 					CollisionMazubSlime((Mazub)this,(Slime)obj,true);
+				else
+					CollisionMazubSlime((Mazub)this,(Slime)obj,false);
 			}
 			return collV(exc,h);
 		}

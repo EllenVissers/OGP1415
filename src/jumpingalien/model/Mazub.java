@@ -742,6 +742,19 @@ public class Mazub extends GameObject {
 	 * 			The time duration after which Mazub's new position and velocity are calculated.
 	 * @effect	The newly computed position is checked with checkWorldH and checkCollH and if necessary corrected with fixWorldH
 	 * 			and fixCollH.
+	 * 			| try {
+	 *			| 	CheckCollH(s);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	if (exc.getCollided())
+	 *			| 		s = collH(exc,s);
+	 *			| 	else
+	 *			| 		s = fixCollH(exc,s);
+	 *			| }
+	 *			| try {
+	 *			| 	CheckWorldH(s);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	s = fixWorldH(exc,s);
+	 *	 		| }
 	 * @effect	The position is updated to the computed one with setXPosition.
 	 * 			| setXPosition(s);
 	 */
@@ -794,6 +807,19 @@ public class Mazub extends GameObject {
 	 * 			The time period after which Mazub's new postion and velocity are calculated.
 	 * @effect	The newly computed position is checked with checkWorldV and checkCollV and if necessary corrected with fixWorldV
 	 * 			and fixCollV.
+	 * 			| try {
+	 *			| 	CheckCollV(h);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	if (exc.getCollided())
+	 *			| 		h = collV(exc,h);
+	 *			| 	else
+	 *			| 		h = fixCollV(exc,h);
+	 *			| }
+	 *			| try {
+	 *			| 	CheckWorldV(h);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	h = fixWorldV(exc,h);
+	 *	 		| }
 	 * @effect	The position is updated to the computed one with setYPosition.
 	 * 			| setYPosition(h);
 	 */
@@ -831,6 +857,19 @@ public class Mazub extends GameObject {
 	 * 			|	setYVelocity(getYVelocity() + getYAcc()*time)
 	 * @effect	The newly computed position is checked with checkWorldV and checkCollV and if necessary corrected with fixWorldV
 	 * 			and fixCollV.
+	 * 			| try {
+	 *			| 	CheckCollV(h);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	if (exc.getCollided())
+	 *			| 		h = collV(exc,h);
+	 *			| 	else
+	 *			| 		h = fixCollV(exc,h);
+	 *			| }
+	 *			| try {
+	 *			| 	CheckWorldV(h);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	h = fixWorldV(exc,h);
+	 *	 		| }
 	 * @effect	The position is updated to the computed one with setYPosition.
 	 * 			| setYPosition(h);
 	 */
@@ -939,11 +978,13 @@ public class Mazub extends GameObject {
 	}
 	
 	/**
-	 * Advance the timers and update Mazub's new position and velocity after the given time duration.
+	 * Update Mazub's new position and velocity after the given time duration.
 	 * @param 	time
 	 * 			The time duration between this position and the next one.
+	 * @effect	The time it takes to move 1 pixel is computed with getDT.
+	 * 			| getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc())
 	 * @effect	The new position and velocity are computed with the method advance.
-	 * 			| advance(dt);
+	 * 			| advance(dt)
 	 * @throws	ModelException
 	 * 			The given time is not valid (between 0 and 0.2)
 	 * 			| ! isValidTime(time)

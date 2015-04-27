@@ -110,6 +110,19 @@ public class Plant extends GameObject {
 	 * 			The time duration after which the new position is calculated.
 	 * @effect	The newly computed position is checked with checkWorldH and checkCollH and if necessary corrected with fixWorldH
 	 * 			and fixCollH.
+	 * 			| try {
+	 *			| 	CheckCollH(s);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	if (exc.getCollided())
+	 *			| 		s = collH(exc,s);
+	 *			| 	else
+	 *			| 		s = fixCollH(exc,s);
+	 *			| }
+	 *			| try {
+	 *			| 	CheckWorldH(s);
+	 *			| } catch (CollisionException exc) {
+	 *			| 	s = fixWorldH(exc,s);
+	 *	 		| }
 	 * @effect	The position is updated to the computed one with setXPosition.
 	 * 			| setXPosition(s);
 	 */
@@ -172,8 +185,10 @@ public class Plant extends GameObject {
 	 * Update the position of the Plant after a given time duration using its current position and velocity.
 	 * @param 	time
 	 * 			The time duration after which the new position is calculated.
+	 * @effect	The time it takes to move 1 pixel is computed with getDT.
+	 * 			| getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc())
 	 * @effect	The new position and velocity are computed with the method advance.
-	 * 			| advance(dt);
+	 * 			| advance(dt)
 	 * @throws	ModelException
 	 * 			The given time is not valid (between 0 and 0.2)
 	 * 			| ! isValidTime(time)
