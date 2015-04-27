@@ -1,62 +1,151 @@
 package jumpingalien.model;
-
 import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
 import jumpingalien.util.Util;
-
 import java.util.ArrayList;
 
-public abstract class GameObject {
 
+/**
+ * A class of game objects involving a horizontal and vertical position, velocity and acceleration, an orientation,
+ * a list of images, a number of hitpoints, a world, a variable registering whether the object is terminated and the time
+ * the object has already been terminated.
+ * @invar	The horizontal and vertical position are always valid.
+ * 			| isValidXPosition(getXPosition()) && isValidYPosition(getYPosition())
+ * @invar 	The horizontal speed will never be greater than the maximum speed.
+ * 			| getXVelocity() <= getMaxVel()
+ * @author 	Ellen Vissers, Nina Versin
+ * @version 1.0
+ */
+public class GameObject {
+
+	/**
+	 * Initialize a new Game Object with given position, velocity, acceleration, orientation, sprites, hitpoints, world and
+	 * variable registering its state.
+	 * @param 	x
+	 * 			The horizontal position.
+	 * @param 	y
+	 * 			The vertical position.
+	 * @param 	vx
+	 * 			The horizontal velocity.
+	 * @param 	vy
+	 * 			The vertical velocity.
+	 * @param 	ax
+	 * 			The horizontal acceleration.
+	 * @param 	ay
+	 * 			The vertical acceleration.
+	 * @param 	orientation
+	 * 			The orientation of the object.
+	 * @param 	sprites
+	 * 			The list of images of the object.
+	 * @param 	hitPoints
+	 * 			The number of hitpoints.
+	 * @param 	world
+	 * 			The world in which the object is situated.
+	 * @param 	terminated
+	 * 			The variable registering its state, whether the object is terminated.
+	 * @throws 	ModelException
+	 * 			Throws an exception if the list of images is empty.
+	 * 			|sprites == null
+	 */
 	public GameObject(double x, double y, double vx, double vy, double ax, double ay, Orientation orientation, 
-			Sprite[] sprites, int hitPoints, World world, boolean terminated) throws ModelException {
+			Sprite[] sprites, int hitPoints, World world, boolean terminated, double terminatedTime) throws ModelException {
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
-		this.setXPosition(x);
-		this.setYPosition(y);
-		this.setXVelocity(vx);
-		this.setYVelocity(vy);
-		this.setXAcc(ax);
-		this.setYAcc(ay);
-		this.setOrientation(orientation);
+		setXPosition(x);
+		setYPosition(y);
+		setXVelocity(vx);
+		setYVelocity(vy);
+		setXAcc(ax);
+		setYAcc(ay);
+		setOrientation(orientation);
 		this.sprites = sprites;
-		this.setHitPoints(hitPoints);
-		this.setWorld(world);
-		this.terminated = false;
+		setHitPoints(hitPoints);
+		setWorld(world);
+		setTerminated(terminated);
+		setTerminatedTime(terminatedTime);
 	}
 	
-	private double x;
-	private double y;
-	private double vx;
-	private double vy;
-	private double ax;
-	private double ay;
-	private Orientation orientation;
-	private Sprite[] sprites;
-	private World world;
-	private int hitPoints;
-	protected boolean terminated;
-	
-	protected boolean isValidXPosition(double pos) {
-		if (getWorld() == null)
-			return true;
-		int xmax = getWorld().getNbTilesX() * getWorld().getTileSize();
-		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,xmax-1));
-	}
-	
-	protected boolean isValidYPosition(double pos) {
-		if (getWorld() == null)
-			return true;
-		int ymax = getWorld().getNbTilesY() * getWorld().getTileSize();
-		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,ymax-1));
-	}
-	
+	//VARIABLES
 	/**
-	 * Return Mazub's current horizontal position.
+	 * Variable registering the horizontal position.
+	 */
+	private double x;
+	/**
+	 * Variable registering the vertical position.
+	 */
+	private double y;
+	/**
+	 * Variable registering the horizontal velocity.
+	 */
+	private double vx;
+	/**
+	 * Variable registering the vertical velocity.
+	 */
+	private double vy;
+	/**
+	 * Variable registering the horizontal acceleration.
+	 */
+	private double ax;
+	/**
+	 * Variable registering the vertical acceleration.
+	 */
+	private double ay;
+	/**
+	 * Variable registering the vertical acceleration of a game object.
+	 */
+	protected final double accy = -10;
+	/**
+	 * Variable registering the orientation of the game object (left or right).
+	 */
+	private Orientation orientation;
+	/**
+	 * Variable registering the list of images of the game object.
+	 */
+	private Sprite[] sprites;
+	/**
+	 * Variable registering the world in which the game object is situated.
+	 */
+	private World world;
+	/**
+	 * Variable registering the number of hitpoints.
+	 */
+	private int hitPoints;
+	/**
+	 * Variable registering the state of the game object (true if it is terminated).
+	 */
+	protected boolean terminated;
+	/**
+	 * Variable registering the time that has passed since the object was terminated.
+	 */
+	private double terminatedTime;
+	/**
+	 * Variable registering the number of hitpoints an alien gets when it collides with a Plant.
+	 */
+	private int MazubPlant = 50;
+	/**
+	 * Variable registering the number of hitpoints an alien and a shark lose when they collide.
+	 */
+	private int MazubShark = 50;
+	/**
+	 * Variable registering the number of hitpoints an alien and a slime lose when they collide.
+	 */
+	private int MazubSlime = 50;
+	/**
+	 * Variable registering the time the immunity of an alien lasts.
+	 */
+	private double immuneDT = 0.6;
+	/**
+	 * Variable registering the number of hitpoints a shark and a slime lose when they collide.
+	 */
+	private int SharkSlime = 50;
+	
+	//GETTERS AND SETTERS
+	/**
+	 * Return the current horizontal position of the game object.
 	 * @return 	The horizontal position.
-	 * 			| this.pos_x
+	 * 			| this.x
 	 */
 	@Basic
 	public double getXPosition() {
@@ -64,25 +153,25 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the horizontal position of Mazub to the given position.
+	 * Set the horizontal position of the game object to the given position.
 	 * @param 	position  
-	 * 			The position we want to set Mazub's horizontal position to.
-	 * @throws 	ModelException
-	 * 			The given position is not a valid one.
-	 * 			| isValidXPosition(position)
-	 * @post 	Mazub's horizontal position is updated to the given position.
+	 * 			The position we want to set the horizontal position to.
+	 * @post 	If the given position is not a valid one, the object is terminated.
+	 * 			| if (! isValidXPosition(position))
+	 * 			| then terminate()
+	 * @post 	The horizontal position is updated to the given position.
 	 * 			| new.pos_x = position
 	 */
-	protected void setXPosition(double position) throws ModelException {
+	protected void setXPosition(double position) {
 		if (! isValidXPosition(position))
 			terminate();
 		this.x = position;
 	}
 	
 	/**
-	 * Return Mazub's current vertical position.
-	 * @return	The verical position.
-	 * 			| this.pos_y
+	 * Return the current vertical position of the game object.
+	 * @return	The vertical position.
+	 * 			| this.y
 	 */
 	@Basic
 	public double getYPosition() {
@@ -90,13 +179,13 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the vertical position of Mazub to the given position.
+	 * Set the vertical position of the game object to the given position.
 	 * @param 	position 
-	 * 			The position we want to set Mazub's vertical position to.
-	 * @throws 	ModelException
-	 * 			The given position is not a valid one.
-	 * 			| isValidYPosition(position)
-	 * @post 	Mazub's vertical position is updated to the given position.
+	 * 			The position we want to set the vertical position to.
+	 * @post 	If the given position is not a valid one, the object is terminated.
+	 * 			| if (! isValidYPosition(position))
+	 * 			| then terminate()
+	 * @post 	The vertical position is updated to the given position.
 	 * 			| new.pos_y = position
 	 */
 	protected void setYPosition(double position) {
@@ -106,9 +195,9 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Return Mazub's current horizontal velocity.
-	 * @return	The horizontal velocity of Mazub.
-	 * 			|this.vel_x
+	 * Return the current horizontal velocity of the game object.
+	 * @return	The horizontal velocity.
+	 * 			|this.vx
 	 */
 	@Basic
 	public double getXVelocity() {
@@ -116,20 +205,20 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the horizontal velocity of Mazub to the given velocity.
+	 * Set the horizontal velocity of the game object to the given velocity.
 	 * @param 	velocity
-	 * 			The new velocity of Mazub.
-	 * @post 	Mazub's horizontal velocity is updated to the given velocity.
-	 * 			| new.vel_x = velocity
+	 * 			The new velocity of the game object.
+	 * @post 	The horizontal velocity is updated to the given velocity.
+	 * 			| new.vx = velocity
 	 */
 	protected void setXVelocity(double velocity) {
 		this.vx = velocity;
 	}
 	
 	/**
-	 * Return Mazub's current vertical velocity.
+	 * Return the current vertical velocity of the game object.
 	 * @return	The vertical velocity.
-	 * 			| this.vel_y
+	 * 			| this.vy
 	 */
 	@Basic
 	public double getYVelocity() {
@@ -137,20 +226,20 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the vertical velocity of Mazub to the given velocity.
+	 * Set the vertical velocity of the game object to the given velocity.
 	 * @param 	velocity
-	 * 			The new velocity of Mazub.
-	 * @post 	Mazub's vertical velocity is updated to the given velocity.
-	 * 			| new.vel_y = velocity
+	 * 			The new velocity of the game object.
+	 * @post 	The vertical velocity is updated to the given velocity.
+	 * 			| new.vy = velocity
 	 */
 	protected void setYVelocity(double velocity) {
 		this.vy = velocity;
 	}
 	
 	/**
-	 * Return Mazub's current horizontal acceleration.
-	 * @return	The horizontal acceleration of Mazub.
-	 * 			|this.acc_x
+	 * Return the current horizontal acceleration of the game object.
+	 * @return	The horizontal acceleration.
+	 * 			|this.ax
 	 */
 	@Basic
 	public double getXAcc() {
@@ -158,20 +247,20 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the horizontal acceleration of Mazub to the given acceleration.
+	 * Set the horizontal acceleration of the game object to the given acceleration.
 	 * @param 	acceleration
-	 * 			The new acceleration of Mazub.
-	 * @post 	Mazub's horizontal acceleration is updated to the given acceleration.
-	 * 			| new.acc_x = acceleration
+	 * 			The new acceleration of the game object.
+	 * @post 	The horizontal acceleration is updated to the given acceleration.
+	 * 			| new.ax = acceleration
 	 */
 	protected void setXAcc(double acceleration) {
 		this.ax = acceleration;
 	}
 	
 	/**
-	 * Return Mazub's current vertical acceleration.
+	 * Return the current vertical acceleration of the game object.
 	 * @return	The vertical acceleration.
-	 * 			| this.acc_y
+	 * 			| this.ay
 	 */
 	@Basic
 	public double getYAcc() {
@@ -179,23 +268,28 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the vertical acceleration of Mazub to the given acceleration.
+	 * Set the vertical acceleration of the game object to the given acceleration.
 	 * @param 	acceleration
-	 * 			The new acceleration of Mazub.
-	 * @post 	Mazub's vertical acceleration is updated to the given acceleration.
-	 * 			| new.acc_y = acceleration
+	 * 			The new acceleration of the game object.
+	 * @post 	The vertical acceleration is updated to the given acceleration.
+	 * 			| new.ay = acceleration
 	 */
 	protected void setYAcc(double acceleration) {
 		this.ay = acceleration;
 	}
 	
+	/**
+	 * Return the list of images of the game object.
+	 * @return 	The list of sprites.
+	 * 			| this.sprites
+	 */
 	public Sprite[] getSprites() {
 		return this.sprites;
 	}
 	
 	/**
-	 * Get the orientation of Mazub.
-	 * @return 	The orientation of Mazub.
+	 * Return the orientation of the game object.
+	 * @return 	The orientation of the game object.
 	 * 			| this.orientation
 	 */
 	@Basic
@@ -204,10 +298,10 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Set the orientation of Mazub to the given orientation.
+	 * Set the orientation of the game object to the given orientation.
 	 * @param 	orientation
-	 * 			The new orientation of Mazub.
-	 * @post 	Mazub's orientation is updated to the given orientation.
+	 * 			The new orientation.
+	 * @post 	The orientation is updated to the given orientation.
 	 * 			| new.orientation = orientation
 	 */
 	protected void setOrientation(Orientation orientation) {
@@ -215,25 +309,53 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * 
-	 * @param points
+	 * Return the current number of hitpoints of the game object.
+	 * @return 	The current number of hitpoints.
+	 * 			|this.hitPoints
 	 */
-	protected void setHitPoints(int points) {
-		this.hitPoints = points;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
+	@Basic
 	public int getHitPoints() {
 		return this.hitPoints;
 	}
 	
+	/**
+	 * Set the number of hitpoints to the given value.
+	 * @param 	points
+	 * 			The new number of hitpoints.
+	 * @post 	If the given number of hitpoints is invalid, the object is terminated.
+	 * 			| if (! isValidYPosition(position))
+	 * 			| then terminate()
+	 */
+	protected void setHitPoints(int points) {
+		if (! isValidNbHitPoints(points))
+			terminate();
+		this.hitPoints = points;
+	}
+	
+	/**
+	 * Return the world in which the game object is situated.
+	 * @return 	The game world.
+	 * 			|this.world
+	 */
+	@Basic
 	public World getWorld() {
 		return this.world;
 	}
 	
+	/**
+	 * Set the game world to the given world.
+	 * @param 	world
+	 * 			The new game world.
+	 * @post	If the new world is null, the object is removed from the old world.
+	 * 			| if (this instanceof Mazub)
+	 *			| 	getWorld().getAllAliens().remove(this);
+	 *			| else if (this instanceof Plant)
+	 *			|	getWorld().getAllPlants().remove(this);
+	 *			| else if (this instanceof Shark)
+	 *			|	getWorld().getAllSharks().remove(this);
+	 *			| else if (this instanceof Slime)
+	 *			|	getWorld().getAllSlimes().remove(this);
+	 */
 	protected void setWorld(World world) {
 		if (world != getWorld())
 		{
@@ -246,48 +368,170 @@ public abstract class GameObject {
 				else if (this instanceof Shark)
 					getWorld().getAllSharks().remove(this);
 				else if (this instanceof Slime)
-				{
 					getWorld().getAllSlimes().remove(this);
-					((Slime)this).getSchool().removeSlime((Slime) this);
-				}
 			}
 			else
 				this.world = world;
 		}
 	}
 	
-	public Sprite getCurrentSprite() {
-		assert (this.getSprites().length == 2);
-		assert (this.getSprites() != null);
-		if (this.getOrientation() == Orientation.LEFT)
-			return this.sprites[0];
-		else
-			return this.sprites[1];
+	/**
+	 * Return the y-coordinate of the upper right position.
+	 * @return 	The height of the game object.
+	 * 			| getCurrentSprite().getHeight()
+	 */
+	@Basic
+	public int getYSize() {
+		return getCurrentSprite().getHeight();
 	}
 	
-	protected void terminate() {
-		this.terminated = true;
-		this.setWorld(null);
-		//delay 0.6s
+	/**
+	 * Return the x-coordinate of the upper right position.
+	 * @return 	The height of the game object.
+	 * 			| getCurrentSprite().getWidth()
+	 */
+	@Basic
+	public int getXSize() {
+		return getCurrentSprite().getWidth();
 	}
 	
-	protected boolean isTerminated() {
+	/**
+	 * Set the time the object is terminated to the given time.
+	 * @param 	time
+	 * 			The new terminated time.
+	 * @post	The terminated time is updated.
+	 * 			| new.getTerminatedTime() == time
+	 */
+	protected void setTerminatedTime(double time) {
+		this.terminatedTime = time;
+	}
+	
+	/**
+	 * Return the time the object is terminated.
+	 * @return	Return the terminated time.
+	 * 			| this.terminatedTime
+	 */
+	@Basic
+	public double getTerminatedTime() {
+		return this.terminatedTime;
+	}
+	
+	/**
+	 * Return the length of the time interval in which the time duration has to be split up.
+	 * @param 	time
+	 * 			The given time duration.
+	 * @param 	vx
+	 * 			The horizontal velocity.
+	 * @param 	vy
+	 * 			The vertical velocity.
+	 * @param 	ax
+	 * 			The horizontal acceleration.
+	 * @param 	ay
+	 * 			The vertical acceleration.
+	 * @return	The new time duration that is used to update position and velocity.
+	 * 			| Math.min((0.01/(Math.abs(vx) + Math.abs(ax)*time)),(0.01/(Math.abs(vy) + Math.abs(ay)*time)));
+	 * @post	If the game object is not moving, the original time is returned.
+	 * 			| if (t == Double.POSITIVE_INFINITY)
+				| then t = time
+	 */
+	protected double getDT(double time, double vx, double vy, double ax, double ay) {
+		double t = Math.min((0.01/(Math.abs(vx) + Math.abs(ax)*time)),(0.01/(Math.abs(vy) + Math.abs(ay)*time)));
+		if (t == Double.POSITIVE_INFINITY)
+			t = time;
+		return t;
+	}
+	
+	//CHECKERS
+	/**
+	 * Check whether the given position is a valid horizontal position.
+	 * @param 	pos
+	 * 			The given position.
+	 * @return	True if the position is valid.
+	 * 			| (pos > 0) && (pos < getWorld().getNbTilesX() * getWorld().getTileSize())
+	 */
+	protected boolean isValidXPosition(double pos) {
+		if (getWorld() == null)
+			return true;
+		int xmax = getWorld().getNbTilesX() * getWorld().getTileSize();
+		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,xmax-1));
+	}
+	
+	/**
+	 * Check whether the given position is a valid vertical position.
+	 * @param 	pos
+	 * 			The given position.
+	 * @return	True if the position is valid.
+	 * 			| (pos >= 0) && (pos < getWorld().getNbTilesY() * getWorld().getTileSize())
+	 */
+	protected boolean isValidYPosition(double pos) {
+		if (getWorld() == null)
+			return true;
+		int ymax = getWorld().getNbTilesY() * getWorld().getTileSize();
+		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,ymax-1));
+	}
+	
+	/**
+	 * Check whether the given number of points is a valid number of hitpoints.
+	 * @param 	points
+	 * 			The number that has to be checked.
+	 * @return	True if the number is valid.
+	 * 			| points > 0
+	 */
+	private boolean isValidNbHitPoints(int points) {
+		return (points > 0);
+	}
+	
+	/**
+	 * Check whether the given time duration is valid.
+	 * @param 	time
+	 * 			The time duration that has to be checked.
+	 * @return  True when the time is valid.
+	 * 			| (time >= 0) && (time < 0.2)
+	 */
+	protected boolean isValidTime(double time) {
+		return ((time >= 0) && (time <= 0.2));
+	}
+	
+	/**
+	 * Check whether the game object is terminated.
+	 * @return	True when the game object is terminated.
+	 * 			| this.terminated > 0.6
+	 */
+	@Basic
+	public boolean isTerminated() {
 		return this.terminated;
 	}
 	
-	protected double getDT(double time, double vx, double vy, double ax, double ay) {
-		if ((Util.fuzzyEquals(vx, 0)) || (Util.fuzzyEquals(vy, 0)))
-			return time;
-		return Math.min(0.01/(Math.abs(vx) + Math.abs(ax)*time),0.01/(Math.abs(vy) + Math.abs(ay)*time));
+	/**
+	 * Set the terminated state to the given state.
+	 * @param 	term
+	 * 			The new terminated state.
+	 * @post	The terminated state is updated.
+	 * 			| new.isTerminated() == term
+	 */
+	protected void setTerminated(boolean term) {
+		this.terminated = term;
 	}
 	
-	protected double getDT2(double time, double vx, double vy, double ax, double ay) {
-		return 0.000009;
+	//METHODS
+	/**
+	 * Terminate the game object.
+	 * @effect	The terminated state is updated with setTerminated.
+	 * 			| setTerminated(true)
+	 * @post	The object is terminated.
+	 * 			|new.isTerminated() == true
+	 */
+	protected void terminate() {
+		setTerminated(true);
 	}
 	
-	public boolean onGround() {
+	/**
+	 * Check whether the game object is standing on impassable terrain.
+	 * @return 	True if the game object is standing on impassable terrain and is not overlapping with impassable terrain.
+	 */
+	protected boolean onGround() {
 		int[][] bottom = getWorld().getTilePositions((int) Math.round(getXPosition()+1),(int) Math.round(getYPosition()),
-				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()));
+				(int) Math.round(getXPosition()+getXSize()-2),(int) Math.round(getYPosition()));
 		boolean a = false;
 		for (int[] pos : bottom)
 			if (getWorld().getFeatureAt(pos[0],pos[1]) == 1)
@@ -295,14 +539,20 @@ public abstract class GameObject {
 		if (! a)
 			return false;
 		int[][] tilepos = getWorld().getTilePositions((int) Math.round(getXPosition()+1),(int) Math.round(getYPosition()+1),
-				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-2));
+				(int) Math.round(getXPosition()+getXSize()-2),(int) Math.round(getYPosition()+getYSize()-2));
 		for (int[] pos : tilepos)
 			if (getWorld().getFeatureAt(pos[0],pos[1]) == 1)
 				return false;
 		return true;
 	}
 	
-	public boolean onGameObject() {
+	/**
+	 * Check whether the game object is standing on another game object.
+	 * @return 	True if the game object is standing on another game object.
+	 * 			| if ((collidesWith(getXPosition(),getYPosition()-1,obj)) && (ymin == yomax))
+	 *			| return true;
+	 */
+	protected boolean onGameObject() {
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
 		ArrayList<Shark> sharks = getWorld().getAllSharks();
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
@@ -311,48 +561,85 @@ public abstract class GameObject {
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
 		allobjects.remove(this);
-		int xmin = (int) Math.round(getXPosition()+1);
-		int xmax = (int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2);
 		int ymin = (int) Math.round(getYPosition());
-		for (int i = 0; i<allobjects.size(); i++)
+		for (GameObject obj : allobjects)
 		{
-			GameObject obj = allobjects.get(i);
-			int xomin = (int) Math.round(obj.getXPosition()+1);
-			int xomax = (int) Math.round(obj.getXPosition()+obj.getCurrentSprite().getWidth()-2);
 			int yomax = (int) Math.round(obj.getYPosition()+obj.getCurrentSprite().getHeight()-1);
-			if ((ymin == yomax) && (((xmin>=xomin) && (xmin<=xomax)) || ((xmax<=xomax) && (xmax>=xomin)) ))
+			if ((collidesWith(getXPosition(),getYPosition()-1,obj)) && (ymin == yomax))
 				return true;
 		}
 		return false;
 	}
-
-	protected void addHitPoints(int points) {
-		setHitPoints(getHitPoints() + points);
-	}
 	
+	/**
+	 * Method to decrease the number of hitpoints with a given value.
+	 * @param 	points
+	 * 			The amount by which the number has to be decreased.
+	 * @post	The number of hitpoints is decreased with the given amount.
+	 * 			|new.getHitpoints() == this.getHitPoints() - points
+	 * @post	If the new number of hitpoints is below or equal to zero, the game object is terminated.
+	 * 			| if ((this.getHitPoints() - points) < 0)
+	 * 			| then terminate()
+	 */
 	protected void reduceHitPoints(int points) {
 		if ((getHitPoints() - points) <= 0)
-			this.terminate();
+		{
+			terminate();
+			setHitPoints(0);
+		}
 		else
 			setHitPoints(getHitPoints()-points);
 	}
 	
-	protected int CheckMedium() {
-		int[][] tiles = getWorld().getTilePositions((int) Math.round(getXPosition()),(int) Math.round(getYPosition()),
-				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-1),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-1));
-		for (int[] tile : tiles)
-			if (getWorld().getFeatureAt(tile[0],tile[1]) != 1)
-				return getWorld().getFeatureAt(tile[0],tile[1]);
-		return -1;
+	/**
+	 * Return the medium in which the game object is situated.
+	 * @return 	The integer number that corresponds to the medium in which the game object is situated.
+	 */
+	protected ArrayList<Integer> CheckMedium() {
+		int[][] tiles = getWorld().getTilePositions((int) Math.round(getXPosition()+1),(int) Math.round(getYPosition()+1),
+				(int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(getYPosition()+getCurrentSprite().getHeight()-2));
+		ArrayList<Integer> medium = new ArrayList<Integer>();
+		for (int[] tile : tiles){
+			int m = getWorld().getFeatureAt(tile[0],tile[1]);
+			if ((m != 1) && (! medium.contains(m)));
+				medium.add(m);	
+		}
+		return medium;
 	}
 	
-	protected boolean collidesWith(double xa, double ya, GameObject other) {
-		return (!((xa + (getCurrentSprite().getWidth() - 1) < other.getXPosition())
-				|| (other.getXPosition() + (other.getCurrentSprite().getWidth()-1) < xa)
-				|| (ya + (getCurrentSprite().getHeight() - 1) < other.getYPosition())
-				|| (other.getYPosition() + (other.getCurrentSprite().getHeight()-1) < ya) ));
+	/**
+	 * Check whether the game object is colliding with another game object at its new position.
+	 * @param 	xa
+	 * 			The new horizontal position of the game object.
+	 * @param 	ya
+	 * 			The new vertical position of the game object.
+	 * @param 	other
+	 * 			The other game object this object could collide with.
+	 * @return 	True if the game object collides with the given other game object.
+	 * 			| (((!(xamax <= xo)) && (!(xomax <= x)) && (!(yamax <= yo)) && (!(yomax <= y))))
+	 */
+	private boolean collidesWith(double xa, double ya, GameObject other) {
+		int x = (int) Math.round(xa);
+		int y = (int) Math.round(ya);
+		int xamax = (int) Math.round(xa + getXSize() - 1);
+		int yamax = (int) Math.round(ya + getYSize() - 1);
+		int xo = (int) Math.round(other.getXPosition());
+		int yo = (int) Math.round(other.getYPosition());
+		int xomax = (int) Math.round(other.getXPosition() + other.getXSize()-1);
+		int yomax = (int) Math.round(other.getYPosition() + other.getYSize()-1);
+		return (((!(xamax <= xo))
+				&& (!(xomax <= x))
+				&& (!(yamax <= yo))
+				&& (!(yomax <= y))));
 	}
 	
+	/**
+	 * Check whether the game object horizontally collides with the game world.
+	 * @param 	s
+	 * 			The updated horizontal position.
+	 * @throws 	CollisionException
+	 * 			Throws an exception if the object collides with impassable terrain of the game world.
+	 */
 	protected void CheckWorldH(double s) throws CollisionException {
 		if (getOrientation() == Orientation.RIGHT) 
 		{
@@ -391,6 +678,16 @@ public abstract class GameObject {
 		}
 	}
 	
+	/**
+	 * Update the horizontal position after a horizontal collision with the game world.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	s
+	 * 			The originally updated horizontal position of the game object.
+	 * @return  The new horizontal position of the game object.
+	 * 			| getXPosition()
+	 * @post	If slimes or sharks collide with impassable terrain, their orientation is changed.
+	 */
 	protected double fixWorldH(CollisionException exc, double s) {
 		if (this instanceof Slime)
 		{
@@ -429,6 +726,13 @@ public abstract class GameObject {
 		return getXPosition();
 	}
 	
+	/**
+	 * Check whether the game object horizontally collides with another game object.
+	 * @param 	s
+	 * 			The updated horizontal position.
+	 * @throws 	CollisionException
+	 * 			Throws an exception if the object collides with another game object of the game world.
+	 */
 	protected void CheckCollH(double s) throws CollisionException {
 		ArrayList<Plant> plants = getWorld().getAllPlants();
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
@@ -436,156 +740,287 @@ public abstract class GameObject {
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
 		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
 		allobjects.addAll(aliens);
-		allobjects.addAll(plants);
+		if (this instanceof Mazub)
+			allobjects.addAll(plants);
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
-		if (getOrientation() == Orientation.RIGHT)
+		allobjects.remove(this);
+		if (this instanceof Plant)
 		{
-			for (GameObject obj : allobjects)
-				if (collidesWith(s,getYPosition(),obj))
-					if (this != obj)
-						throw new CollisionException(obj,Orientation.RIGHT);
+			allobjects.removeAll(plants);
+			allobjects.removeAll(sharks);
+			allobjects.removeAll(slimes);
 		}
-		if (getOrientation() == Orientation.LEFT)
+		for (GameObject obj : allobjects)
 		{
-			for (GameObject obj : allobjects)
-				if (collidesWith(s,getYPosition(),obj))
-					if (this != obj)
-						throw new CollisionException(obj,Orientation.LEFT);
+			if ((collidesWith(s,getYPosition(),obj)) && ((int) Math.round(s) != (int) Math.round(getXPosition())))
+			{
+				ArrayList<GameObject> coll = new ArrayList<GameObject>();
+				coll.add(obj);
+				coll.add(this);
+				if (! (getWorld().getCollided().contains(coll)))
+				{
+					ArrayList<GameObject> coll2 = new ArrayList<GameObject>();
+					coll2.add(this);
+					coll2.add(obj);
+					getWorld().getCollided().add(coll2);
+					throw new CollisionException(obj,getOrientation(),false);
+				}
+				else
+					throw new CollisionException(obj,getOrientation(),true);
+			}
 		}
 	}
 	
-	private void CollisionMazubPlant(Plant plant) {
+	/**
+	 * Update the states of a Plant and an alien after collision.
+	 * @param 	plant
+	 * 			The Plant with which the game object Mazub collides.
+	 * @effect	If Mazub has not reached his maximum number of hitpoints, the plant is terminated with terminate and the number of
+	 * 			hitpoints of Mazub is updated with addHitPoints.
+	 * 			| mazub.addHitPoints(MazubPlant,Mazub.maxHitPoints)
+	 * 			| plant.terminate()
+	 */
+	private void CollisionMazubPlant(Mazub mazub, Plant plant) {
 		if (getHitPoints() < Mazub.maxHitPoints)
 		{
-			((Mazub)this).addHitPoints(50,Mazub.maxHitPoints);
+			mazub.addHitPoints(MazubPlant,Mazub.maxHitPoints);
 			plant.terminate();
 		}
 	}
 	
-	private void CollisionMazubShark(Shark shark) {
-		if (! ((Mazub)this).isImmune())
+	/**
+	 * Update the states of a Shark and an alien after collision.
+	 * @param 	shark
+	 * 			The Shark with which the game object Mazub collides.
+	 * @effect	The number of hitpoints of the shark is updated with reduceHitPoints.
+	 * 			| shark.reduceHitPoints(MazubShark)
+	 * @effect	If Mazub is not immune, his number of hitpoints is updated with reduceHitPoints and his immune time is
+	 * 			set with setImmuneTime.
+	 * 			| mazub.reduceHitPoints(MazubShark)
+	 * 			| mazub.setImmuneTime(immuneDT)
+	 */
+	private void CollisionMazubShark(Mazub mazub, Shark shark, boolean hit) {
+		if ((! mazub.isImmune()) && hit)
 		{
-			((Mazub)this).reduceHitPoints(50);
-			shark.reduceHitPoints(50);
-			((Mazub)this).setImmuneTime(0.6);
+			mazub.reduceHitPoints(MazubShark);
+			mazub.setImmuneTime(immuneDT);
 		}
+		shark.reduceHitPoints(MazubShark);
 	}
 	
-	private void CollisionMazubSlime(Slime slime) {
-		if (! ((Mazub)this).isImmune())
+	/**
+	 * Update the states of a Slime and an alien after collision.
+	 * @param 	slime
+	 * 			The Slime with which the game object Mazub collides.
+	 * @effect	The number of hitpoints of the slime is updated with reduceHitPoints.
+	 * 			| slime.reduceHitPoints(MazubSlime)
+	 * @effect	If Mazub is not immune, his number of hitpoints is updated with reduceHitPoints and his immune time is
+	 * 			set with setImmuneTime.
+	 * 			| mazub.reduceHitPoints(MazubSlime)
+	 * 			| mazub.setImmuneTime(immuneDT)
+	 */
+	private void CollisionMazubSlime(Mazub mazub, Slime slime, boolean hit) {
+		if ((! mazub.isImmune()) && hit)
 		{
-			((Mazub)this).reduceHitPoints(50);
-			slime.reduceHitPoints(50);
-			((Mazub)this).setImmuneTime(0.6);
+			mazub.reduceHitPoints(MazubSlime);
+			mazub.setImmuneTime(immuneDT);
 		}
+		slime.reduceHitPoints(MazubSlime);
 	}
 	
-	private void CollisionSharkSlime(Slime slime) {
-		((Shark)this).reduceHitPoints(50);
-		slime.reduceHitPoints(50);
+	/**
+	 * Update the states of a Shark and a Slime after collision.
+	 * @param 	slime
+	 * 			The Slime with which the game object Shark collides.
+	 * @effect	The number of hitpoints of the shark is updated with reduceHitPoints.
+	 * 			| shark.reduceHitPoints(SharkSlime)
+	 * @effect	The number of hitpoints of the slime is updated with reduceHitPoints.
+	 * 			| slime.reduceHitPoints(SharkSlime)
+	 */
+	private void CollisionSharkSlime(Shark shark, Slime slime) {
+		shark.reduceHitPoints(SharkSlime);
+		slime.reduceHitPoints(SharkSlime);
 	}
 	
+	/**
+	 * Update the states of a Slime and a Slime after collision.
+	 * @param 	slime
+	 * 			The Slime with which the game object Slime collides.
+	 * @post	The slime of the smaller school joined the larger school of the other slime.
+	 * 			| if (getSchool().getSize() < slime.getSchool().getSize())
+	 * 			| then new.getSchool() == slime.getSchool()
+	 */
 	private void CollisionSlimeSlime(Slime slime) {
-		if (((Slime)this).getSchool().getSize() < slime.getSchool().getSize())
+		if (((Slime)this).getSchool() != slime.getSchool())
 		{
-			((Slime)this).getSchool().removeSlime((Slime)this);
-			slime.getSchool().addSlime((Slime)this);
-		}
-		else if (((Slime)this).getSchool().getSize() > slime.getSchool().getSize())
-		{
-			slime.getSchool().removeSlime(slime);
-			((Slime)this).getSchool().addSlime(slime);
-		}
-		if (getOrientation() == Orientation.RIGHT)
-		{
-			setOrientation(Orientation.LEFT);
-			setXVelocity(0);
-			((Slime)this).setMaxVel(-(Slime.maxSpeed));
-			setXAcc(-(Slime.accx));
-			if (slime.getOrientation() == Orientation.LEFT)
+			int size1 = ((Slime)this).getSchool().getSize();
+			int size2 = slime.getSchool().getSize();
+			if (size1 < size2)
 			{
-				slime.setOrientation(Orientation.RIGHT);
-				slime.setXVelocity(0);
-				slime.setMaxVel(Slime.maxSpeed);
-				slime.setXAcc(Slime.accx);	
+				((Slime)this).getSchool().removeSlime(((Slime)this));
+				slime.getSchool().addSlime(((Slime)this));
 			}
-		}
-		else
-		{
-			setOrientation(Orientation.RIGHT);
-			setXVelocity(0);
-			((Slime)this).setMaxVel(Slime.maxSpeed);
-			setXAcc(Slime.accx);
-			if (slime.getOrientation() == Orientation.RIGHT)
+			else if (size2 < size1)
 			{
-				slime.setOrientation(Orientation.LEFT);
-				slime.setXVelocity(0);
-				slime.setMaxVel(-(Slime.maxSpeed));
-				slime.setXAcc(-(Slime.accx));	
+				slime.getSchool().removeSlime(slime);
+				((Slime)this).getSchool().addSlime(slime);
 			}
 		}
 		Slime.timer = 0;
 		Slime.timeslot = Slime.randomTime();
 	}
 	
+	/**
+	 * Update the state of the game object after a horizontal collision with another game object.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	s
+	 * 			The originally updated horizontal position of the game object.
+	 * @return  The new horizontal position of the game object.
+	 * @effect	If the object is not a plant, the new position is calculated with collH.
+	 * 			| collH(exc,s)
+	 * @effect	If two objects collide, their state is updated with Collision_Obj1_Obj2.
+	 * 			| CollisionMazubPlant((Mazub)this,(Plant)obj)
+	 */
 	protected double fixCollH(CollisionException exc, double s) {
+		GameObject obj = exc.getObject();
 		if (this instanceof Mazub)
 		{
-			if (exc.getObject() instanceof Mazub)
-				s = getXPosition();
-			else if (exc.getObject() instanceof Plant)
-				CollisionMazubPlant((Plant)exc.getObject());
-			else if (exc.getObject() instanceof Shark)
-			{
-				CollisionMazubShark((Shark)exc.getObject());
-				s = getXPosition();
-			}
-			else if (exc.getObject() instanceof Slime)
-			{
-				CollisionMazubSlime((Slime)exc.getObject());
-				s = getXPosition();
-			}
+			if (obj instanceof Plant)
+				CollisionMazubPlant((Mazub)this,(Plant)obj);
+			else if (obj instanceof Shark)
+				CollisionMazubShark((Mazub)this,(Shark)obj,true);
+			else if (obj instanceof Slime)
+				CollisionMazubSlime((Mazub)this,(Slime)obj,true);
+			return collH(exc,s);
 		}
 		if (this instanceof Shark)
 		{
-			if (exc.getObject() instanceof Shark)
-				s = getXPosition();
-			else if (exc.getObject() instanceof Slime)
-			{
-				CollisionSharkSlime((Slime)exc.getObject());
-				s = getXPosition();
-			}
-			else if (exc.getObject() instanceof Mazub)
-				s = getXPosition();
+			if (obj instanceof Mazub)
+				CollisionMazubShark((Mazub)obj,(Shark)this,true);
+			else if (obj instanceof Slime)
+				CollisionSharkSlime((Shark)this,(Slime)obj);
+			return collH(exc,s);
 		}
 		if (this instanceof Slime)
 		{
-			if (exc.getObject() instanceof Slime)
-			{
-				CollisionSlimeSlime((Slime)exc.getObject());
-				s = getXPosition();
-			}
-			else if ((exc.getObject() instanceof Mazub) || (exc.getObject() instanceof Shark))
-				s = getXPosition();
+			if (obj instanceof Mazub)
+				CollisionMazubSlime((Mazub)obj,(Slime)this,true);
+			else if (obj instanceof Shark)
+				CollisionSharkSlime((Shark)obj,(Slime)this);
+			else if (obj instanceof Slime)
+				CollisionSlimeSlime((Slime)obj);
+			return collH(exc,s);
 		}
 		return s;
 	}
 	
-	protected void CheckWorldVertical(double s) throws CollisionException {
+	/**
+	 * Update the horizontal position after a horizontal collision with another game object.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	s
+	 * 			The originally updated horizontal position of the game object.
+	 * @return	The new horizontal position.
+	 * 			| if (obj instanceof Plant)
+	 *			| 	return s;
+	 *			| else 
+	 *			| 	return getXPosition();
+	 *@post		If two slimes or two sharks collide, their orientation is changed away from the collision.
+	 */
+	protected double collH(CollisionException exc, double s) {
+		GameObject obj = exc.getObject();
+		if ((this instanceof Slime) && (obj instanceof Slime))
+		{
+			if (getOrientation() == Orientation.RIGHT)
+			{
+				setOrientation(Orientation.LEFT);
+				setXVelocity(0);
+				((Slime)this).setMaxVel(-(Slime.maxSpeed));
+				setXAcc(-(Slime.accx));
+				if (obj.getOrientation() == Orientation.LEFT)
+				{
+					obj.setOrientation(Orientation.RIGHT);
+					obj.setXVelocity(0);
+					((Slime)obj).setMaxVel(Slime.maxSpeed);
+					obj.setXAcc(Slime.accx);	
+				}
+			}
+			else
+			{
+				setOrientation(Orientation.RIGHT);
+				setXVelocity(0);
+				((Slime)this).setMaxVel(Slime.maxSpeed);
+				setXAcc(Slime.accx);
+				if (obj.getOrientation() == Orientation.RIGHT)
+				{
+					obj.setOrientation(Orientation.LEFT);
+					obj.setXVelocity(0);
+					((Slime)obj).setMaxVel(-(Slime.maxSpeed));
+					obj.setXAcc(-(Slime.accx));	
+				}
+			}
+		}
+		else if ((this instanceof Shark) && (obj instanceof Shark))
+		{
+			if (getOrientation() == Orientation.RIGHT)
+			{
+				setOrientation(Orientation.LEFT);
+				setXVelocity(0);
+				((Shark)this).setMaxVel(-(Shark.maxSpeed));
+				setXAcc(-(Shark.accx));
+				if (obj.getOrientation() == Orientation.LEFT)
+				{
+					obj.setOrientation(Orientation.RIGHT);
+					obj.setXVelocity(0);
+					((Shark)obj).setMaxVel(Shark.maxSpeed);
+					obj.setXAcc(Shark.accx);	
+				}
+			}
+			else
+			{
+				setOrientation(Orientation.RIGHT);
+				setXVelocity(0);
+				((Shark)this).setMaxVel(Shark.maxSpeed);
+				setXAcc(Shark.accx);
+				if (obj.getOrientation() == Orientation.RIGHT)
+				{
+					obj.setOrientation(Orientation.LEFT);
+					obj.setXVelocity(0);
+					((Shark)obj).setMaxVel(-(Shark.maxSpeed));
+					obj.setXAcc(-(Shark.accx));	
+				}
+			}
+		}
+		if (obj instanceof Plant)
+			return s;
+		else 
+			return getXPosition();
+		
+	}
+	
+	/**
+	 * Check whether the game object vertically collides with the game world.
+	 * @param 	h
+	 * 			The new vertical position.
+	 * @throws 	CollisionException
+	 * 			Throws an exception if the object collides with impassable terrain of the game world.
+	 */
+	protected void CheckWorldV(double h) throws CollisionException {
 		if (getYVelocity() > 0) 
 		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(s+getCurrentSprite().getHeight()-2));
+			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(h+getCurrentSprite().getHeight()-2));
 			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
 				throw new CollisionException(this,true);
 			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),
-					(int) Math.round(s+getCurrentSprite().getHeight()-2));
+					(int) Math.round(h+getCurrentSprite().getHeight()-2));
 			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
 				throw new CollisionException(this,true);
-			int h = tilepos2[0] - tilepos1[0];
-			if (h > 1)
+			int dh = tilepos2[0] - tilepos1[0];
+			if (dh > 1)
 			{
-				for (int i = 1; i < h; i++) {
+				for (int i = 1; i < dh; i++) {
 					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
 						throw new CollisionException(this,true);
 					}
@@ -593,16 +1028,16 @@ public abstract class GameObject {
 		}
 		if (getYVelocity() <= 0) 
 		{
-			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(s+1));
+			int[] tilepos1 = getWorld().getTile((int) Math.round(getXPosition()+1),(int) Math.round(h+1));
 			if (getWorld().getFeatureAt(tilepos1[0],tilepos1[1]) == 1)
 				throw new CollisionException(this,false);
-			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(s+1));
+			int[] tilepos2 = getWorld().getTile((int) Math.round(getXPosition()+getCurrentSprite().getWidth()-2),(int) Math.round(h+1));
 			if (getWorld().getFeatureAt(tilepos2[0],tilepos2[1]) == 1)
 				throw new CollisionException(this,false);
-			int h = tilepos2[0] - tilepos1[0];
-			if (h > 1)
+			int dh = tilepos2[0] - tilepos1[0];
+			if (dh > 1)
 			{
-				for (int i = 1; i < h; i++) {
+				for (int i = 1; i < dh; i++) {
 					if (getWorld().getFeatureAt(tilepos1[0] + i, tilepos1[1]) == 1)
 						throw new CollisionException(this,false);
 					}
@@ -610,6 +1045,21 @@ public abstract class GameObject {
 		}
 	}
 	
+	/**
+	 * Update the vertical position after a horizontal collision with the game world.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	s
+	 * 			The originally updated horizontal position of the game object.
+	 * @return  The new horizontal position of the game object.
+	 * 			| getYPosition()
+	 * @post	If the vertical velocity of the game object is positive, it is set to zero.
+	 * 			| if (getYVelocity() > 0)
+	 * 			| then (new.getYVelocity() == 0)
+	 * @post	If the object was moving downward, the vertical velocity and acceleration are set to zero.
+	 * 			| if (! exc.getVertical())
+	 * 			| then (setYVelocity(0) && setYAcc(0))
+	 */
 	protected double fixWorldV(CollisionException exc, double h) {
 		if ((exc.getVertical()) && (getYVelocity() > 0))
 			setYVelocity(0);
@@ -621,6 +1071,13 @@ public abstract class GameObject {
 		return getYPosition();
 	}
 	
+	/**
+	 * Check whether the game object vertically collides with another game object.
+	 * @param 	s
+	 * 			The updated vertical position.
+	 * @throws 	CollisionException
+	 * 			Throws an exception if the object collides with another game object of the game world.
+	 */
 	protected void CheckCollV(double s) throws CollisionException {
 		ArrayList<Plant> plants = getWorld().getAllPlants();
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
@@ -628,79 +1085,153 @@ public abstract class GameObject {
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
 		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
 		allobjects.addAll(aliens);
-		allobjects.addAll(plants);
+		if (this instanceof Mazub)
+			allobjects.addAll(plants);
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
-		if (getYVelocity() > 0)
+		allobjects.remove(this);
+		if (this instanceof Plant)
 		{
-			for (GameObject obj : allobjects)
-				if (collidesWith(getXPosition(),s,obj))
-					if (this != obj)
-						throw new CollisionException(obj,Orientation.RIGHT);
+			allobjects.removeAll(sharks);
+			allobjects.removeAll(slimes);
 		}
-		if (getYVelocity() <= 0)
+		for (GameObject obj : allobjects)
 		{
-			for (GameObject obj : allobjects)
-				if (collidesWith(getXPosition(),s,obj))
-					if (this != obj)
-						throw new CollisionException(obj,Orientation.RIGHT);
+			if ((collidesWith(getXPosition(),s,obj)) && ((int) Math.round(s) != (int) Math.round(getYPosition())))
+			{
+				ArrayList<GameObject> coll = new ArrayList<GameObject>();
+				coll.add(obj);
+				coll.add(this);
+				ArrayList<GameObject> coll2 = new ArrayList<GameObject>();
+				coll2.add(this);
+				coll2.add(obj);
+				if ((! (getWorld().getCollided().contains(coll))) && (! (getWorld().getCollided().contains(coll2))))
+				{
+					getWorld().getCollided().add(coll2);
+					throw new CollisionException(obj,(getYVelocity() > 0),false);
+				}
+				else
+					throw new CollisionException(obj,(getYVelocity() > 0),true);
+			}
 		}
 	}
 	
+	/**
+	 * Update the state of the game object after a vertical collision with another game object.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	h
+	 * 			The originally updated vertical position of the game object.
+	 * @return  The new vertical position of the game object.
+	 * @effect	If the object is not a plant, the new position is calculated with collV.
+	 * 			| collV(exc,s)
+	 * @effect	If two objects collide, their state is updated with Collision_Obj1_Obj2.
+	 * 			| CollisionMazubPlant((Mazub)this,(Plant)obj)
+	 */
 	protected double fixCollV(CollisionException exc, double h) {
+		GameObject obj = exc.getObject();
 		if (this instanceof Mazub)
 		{
-			if (exc.getObject() instanceof Mazub)
-				h = getYPosition();
-			else if (exc.getObject() instanceof Plant)
-				CollisionMazubPlant((Plant)exc.getObject());
-			else if (exc.getObject() instanceof Shark)
+			if (obj instanceof Plant)
+				CollisionMazubPlant((Mazub)this,(Plant)exc.getObject());
+			else if (obj instanceof Shark)
 			{
-				CollisionMazubShark((Shark)exc.getObject());
-				h = getYPosition();
+				if (! exc.getVertical())
+					CollisionMazubShark((Mazub)this,(Shark)obj,false);
+				else
+					CollisionMazubShark((Mazub)this,(Shark)obj,true);
 			}
-			else if (exc.getObject() instanceof Slime)
+			else if (obj instanceof Slime)
 			{
-				CollisionMazubSlime((Slime)exc.getObject());
-				h = getYPosition();
+				if (! exc.getVertical())
+					CollisionMazubSlime((Mazub)this,(Slime)obj,false);
+				else
+					CollisionMazubSlime((Mazub)this,(Slime)obj,true);
 			}
+			return collV(exc,h);
 		}
 		if (this instanceof Shark)
 		{
-			if (exc.getObject() instanceof Shark)
-				h = getYPosition();
-			else if (exc.getObject() instanceof Slime)
+			if (obj instanceof Mazub)
 			{
-				CollisionSharkSlime((Slime)exc.getObject());
-				h = getYPosition();
+				if (exc.getVertical())
+					CollisionMazubShark((Mazub)obj,(Shark)this,false);
+				else
+					CollisionMazubShark((Mazub)obj,(Shark)this,true);
 			}
-			else if (exc.getObject() instanceof Mazub)
-				h = getYPosition();
+			else if (obj instanceof Slime)
+				CollisionSharkSlime((Shark)this,(Slime)obj);
+			else if (obj instanceof Plant)
+				return h;
+			return collV(exc,h);
 		}
 		if (this instanceof Slime)
 		{
-			if (exc.getObject() instanceof Slime)
+			if (obj instanceof Slime)
+				CollisionSlimeSlime((Slime)obj);
+			else if (obj instanceof Mazub)
 			{
-				CollisionSlimeSlime((Slime)exc.getObject());
-				h = getYPosition();
+				if (exc.getVertical())
+					CollisionMazubSlime((Mazub)obj,(Slime)this,false);
+				else
+					CollisionMazubSlime((Mazub)obj,(Slime)this,true);
 			}
-			else if ((exc.getObject() instanceof Mazub) || (exc.getObject() instanceof Shark))
-				h = getYPosition();
+			else if (obj instanceof Shark)
+				CollisionSharkSlime((Shark)obj,(Slime)this);
+			else if (obj instanceof Plant)
+				return h;
+			return collV(exc,h);
 		}
 		return h;
 	}
 	
 	/**
-	 * Check whether the given time duration is valid.
-	 * @param 	time
-	 * 			The time duration that has to be checked.
-	 * @return  True when the time is valid.
-	 * 			| (time >= 0) && (time < 0.2)
+	 * Update the vertical position after a vertical collision with another game object.
+	 * @param 	exc
+	 * 			The CollisionException that is thrown after the collision.
+	 * @param 	h
+	 * 			The originally updated vertical position of the game object.
+	 * @return 	The new vertical position of the game object.
+	 * 			| if (obj instanceof Plant)
+	 *			|	return h
+	 *			| else 
+	 *			| 	return getYPosition()
 	 */
-	protected boolean isValidTime(double time) {
-		return ((time >= 0) && (time < 0.2));
+	protected double collV(CollisionException exc, double h) {
+		GameObject obj = exc.getObject();
+		if (obj instanceof Plant)
+			return h;
+		else 
+			return getYPosition();
 	}
 	
-	abstract void advanceTime(double time);
+	/**
+	 * Return the current sprite of the game object.
+	 * @pre 	The length of the sprites array must be 2.
+	 * 			| (getSprites().length == 2)
+	 * @pre		The array of sprites is not null.
+	 * 			| (getSprites() != null)
+	 * @return 	The object's current sprite.
+	 * 			| if (this.getOrientation() == Orientation.LEFT)
+	 *			|	return getSprites()[0]
+	 *			| else
+	 *			|	return getSprites()[1]
+	 * @post 	The current sprite of the object is updated.
+	 */
+	public Sprite getCurrentSprite() {
+		assert (getSprites().length == 2);
+		assert (getSprites() != null);
+		if (this.getOrientation() == Orientation.LEFT)
+			return getSprites()[0];
+		else
+			return getSprites()[1];
+	}
 	
+	/**
+	 * Advance the timers and update the game object's position and velocity after the given time duration.
+	 * @param 	time
+	 * 			The time duration between this position and the next one.
+	 */
+	public void advanceTime(double time) {
+	}
 }

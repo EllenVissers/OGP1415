@@ -18,7 +18,6 @@ public class Facade implements IFacadePart2 {
 	public Facade() {
 	}
 	
-	// OOK ALLE METHODEN UIT PART1
 	@Override
 	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) {
 		return new Mazub(pixelLeftX, pixelBottomY, sprites);
@@ -43,7 +42,7 @@ public class Facade implements IFacadePart2 {
 			c[0] = -alien.getXAcc();
 		if (alien.isMovingRight())
 			c[0] = alien.getXAcc();
-		if ((! alien.onGround()) || (! alien.onGameObject()))
+		if (alien.isFalling())
 			c[1] = alien.getYAcc();
 		return c;
 	}
@@ -98,8 +97,6 @@ public class Facade implements IFacadePart2 {
 	public void endDuck(Mazub alien) {
 		alien.endDuck();
 	}
-	
-	// EN DIE UIT FACADE 2
 	
 	/**
 	 * Returns the current number of hitpoints of the given alien.
@@ -172,7 +169,6 @@ public class Facade implements IFacadePart2 {
 	 */
 	public void startGame(World world) {
 		world.startGame();
-		//world.changeGameState(true);
 	}
 
 	/**
@@ -185,7 +181,6 @@ public class Facade implements IFacadePart2 {
 	 */
 	public boolean isGameOver(World world) {
 		return world.getGameOver();
-		//return world.isGameOver();
 	}
 
 	/**
@@ -197,8 +192,7 @@ public class Facade implements IFacadePart2 {
 	 * @return true if the game is over and the player has won; false otherwise.
 	 */
 	public boolean didPlayerWin(World world) {
-		return world.getWon();
-		//return world.hasWon();
+		return (world.getWon() && world.getGameOver());
 	}
 
 	/**
@@ -281,7 +275,6 @@ public class Facade implements IFacadePart2 {
 	 */
 	public int[][] getTilePositionsIn(World world, int pixelLeft, int pixelBottom, int pixelRight, int pixelTop) {
 		return world.getTilePositions(pixelLeft,pixelBottom,pixelRight,pixelTop);
-		//return world.getTilePositions(pixelLeft,pixelTop,pixelRight,pixelBottom);
 	}
 
 	/**
@@ -317,8 +310,6 @@ public class Facade implements IFacadePart2 {
 		int[] tilepos = world.getTile(pixelX,pixelY);
 		return world.getFeatureAt(tilepos[0], tilepos[1]);
 	}
-
-	// return world.getFeatureAt(pixelX,pixelY);
 	
 	/**
 	 * Modify the geological type of a specific tile in the given world to a
@@ -600,6 +591,4 @@ public class Facade implements IFacadePart2 {
 	public School getSchool(Slime slime) {
 		return slime.getSchool();
 	}
-
-
 }

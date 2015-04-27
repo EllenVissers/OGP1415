@@ -6,12 +6,14 @@ import java.util.ArrayList;
 
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 
 public class Slime extends GameObject {
 
 	public Slime(double pos_x, double pos_y, Sprite[] sprites, School school) throws ModelException {
-		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false);
+		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false,0);
 		setSchool(school);
+		school.addSlime(this);
 		setMaxVel(-maxSpeed);
 	}
 	
@@ -20,20 +22,23 @@ public class Slime extends GameObject {
 	
 	private static final double accy = -10;
 	
-	protected static double accx = 0.7;
+	protected static final double accx = 0.7;
 	
-	protected static double maxSpeed = 2.5;
+	protected static final double maxSpeed = 2.5;
 	
 	private static double minDT = 2;
 	
 	private static double maxDT = 6;
+	
+	protected static double timer = 0;
+	protected static double timeslot = randomTime();
 	
 	/**
 	 * The default value of the amount of hitpoints of a newly created Slime.
 	 */
 	private static int startHitPoints = 100;
 	
-	public double getMaxVel() {
+	private double getMaxVel() {
 		return this.maxVel;
 	}
 	
@@ -45,12 +50,9 @@ public class Slime extends GameObject {
 		return this.school;
 	}
 	
-	public void setSchool(School school) {
+	protected void setSchool(School school) {
 		this.school = school;
 	}
-	
-	protected static double timer = 0;
-	protected static double timeslot = randomTime();
 	
 	protected static double randomTime() {
 		return (minDT + Math.random()*(maxDT-minDT));
@@ -83,31 +85,42 @@ public class Slime extends GameObject {
 	}
 	
 	@Override
-	protected void terminate() {
-		this.terminated = true;
-		this.setWorld(null);
-		getSchool().removeSlime(this);
-	}
-	
-	@Override
 	protected void reduceHitPoints(int points) {
 		if ((getHitPoints() - points) <= 0)
-			this.terminate();
+		{
+			setHitPoints(0);
+			terminate();
+		}
 		else
 			setHitPoints(getHitPoints()-points);
-		ArrayList<Slime> slimes = this.getSchool().getSlimes();
+		ArrayList<Slime> slimes = getSchool().getSlimes();
+		slimes.remove(this);
 		for (Slime slime : slimes)
-			if (this != slime)
-				slime.setHitPoints(getHitPoints() - 1);
+		{
+			if ((slime.getHitPoints() - 1) <= 0)
+			{
+				slime.setHitPoints(0);
+				slime.terminate();
+			}
+			else
+				slime.setHitPoints(slime.getHitPoints() - 1);
+		}
 	}
 	
 	private void Fall(double time) {
-		//setXVelocity(0);
 		double h = getYPosition() + 100*(getYVelocity()*time + 0.5*accy*time*time);
 		try {
-			CheckWorldVertical(h);
+			CheckWorldV(h);
 		} catch (CollisionException exc) {
 			h = fixWorldV(exc,h);
+		}
+		try {
+			CheckCollV(h);
+		} catch (CollisionException exc) {
+			if (exc.getCollided())
+				h = collV(exc,h);
+			else
+				h = fixCollV(exc,h);
 		}
 		setYPosition(h);
 		setYVelocity(getYVelocity() + accy*time);
@@ -174,26 +187,38 @@ public class Slime extends GameObject {
 		try {
 			CheckCollH(s);
 		} catch (CollisionException exc) {
-			s = fixCollH(exc,s);
+			if (exc.getCollided())
+				s = collH(exc,s);
+			else
+				s = fixCollH(exc,s);
 		}
 		setXPosition(s);
 	}
 	
 	private void advance(double t) {
-		if (! isTerminated())
+		if (isTerminated())
 		{
-			if (! (onGround()))
-					Fall(t);
-			else
+			setTerminatedTime(getTerminatedTime() + t);
+			if (Util.fuzzyGreaterThanOrEqualTo(getTerminatedTime(), 0.6))
+				{
+				getSchool().removeSlime(this);
+				setWorld(null);
+				}
+		}
+		else
+		{
+			Move(t);
+			setTerminatedTime(0);
+			if (onGround() || onGameObject())
 				setYVelocity(0);
-			if ((! isTerminated()) && (onGround()))
-				Move(t);
-			int medium = CheckMedium();
-			if (medium == 2)
+			else
+				Fall(t);
+			ArrayList<Integer> medium = CheckMedium();
+			if (medium.contains(2))
 				touchWater(t);
 			else
 				timerWater = 0;
-			if (medium == 3)
+			if (medium.contains(3))
 				touchMagma(t);
 			else
 				timerMagma = 0;	
@@ -204,13 +229,15 @@ public class Slime extends GameObject {
 	public void advanceTime(double time) {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
-		double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
-		int i = (int) (time/dt);
-		double r = time%dt;
-		for (int p = 0; p<i; p++) {
-			advance(dt);
+		while (time > 0)
+		{
+			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
+			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
+				advance(dt);
+			else
+				advance(time);
+			time -= dt;
 		}
-		advance(r);
 	}
 	
 }

@@ -75,7 +75,7 @@ public class Facade implements IFacade {
 			c[0] = -alien.getXAcc();
 		if (alien.isMovingRight())
 			c[0] = alien.getXAcc();
-		if (alien.isJumping())
+		if (alien.isFalling())
 			c[1] = alien.getYAcc();
 		return c;
 	}

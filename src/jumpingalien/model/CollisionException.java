@@ -14,6 +14,19 @@ public class CollisionException extends Exception {
 	private GameObject object;
 	private Orientation orientation;
 	private boolean vertical;
+	private boolean collided;
+	
+	public CollisionException(GameObject object, Orientation orientation, boolean collided) {
+		this.object = object;
+		this.orientation = orientation;
+		this.collided = collided;
+	}
+	
+	public CollisionException(GameObject object, boolean vertical, boolean collided) {
+		this.object = object;
+		this.vertical = vertical;
+		this.collided = collided;
+	}
 	
 	public CollisionException(GameObject object, Orientation orientation) {
 		this.object = object;
@@ -35,6 +48,10 @@ public class CollisionException extends Exception {
 	
 	public boolean getVertical() {
 		return this.vertical;
+	}
+	
+	public boolean getCollided() {
+		return this.collided;
 	}
 	
 }
