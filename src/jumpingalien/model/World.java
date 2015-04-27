@@ -124,7 +124,7 @@ public class World {
 		/**
 		 * A variable registering whether the game has started.
 		 */
-		private boolean isStarted;
+		public boolean isStarted;
 		/**
 		 * An array list registering the collisions in this world between game objects
 		 */
@@ -596,7 +596,7 @@ public class World {
 		 * @return All aliens in this world.
 		 * 		| this.aliens
 		 */
-		protected ArrayList<Mazub> getAllAliens(){
+		public ArrayList<Mazub> getAllAliens(){
 			return aliens;
 		}
 		
