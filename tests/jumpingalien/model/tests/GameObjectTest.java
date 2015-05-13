@@ -36,13 +36,13 @@ public class GameObjectTest {
 		s2 = new Sprite[] { Resources.SHARK_SPRITE_LEFT, Resources.SHARK_SPRITE_RIGHT };
 		s3 = new Sprite[] { Resources.SLIME_SPRITE_LEFT, Resources.SLIME_SPRITE_RIGHT };
 		
-		g1 = new GameObject(49, 49, 0, 0, 0, 0, Orientation.NONE, s1, 100, w2, false,0);
-		g2 = new GameObject(580, 49, 1.6, 0, 0.9, 0, Orientation.RIGHT, s2, 120, w2, false,0);
-		g3 = new GameObject(1200, 49, -2.14, 0, -0.9, 0, Orientation.LEFT, s3, 170, w2, false,0);
-		g4 = new GameObject(413, 49, 2.7, 0, 0.9, 0, Orientation.RIGHT, s1, 360, w2, false,0);
-		g5 = new GameObject(864, 49, -1.1, 0, -0.9, 0, Orientation.LEFT, s2, 40, w2, false,0);
-		g6 = new GameObject(864, 162, -1.1, 5.3, -0.9, -10, Orientation.LEFT, s3, 40, w1, false,0);
-		g7 = new GameObject(49, 49, 1.0, 0, 0.9, 0, Orientation.RIGHT, s1, 120, w2, true,0.8);
+		g1 = new GameObject(49, 49, 0, 0, 0, 0, Orientation.NONE, s1, 100, w2, false,0,null);
+		g2 = new GameObject(580, 49, 1.6, 0, 0.9, 0, Orientation.RIGHT, s2, 120, w2, false,0,null);
+		g3 = new GameObject(1200, 49, -2.14, 0, -0.9, 0, Orientation.LEFT, s3, 170, w2, false,0,null);
+		g4 = new GameObject(413, 49, 2.7, 0, 0.9, 0, Orientation.RIGHT, s1, 360, w2, false,0,null);
+		g5 = new GameObject(864, 49, -1.1, 0, -0.9, 0, Orientation.LEFT, s2, 40, w2, false,0,null);
+		g6 = new GameObject(864, 162, -1.1, 5.3, -0.9, -10, Orientation.LEFT, s3, 40, w1, false,0,null);
+		g7 = new GameObject(49, 49, 1.0, 0, 0.9, 0, Orientation.RIGHT, s1, 120, w2, true,0.8,null);
 		
 	}
 
@@ -64,7 +64,7 @@ public class GameObjectTest {
 	
 	@Test(expected = ModelException.class)
 	public void Constructor_IllegalCase() {
-		new GameObject(80,65,0,0,0,0,Orientation.NONE,null,50,w1,false,0);
+		new GameObject(80,65,0,0,0,0,Orientation.NONE,null,50,w1,false,0,null);
 	}
 
 	@Test

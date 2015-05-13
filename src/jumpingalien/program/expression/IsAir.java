@@ -1,5 +1,6 @@
 package jumpingalien.program.expression;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.model.Tile;
 
 public class IsAir extends UnaryExpression {
 
@@ -13,9 +14,9 @@ public class IsAir extends UnaryExpression {
 		Object obj = getExpression();
 		if (! (obj instanceof Tile))
 			throw new IllegalArgumentException();
-		int x = obj.getXPosition();
-		int y = obj.getYPosition();
-		Boolean result = (obj.getWorld().getFeatureAt(x,y) == 0);
+		int x = ((Tile)obj).getXPosition();
+		int y = ((Tile)obj).getYPosition();
+		Boolean result = (((Tile)obj).getWorld().getFeatureAt(x,y) == 0);
 		return new Constant<Boolean>(getSourceLocation(),result);
 	}
 

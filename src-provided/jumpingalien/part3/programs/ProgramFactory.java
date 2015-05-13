@@ -2,45 +2,9 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 import java.util.Map;
-
-import jumpingalien.program.*;
-import jumpingalien.program.expression.Addition;
-import jumpingalien.program.expression.And;
-import jumpingalien.program.expression.Constant;
-import jumpingalien.program.expression.Division;
-import jumpingalien.program.expression.Expression;
-import jumpingalien.program.expression.GetHeight;
-import jumpingalien.program.expression.GetHitpoints;
-import jumpingalien.program.expression.GetTile;
-import jumpingalien.program.expression.GetWidth;
-import jumpingalien.program.expression.IsAir;
-import jumpingalien.program.expression.IsMagma;
-import jumpingalien.program.expression.IsPassable;
-import jumpingalien.program.expression.IsTerrain;
-import jumpingalien.program.expression.IsWater;
-import jumpingalien.program.expression.LessThan;
-import jumpingalien.program.expression.LessThanOrEqualTo;
-import jumpingalien.program.expression.Multiplication;
-import jumpingalien.program.expression.Not;
-import jumpingalien.program.expression.Or;
-import jumpingalien.program.expression.Random;
-import jumpingalien.program.expression.ReadVariable;
-import jumpingalien.program.expression.SearchObj;
-import jumpingalien.program.expression.SquareRoot;
-import jumpingalien.program.expression.StartDuck;
-import jumpingalien.program.expression.StartJump;
-import jumpingalien.program.expression.StartRun;
-import jumpingalien.program.expression.StopDuck;
-import jumpingalien.program.expression.StopJump;
-import jumpingalien.program.expression.StopRun;
-import jumpingalien.program.expression.Substraction;
+import jumpingalien.program.expression.*;
 import jumpingalien.program.program.Program;
-import jumpingalien.program.statement.Assignment;
-import jumpingalien.program.statement.Break;
-import jumpingalien.program.statement.Foreach;
-import jumpingalien.program.statement.Statement;
-import jumpingalien.program.statement.Wait;
-import jumpingalien.program.statement.While;
+import jumpingalien.program.statement.*;
 import jumpingalien.program.type.Type;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Type, Program> {

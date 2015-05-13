@@ -1,5 +1,6 @@
 package jumpingalien.program.expression;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.model.Tile;
 
 public class IsTerrain extends UnaryExpression {
 

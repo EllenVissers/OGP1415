@@ -1,5 +1,6 @@
 package jumpingalien.program.expression;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.model.Tile;
 import jumpingalien.model.GameObject;
 
 public class GetHeight extends UnaryExpression {
@@ -16,7 +17,7 @@ public class GetHeight extends UnaryExpression {
 		if (obj == null)
 			throw new NullPointerException();
 		if (obj instanceof Tile)
-			return new Constant<Double>(getSourceLocation(),obj.getWorld().getTileSizeY());
+			return new Constant<Double>(getSourceLocation(),(double)((Tile)obj).getWorld().getTileSize());
 		Double result = (double)((GameObject)obj).getCurrentSprite().getHeight();
 		return new Constant<Double>(getSourceLocation(),result);
 	}
