@@ -1,7 +1,7 @@
 package jumpingalien.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;

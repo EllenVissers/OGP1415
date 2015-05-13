@@ -3,7 +3,7 @@ import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 
 
 /**

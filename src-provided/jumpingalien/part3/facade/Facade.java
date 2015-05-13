@@ -12,7 +12,7 @@ import jumpingalien.model.Slime;
 import jumpingalien.model.World;
 import jumpingalien.part2.facade.IFacadePart2;
 import jumpingalien.part3.programs.ParseOutcome;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 

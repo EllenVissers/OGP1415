@@ -2,15 +2,53 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 import java.util.Map;
+
 import jumpingalien.program.*;
+import jumpingalien.program.expression.Addition;
+import jumpingalien.program.expression.And;
+import jumpingalien.program.expression.Constant;
+import jumpingalien.program.expression.Division;
+import jumpingalien.program.expression.Expression;
+import jumpingalien.program.expression.GetHeight;
+import jumpingalien.program.expression.GetHitpoints;
+import jumpingalien.program.expression.GetTile;
+import jumpingalien.program.expression.GetWidth;
+import jumpingalien.program.expression.IsAir;
+import jumpingalien.program.expression.IsMagma;
+import jumpingalien.program.expression.IsPassable;
+import jumpingalien.program.expression.IsTerrain;
+import jumpingalien.program.expression.IsWater;
+import jumpingalien.program.expression.LessThan;
+import jumpingalien.program.expression.LessThanOrEqualTo;
+import jumpingalien.program.expression.Multiplication;
+import jumpingalien.program.expression.Not;
+import jumpingalien.program.expression.Or;
+import jumpingalien.program.expression.Random;
+import jumpingalien.program.expression.ReadVariable;
+import jumpingalien.program.expression.SearchObj;
+import jumpingalien.program.expression.SquareRoot;
+import jumpingalien.program.expression.StartDuck;
+import jumpingalien.program.expression.StartJump;
+import jumpingalien.program.expression.StartRun;
+import jumpingalien.program.expression.StopDuck;
+import jumpingalien.program.expression.StopJump;
+import jumpingalien.program.expression.StopRun;
+import jumpingalien.program.expression.Substraction;
+import jumpingalien.program.program.Program;
+import jumpingalien.program.statement.Assignment;
+import jumpingalien.program.statement.Break;
+import jumpingalien.program.statement.Foreach;
+import jumpingalien.program.statement.Statement;
+import jumpingalien.program.statement.Wait;
+import jumpingalien.program.statement.While;
+import jumpingalien.program.type.Type;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Type, Program> {
 
 	@Override
 	public Expression createReadVariable(String variableName,
 			Type variableType, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ReadVariable(sourceLocation,variableName,variableType);
 	}
 
 	@Override
@@ -168,10 +206,8 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	}
 
 	@Override
-	public Expression createGetTile(Expression x, Expression y,
-			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression createGetTile(Expression x, Expression y, SourceLocation sourceLocation) {
+		return new GetTile(sourceLocation,x,y);
 	}
 
 	@Override
@@ -218,35 +254,30 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsTerrain(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsTerrain(sourceLocation,expr);
 	}
 
 	@Override
 	public Expression createIsPassable(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsPassable(sourceLocation,expr);
 	}
 
 	@Override
 	public Expression createIsWater(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsWater(sourceLocation,expr);
 	}
 
 	@Override
 	public Expression createIsMagma(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsMagma(sourceLocation,expr);
 	}
 
 	@Override
 	public Expression createIsAir(Expression expr, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsAir(sourceLocation,expr);
 	}
 
 	@Override
@@ -273,15 +304,13 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createAssignment(String variableName, Type variableType,
 			Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Assignment(sourceLocation, variableName,variableType,value);
 	}
 
 	@Override
 	public Statement createWhile(Expression condition, Statement body,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new While(sourceLocation,condition,body);
 	}
 
 	@Override
@@ -292,14 +321,12 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 			Expression sort,
 			jumpingalien.part3.programs.IProgramFactory.SortDirection sortDirection,
 			Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Foreach(sourceLocation,variableName,variableKind,where,sort,sortDirection,body);
 	}
 
 	@Override
 	public Statement createBreak(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Break(sourceLocation);
 	}
 
 	@Override
@@ -318,52 +345,44 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createStartRun(Expression direction,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StartRun(sourceLocation,direction);
 	}
 
 	@Override
 	public Statement createStopRun(Expression direction,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StopRun(sourceLocation,direction);
 	}
 
 	@Override
 	public Statement createStartJump(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StartJump(sourceLocation);
 	}
 
 	@Override
 	public Statement createStopJump(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StopJump(sourceLocation);
 	}
 
 	@Override
 	public Statement createStartDuck(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StartDuck(sourceLocation);
 	}
 
 	@Override
 	public Statement createStopDuck(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StopDuck(sourceLocation);
 	}
 
 	@Override
 	public Statement createWait(Expression duration,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Wait(sourceLocation,duration);
 	}
 
 	@Override
 	public Statement createSkip(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Wait(sourceLocation,new Constant<Double>(sourceLocation,0.001));
 	}
 
 	@Override
@@ -400,9 +419,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Program createProgram(Statement mainStatement,
 			Map<String, Type> globalVariables) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Program(mainStatement, globalVariables);
 	}
-
 	
 }

@@ -11,7 +11,7 @@ import jumpingalien.part1.facade.IFacade;
 import jumpingalien.part2.facade.IFacadePart2;
 import jumpingalien.part3.programs.ParseOutcome;
 import jumpingalien.part3.programs.ProgramParser;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
 
 /**

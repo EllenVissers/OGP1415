@@ -5,7 +5,7 @@ import static org.junit.Assume.*;
 import jumpingalien.part3.facade.Facade;
 import jumpingalien.part3.facade.IFacadePart3;
 import jumpingalien.part3.programs.ParseOutcome;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 
 import org.junit.Test;
 

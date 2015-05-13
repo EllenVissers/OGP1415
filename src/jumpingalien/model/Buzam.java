@@ -1,6 +1,6 @@
 package jumpingalien.model;
 
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 

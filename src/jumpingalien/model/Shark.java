@@ -2,7 +2,7 @@ package jumpingalien.model;
 import java.util.ArrayList;
 
 import be.kuleuven.cs.som.annotate.Basic;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Util;

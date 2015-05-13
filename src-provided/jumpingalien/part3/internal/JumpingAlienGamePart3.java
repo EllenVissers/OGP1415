@@ -36,7 +36,7 @@ import jumpingalien.part2.internal.tmxfile.data.Map;
 import jumpingalien.part2.internal.tmxfile.data.MapObject;
 import jumpingalien.part3.facade.IFacadePart3;
 import jumpingalien.part3.programs.ParseOutcome;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
 import ogp.framework.messages.Message;
 import ogp.framework.messages.MessageType;

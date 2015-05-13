@@ -1,7 +1,7 @@
 package jumpingalien.model;
 
 import jumpingalien.model.School;
-import jumpingalien.program.Program;
+import jumpingalien.program.program.Program;
 
 import java.util.ArrayList;
 
