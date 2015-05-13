@@ -1,6 +1,7 @@
 package jumpingalien.model;
 
 import jumpingalien.model.School;
+import jumpingalien.program.Program;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,32 @@ public class Slime extends GameObject {
 	 * 			| setMaxVel(-maxSpeed)
 	 */
 	public Slime(double pos_x, double pos_y, Sprite[] sprites, School school) throws ModelException {
-		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false,0);
+		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false,0,null);
+		setSchool(school);
+		school.addSlime(this);
+		setMaxVel(-maxSpeed);
+	}
+	
+	/**
+	 * Initialize a new Slime with given position and sprites
+	 * @param 	posx
+	 * 			The horizontal position of the Slime corresponding to the position of the leftmost pixel of it's image.
+	 * @param 	posy
+	 * 			The vertical position of the Slime corresponding to the position of the lowest pixel of it's image.
+	 * @param 	sprites
+	 * 			The list of images for the different states of a Slime.
+	 * @param	program
+	 * 			The controlling program of this slime.
+	 * @throws 	ModelException
+	 * 			Throws an exception if sprites is an emty array.
+	 * 			| sprites == null
+	 * @effect
+	 * 			| school.addSlime(this)
+	 * @effect
+	 * 			| setMaxVel(-maxSpeed)
+	 */
+	public Slime(double pos_x, double pos_y, Sprite[] sprites, School school, Program program) throws ModelException {
+		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false,0,program);
 		setSchool(school);
 		school.addSlime(this);
 		setMaxVel(-maxSpeed);

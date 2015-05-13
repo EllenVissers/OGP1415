@@ -3,6 +3,7 @@ import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
+import jumpingalien.program.Program;
 
 
 /**
@@ -34,7 +35,24 @@ public class Plant extends GameObject {
 	 * 			| sprites == null
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites) throws ModelException {
-		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0);
+		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,null);
+	}
+	
+	/**
+	 * Initialize a new Plant with given position, sprites and program.
+	 * 			The horizontal position of the Plant corresponding to the position of the leftmost pixel of it's image.
+	 * @param 	posy
+	 * 			The vertical position of the Plant corresponding to the position of the lowest pixel of it's image.
+	 * @param 	sprites
+	 * 			The list of images for the different states of a Plant.
+	 * @param	program
+	 * 			The program that controls the movement of this Plant.
+	 * @throws 	ModelException
+	 * 			Throws an exception if sprites is an emty array.
+	 * 			| sprites == null
+	 */
+	public Plant(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
+		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,program);
 	}
 	
 	/**

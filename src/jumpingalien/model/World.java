@@ -501,6 +501,10 @@ public class World {
 		 * A list of all aliens in this world.
 		 */
 		private ArrayList<Mazub> aliens = new ArrayList<Mazub>();
+		/**
+		 * A list of all buzams in this world.
+		 */
+		private ArrayList<Buzam> buzams = new ArrayList<Buzam>();
 		
 		/**
 		 * A method that returns all the plants in this world.
@@ -598,6 +602,26 @@ public class World {
 		 */
 		public ArrayList<Mazub> getAllAliens(){
 			return aliens;
+		}
+		
+		/**
+		 * A method to add a shark to this world and set the world of the shark to this world.
+		 * @param 	shark
+		 * 			The shark we want to add.
+		 * @pre 	The game world is not full yet
+		 * 			| ! gameWorldFull()
+		 * @effect	The world of this shark is updated with setWorld.
+		 * 			| shark.setWorld(this)
+		 * @post	The shark is added to the list with all sharks.
+		 * 			| sharks.add(shark)
+		 */
+		public void addBuzam(Buzam buzam) {
+			assert (! gameWorldFull());
+			if (! isStarted())
+			{
+				buzams.add(buzam);
+				buzam.setWorld(this);
+			}
 		}
 		
 		/**

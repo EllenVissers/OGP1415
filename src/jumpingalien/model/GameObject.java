@@ -3,7 +3,9 @@ import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
+import jumpingalien.program.Program;
 import jumpingalien.util.Util;
+
 import java.util.ArrayList;
 
 
@@ -45,12 +47,15 @@ public class GameObject {
 	 * 			The world in which the object is situated.
 	 * @param 	terminated
 	 * 			The variable registering its state, whether the object is terminated.
+	 * @param	program
+	 * 			The program that controls the movement of this game object.
 	 * @throws 	ModelException
 	 * 			Throws an exception if the list of images is empty.
 	 * 			|sprites == null
 	 */
 	public GameObject(double x, double y, double vx, double vy, double ax, double ay, Orientation orientation, 
-			Sprite[] sprites, int hitPoints, World world, boolean terminated, double terminatedTime) throws ModelException {
+			Sprite[] sprites, int hitPoints, World world, boolean terminated, double terminatedTime, Program program) 
+					throws ModelException {
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
 		setXPosition(x);
@@ -65,6 +70,7 @@ public class GameObject {
 		setWorld(world);
 		setTerminated(terminated);
 		setTerminatedTime(terminatedTime);
+		setProgram(program);
 	}
 	
 	//VARIABLES
@@ -116,6 +122,10 @@ public class GameObject {
 	 * Variable registering the state of the game object (true if it is terminated).
 	 */
 	protected boolean terminated;
+	/**
+	 * Variable registering the program that controls the movement of this game object.
+	 */
+	private Program program;
 	/**
 	 * Variable registering the time that has passed since the object was terminated.
 	 */
@@ -414,6 +424,24 @@ public class GameObject {
 	@Basic
 	public double getTerminatedTime() {
 		return this.terminatedTime;
+	}
+	
+	/**
+	 * Set the controlling program to the given program.
+	 * @param 	program
+	 * 			The controlling program of this game object.
+	 */
+	protected void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	/**
+	 * Return the program that controls this game object's movement.
+	 * @return	The controlling program.
+	 * 			| this.program
+	 */
+	public Program getProgram() {
+		return this.program;
 	}
 	
 	/**

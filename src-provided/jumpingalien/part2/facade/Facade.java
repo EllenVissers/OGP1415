@@ -377,7 +377,7 @@ public class Facade implements IFacadePart2 {
 	 *         should not belong to a world.
 	 */
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		return new Plant((double) x,(double) y,sprites);
+		return new Plant(x,y,sprites);
 	}
 
 	/**

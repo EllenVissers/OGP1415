@@ -1,7 +1,6 @@
 package jumpingalien.model;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
@@ -73,7 +72,7 @@ public class Mazub extends GameObject {
 	public Mazub(double x, double y, double vx, double vy, double ax, double ay, Orientation or, Sprite[] sprites, int hitpoints,
 			World world, int nb, double startvel, double maxvel, boolean left, 
 			boolean right, double immune,boolean duck) throws ModelException {
-		super(x,y,vx,vy,ax,ay,or,sprites,hitpoints,world,false,0);
+		super(x,y,vx,vy,ax,ay,or,sprites,hitpoints,world,false,0,null);
 		setNb(nb);
 		setStartVel(startvel);
 		setMaxVel(maxvel);
@@ -249,7 +248,7 @@ public class Mazub extends GameObject {
 	 * @post 	Mazub's start velocity is updated to the given velocity.
 	 * 			| new.getStartVel() = vel
 	 */
-	private void setStartVel(double vel) {
+	protected void setStartVel(double vel) {
 		assert isValidStartVelocity(vel);
 		this.start_vel = vel;
 	}
@@ -273,7 +272,7 @@ public class Mazub extends GameObject {
 	 * @post 	Mazub's maximum velocity is updated to the given velocity.
 	 * 			| new.max_vel = vel
 	 */
-	private void setMaxVel(double vel) {
+	protected void setMaxVel(double vel) {
 		assert isValidMaxVelocity(vel);
 		this.max_vel = vel;
 	}

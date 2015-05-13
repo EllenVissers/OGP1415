@@ -2,6 +2,7 @@ package jumpingalien.model;
 import java.util.ArrayList;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import jumpingalien.program.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Util;
@@ -35,7 +36,27 @@ public class Shark extends GameObject {
 	 * 			| setMaxVel(-maxSpeed)
 	 */
 	public Shark(double posx, double posy, Sprite[] sprites) throws ModelException {
-		super(posx,posy,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints,null,false,0);
+		super(posx,posy,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints,null,false,0,null);
+		setMaxVel(-maxSpeed);
+	}
+	
+	/**
+	 * Initialize a new shark with a given position an list of images.
+	 * @param 	posx
+	 * 			The horizontal position of the shark.
+	 * @param 	posy
+	 * 			The vertical position of the shark.
+	 * @param 	sprites
+	 * 			The list of images of the shark.
+	 * @param	program
+	 * 			The controlling program of this shark.
+	 * @throws 	ModelException
+	 * 			Throws an exception if the list of images is empty.
+	 * @effect	The maximum speed is set with setMaxVel.
+	 * 			| setMaxVel(-maxSpeed)
+	 */
+	public Shark(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
+		super(posx,posy,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints,null,false,0,program);
 		setMaxVel(-maxSpeed);
 	}
 	
