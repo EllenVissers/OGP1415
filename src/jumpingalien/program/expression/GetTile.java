@@ -8,7 +8,7 @@ public class GetTile extends BinaryExpression {
 	}
 	
 	@Override
-	protected Expression getResult() {
+	public Expression getResult() {
 		// TODO Auto-generated method stub
 		return null;
 	}

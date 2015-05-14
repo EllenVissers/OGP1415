@@ -13,6 +13,6 @@ public abstract class Statement {
 		return this.sourceLocation;
 	}
 	
-	public abstract Statement getResult();
+	public abstract void evaluate();
 
 }

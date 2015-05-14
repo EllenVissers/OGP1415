@@ -1,6 +1,8 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
+import jumpingalien.program.expression.BinaryExpression;
+import jumpingalien.program.expression.Constant;
 
 public class While extends Statement {
 
@@ -21,8 +23,8 @@ public class While extends Statement {
 		return this.body;
 	}
 	
-	public Statement getResult() {
-		// TODO Auto-generated method stub
-		return null;
+	public void evaluate() {
+		while (((Constant<Boolean>) ((BinaryExpression) getCondition()).getResult()).getValue())
+			getBody().evaluate();
 	}
 }

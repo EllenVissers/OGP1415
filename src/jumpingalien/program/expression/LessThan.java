@@ -9,7 +9,7 @@ public class LessThan extends BinaryExpression {
 	}
 	
 	@Override
-	protected Constant<Boolean> getResult() {
+	public Constant<Boolean> getResult() {
 		Double left = ((Constant<Double>)getLeftExpression()).getValue();
 		Double right = ((Constant<Double>)getRightExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),left<right);

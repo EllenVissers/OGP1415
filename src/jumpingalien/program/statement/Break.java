@@ -8,9 +8,8 @@ public class Break extends Statement {
 	}
 	
 	@Override
-	public Statement getResult() {
-		// TODO Auto-generated method stub
-		return null;
+	public void evaluate() {
+		break; // kan niet zonder loop, maar loop niet gegeven..
 	}
 
 }

@@ -2,6 +2,7 @@ package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.Type;
+import jumpingalien.program.expression.Constant;
 
 public class Assignment extends Statement {
 
@@ -28,9 +29,8 @@ public class Assignment extends Statement {
 		return this.value;
 	}
 	
-	public Statement getResult() {
-		// TODO Auto-generated method stub
-		return null;
+	public void evaluate() {
+		getVariableType() getVariableName() = ((Constant)getValue()).getValue();
 	}
 	
 }

@@ -9,7 +9,7 @@ public class Division extends BinaryExpression {
 	}
 	
 	@Override
-	protected Constant<Double> getResult() throws ArithmeticException {
+	public Constant<Double> getResult() throws ArithmeticException {
 		Double left = ((Constant<Double>)getLeftExpression()).getValue();
 		Double right = ((Constant<Double>)getRightExpression()).getValue();
 		if (right == 0)

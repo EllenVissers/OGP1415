@@ -1,6 +1,5 @@
-package jumpingalien.program.expression;
+package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
-import jumpingalien.program.statement.Statement;
 
 public class StopJump extends Statement {
 
@@ -9,9 +8,8 @@ public class StopJump extends Statement {
 	}
 	
 	@Override
-	public Statement getResult() {
+	public void evaluate() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

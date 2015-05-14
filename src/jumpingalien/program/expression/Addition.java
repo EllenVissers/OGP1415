@@ -11,7 +11,7 @@ public class Addition extends BinaryExpression {
 	}
 	
 	@Override
-	protected Constant<Double> getResult() {
+	public Constant<Double> getResult() {
 		Double left = ((Constant<Double>)getLeftExpression()).getValue();
 		Double right = ((Constant<Double>)getRightExpression()).getValue();
 		return new Constant<Double>(getSourceLocation(),left+right);

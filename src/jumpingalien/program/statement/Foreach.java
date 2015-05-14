@@ -2,6 +2,7 @@ package jumpingalien.program.statement;
 
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
+import java.util.ArrayList;
 
 public class Foreach extends Statement {
 	
@@ -48,9 +49,18 @@ public class Foreach extends Statement {
 		return this.body;
 	}
 	
-	public Statement getResult() {
-		// TODO Auto-generated method stub
-		return null;
+	// LAMBDA UITDRUKKINGEN!!!
+	
+	public void evaluate() {
+		// lijst met alle elementen waarover moet ge-itereerd worden!
+		ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind> all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+		if (getWhere() != null) // pas lijst aan naar where!
+			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+		if (getSort() != null) // sorteer de lijst naar het object in de juiste richting
+			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+		for (getVariableKind() getVariableName() : all) {
+			getBody().evaluate();
+		}	
 	}
 
 }
