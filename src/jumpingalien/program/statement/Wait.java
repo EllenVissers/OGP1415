@@ -16,6 +16,7 @@ public class Wait extends Statement {
 		return this.duration;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
 		int time = (int)(double)(((Constant<Double>) getDuration()).getValue());

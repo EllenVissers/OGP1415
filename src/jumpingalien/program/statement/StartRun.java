@@ -20,6 +20,7 @@ public class StartRun extends Statement {
 		return this.direction;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
 		if (((Constant<Direction>) getDirection()).getValue() == Direction.LEFT)

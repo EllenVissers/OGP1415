@@ -23,6 +23,7 @@ public class While extends Statement {
 		return this.body;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void evaluate() {
 		while (((Constant<Boolean>) ((BinaryExpression) getCondition()).evaluate()).getValue())
 			getBody().evaluate();

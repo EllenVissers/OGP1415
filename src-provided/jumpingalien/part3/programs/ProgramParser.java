@@ -35,12 +35,12 @@ import org.antlr.v4.runtime.Recognizer;
  * 
  * <pre>
  * <code>
- * ProgramParser&lt;MyExpression, MyStatement, MyType, MyProgram&gt; parser = new ProgramParser<>(factory);
+ * ProgramParser<MyExpression, MyStatement, MyType, MyProgram> parser = new ProgramParser<>(factory);
  * </code>
  * </pre>
  * 
  * Finally, parse a string or file: <code><pre>
- * Optional&lt;MyProgram&gt; parseResult = parser.parse(textToParse);
+ * Optional<MyProgram> parseResult = parser.parse(textToParse);
  * </pre></code>
  * 
  * If parsing is successful, <code>parseResult.isPresent()</code> returns true
@@ -139,8 +139,7 @@ public class ProgramParser<E, S, T, P> {
 		return Collections.unmodifiableList(errors);
 	}
 
-	public static <E, S, T, P> ProgramParser<E, S, T, P> create(
-			IProgramFactory<E, S, T, P> factory) {
+	public static <E, S, T, P> ProgramParser<E, S, T, P> create(IProgramFactory<E, S, T, P> factory) {
 		return new ProgramParser<E, S, T, P>(factory);
 	}
 }

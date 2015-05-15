@@ -39,5 +39,10 @@ public class Program {
 	public void setSelf(Object obj) {
 		self = obj;
 	}
+	
+	public boolean isWellFormed() {
+		// TODO
+		return true;
+	}
 
 }
