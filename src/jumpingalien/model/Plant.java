@@ -225,4 +225,34 @@ public class Plant extends GameObject {
 			time -= dt;
 		}
 	}
+
+	@Override
+	public void startMove(Orientation orientation) {
+		if (orientation == Orientation.RIGHT)
+			setXVelocity(speed);
+		else
+			setXVelocity(-speed);
+		setOrientation(orientation);
+	}
+
+	@Override
+	public void endMove(Orientation orientation) {
+		setXVelocity(0);
+	}
+
+	@Override
+	public void startJump() {
+	}
+
+	@Override
+	public void endJump() {
+	}
+
+	@Override
+	public void startDuck() {
+	}
+
+	@Override
+	public void endDuck() {
+	}
 }

@@ -9,12 +9,11 @@ import jumpingalien.program.expression.Constant;
 
 public class Program {
 
-	public Program(Statement mainStatement,
-			Map<String, Type> globalVariables) {
+	public Program(Statement mainStatement, Map<String, Type> globalVariables) {
 		this.main = mainStatement;
 		this.global = globalVariables;
 		for (Map.Entry<String,Type> entry : globalVariables.entrySet()) {
-		    globalVariableValues.put(entry.getKey(), null);
+		    variableValues.put(entry.getKey(), null);
 		}
 	}
 	
@@ -29,10 +28,16 @@ public class Program {
 		return this.global;
 	}
 	
-	public static Map<String, Constant<?>> globalVariableValues = new HashMap<String,Constant<?>>();
+	public static Map<String, Constant<?>> variableValues = new HashMap<String,Constant<?>>();
 	
-	public Map<String,Constant<?>> getGlobalVariableValues() {
-		return globalVariableValues;
+	public Map<String,Constant<?>> getVariableValues() {
+		return variableValues;
+	}
+	
+	public static Object self;
+	
+	public void setSelf(Object obj) {
+		self = obj;
 	}
 
 }

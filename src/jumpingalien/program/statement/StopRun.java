@@ -1,6 +1,11 @@
 package jumpingalien.program.statement;
+import jumpingalien.model.GameObject;
+import jumpingalien.model.Orientation;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.part3.programs.IProgramFactory.Direction;
+import jumpingalien.program.expression.Constant;
 import jumpingalien.program.expression.Expression;
+import jumpingalien.program.program.Program;
 
 public class StopRun extends Statement {
 
@@ -17,7 +22,10 @@ public class StopRun extends Statement {
 	
 	@Override
 	public void evaluate() {
-		// TODO Auto-generated method stub
+		if (((Constant<Direction>) getDirection()).getValue() == Direction.LEFT)
+			((GameObject) Program.self).endMove(Orientation.LEFT);
+		else if (((Constant<Direction>) getDirection()).getValue() == Direction.RIGHT)
+			((GameObject) Program.self).endMove(Orientation.RIGHT);
 	}
 
 }

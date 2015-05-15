@@ -428,7 +428,8 @@ public class Shark extends GameObject {
 	 * @post	The number of jumping periods to the next one is set to 5.
 	 * 			| lastJump = 5
 	 */
-	private void startJump() {
+	@Override
+	public void startJump() {
 		lastJump = 5;
 		setYVelocity(startVelY);
 		setYAcc(accy);
@@ -442,7 +443,8 @@ public class Shark extends GameObject {
 	 * 			| if (getYVelocity() > 0)
 	 * 			|	setYVelocity(0)
 	 */
-	private void endJump() {
+	@Override
+	public void endJump() {
 		setYAcc(0);
 		if (getYVelocity() > 0)
 			setYVelocity(0);
@@ -719,6 +721,34 @@ public class Shark extends GameObject {
 				advance(time);
 			time -= dt;
 		}
+	}
+
+	@Override
+	public void startMove(Orientation orientation) {
+		if (getOrientation() != orientation) {
+			if (orientation == Orientation.RIGHT)
+				setXAcc(accx);
+			else
+				setXAcc(-accx);
+			setXVelocity(0);
+			setOrientation(orientation);
+		}
+	}
+
+	@Override
+	public void endMove(Orientation orientation) {
+		if (getOrientation() == orientation) {
+			setXAcc(0);
+			setXVelocity(0);
+		}
+	}
+
+	@Override
+	public void startDuck() {
+	}
+
+	@Override
+	public void endDuck() {
 	}
 	
 }

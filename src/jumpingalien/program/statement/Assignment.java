@@ -33,7 +33,7 @@ public class Assignment extends Statement {
 	public void evaluate() {
 		//if (((Constant) getExpression()).getValue() == getVariableType().getType())        fout!
 		//getVariableType() getVariableName() = ((Constant)getValue()).getValue();
-		Program.globalVariableValues.put(getVariableName(),(Constant<?>) getExpression());
+		Program.variableValues.put(getVariableName(),(Constant<?>) getExpression());
 	}
 	
 }

@@ -486,4 +486,40 @@ public class Slime extends GameObject {
 			time -= dt;
 		}
 	}
+
+	@Override
+	public void startMove(Orientation orientation) {
+		if (getOrientation() != orientation) {
+			if (orientation == Orientation.RIGHT)
+				setXAcc(accx);
+			else
+				setXAcc(-accx);
+			setXVelocity(0);
+			setOrientation(orientation);
+		}
+	}
+
+	@Override
+	public void endMove(Orientation orientation) {
+		if (getOrientation() == orientation) {
+			setXAcc(0);
+			setXVelocity(0);
+		}
+	}
+
+	@Override
+	public void startJump() {
+	}
+
+	@Override
+	public void endJump() {
+	}
+
+	@Override
+	public void startDuck() {
+	}
+
+	@Override
+	public void endDuck() {
+	}
 }

@@ -9,7 +9,7 @@ public class Break extends Statement {
 	
 	@Override
 	public void evaluate() {
-		break; // kan niet zonder loop, maar loop niet gegeven..
+		break; 
 	}
 
 }

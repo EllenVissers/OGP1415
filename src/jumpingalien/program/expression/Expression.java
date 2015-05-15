@@ -1,5 +1,4 @@
 package jumpingalien.program.expression;
-
 import jumpingalien.part3.programs.SourceLocation;
 
 public abstract class Expression {
@@ -13,4 +12,5 @@ public abstract class Expression {
 	protected SourceLocation getSourceLocation() {
 		return this.location;
 	}
+
 }

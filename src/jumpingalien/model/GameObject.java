@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author 	Ellen Vissers, Nina Versin
  * @version 1.0
  */
-public class GameObject {
+public abstract class GameObject {
 
 	/**
 	 * Initialize a new Game Object with given position, velocity, acceleration, orientation, sprites, hitpoints, world and
@@ -71,6 +71,8 @@ public class GameObject {
 		setTerminated(terminated);
 		setTerminatedTime(terminatedTime);
 		setProgram(program);
+		if (program != null)
+			program.setSelf(this);
 	}
 	
 	//VARIABLES
@@ -1254,6 +1256,13 @@ public class GameObject {
 		else
 			return getSprites()[1];
 	}
+	
+	public abstract void startMove(Orientation orientation);
+	public abstract void endMove(Orientation orientation);
+	public abstract void startJump();
+	public abstract void endJump();
+	public abstract void startDuck();
+	public abstract void endDuck();
 	
 	/**
 	 * Advance the timers and update the game object's position and velocity after the given time duration.

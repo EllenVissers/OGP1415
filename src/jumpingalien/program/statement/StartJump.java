@@ -1,5 +1,7 @@
 package jumpingalien.program.statement;
+import jumpingalien.model.GameObject;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.program.program.Program;
 
 public class StartJump extends Statement {
 
@@ -9,7 +11,7 @@ public class StartJump extends Statement {
 	
 	@Override
 	public void evaluate() {
-		// TODO Auto-generated method stub
+		((GameObject) Program.self).startJump();
 	}
 
 }
