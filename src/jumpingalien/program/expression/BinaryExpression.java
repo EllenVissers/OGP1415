@@ -22,5 +22,5 @@ public abstract class BinaryExpression extends Expression {
 	}
 	
 	//public abstract Expression getResult();
-	public abstract Expression evaluate();
+	//public abstract Expression evaluate();
 }

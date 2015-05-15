@@ -9,10 +9,8 @@ public class SquareRoot extends UnaryExpression {
 		super(loc,value);
 	}
 	
-	@Override
-	public Constant<Double> evaluate() {
-		double result = Math.sqrt(((Constant<Double>)getExpression()).getValue());
-		return new Constant<Double>(getSourceLocation(),result);
+	public double evaluate() {
+		return Math.sqrt(((Constant<Double>)getExpression()).getValue());
 	}
 
 }

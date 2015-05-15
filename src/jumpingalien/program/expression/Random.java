@@ -8,10 +8,8 @@ public class Random extends UnaryExpression {
 		super(loc,max);
 	}
 	
-	@Override
-	public Constant<Double> evaluate() {
-		double value = Math.random() * ((Constant<Double>)getExpression()).getValue();
-		return new Constant<Double>(getSourceLocation(),value);
+	public double evaluate() {
+		return (Math.random() * ((Constant<Double>)getExpression()).getValue());
 	}
 
 }

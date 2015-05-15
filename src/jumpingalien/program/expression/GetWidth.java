@@ -9,17 +9,13 @@ public class GetWidth extends UnaryExpression {
 		super(loc,object);
 	}
 	
-	
-	// Class Tile moet nog worden aangemaakt
-	@Override
-	public Constant<Double> evaluate() throws NullPointerException {
+	public int evaluate() throws NullPointerException {
 		Object obj = getExpression();
 		if (obj == null)
 			throw new NullPointerException();
 		if (obj instanceof Tile)
-			return new Constant<Double>(getSourceLocation(),(double)((Tile)obj).getWorld().getTileSize());
-		double result = ((GameObject)obj).getCurrentSprite().getWidth();
-		return new Constant<Double>(getSourceLocation(),result);
+			return ((Tile)obj).getWorld().getTileSize();
+		return ((GameObject)obj).getCurrentSprite().getWidth();
 	}
 
 }

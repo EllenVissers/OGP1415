@@ -9,17 +9,13 @@ public class GetHitpoints extends UnaryExpression {
 		super(loc,object);
 	}
 	
-	
-	// Class Tile moet nog worden aangemaakt
-	@Override
-	public Constant<Double> evaluate() throws NullPointerException {
+	public int evaluate() throws NullPointerException {
 		Object obj = getExpression();
 		if (obj == null)
 			throw new NullPointerException();
 		if (obj instanceof Tile)
-			return new Constant<Double>(getSourceLocation(),(double)0); // of throw exception?
-		double result = ((GameObject)obj).getHitPoints();
-		return new Constant<Double>(getSourceLocation(),result);
+			return 0; // of throw exception?
+		return ((GameObject)obj).getHitPoints();
 	}
 
 }

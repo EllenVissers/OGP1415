@@ -8,11 +8,10 @@ public class LessThanOrEqualTo extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	@Override
-	public Constant<Boolean> evaluate() {
+	public boolean evaluate() {
 		double left = ((Constant<Double>)getLeftExpression()).getValue();
 		double right = ((Constant<Double>)getRightExpression()).getValue();
-		return new Constant<Boolean>(getSourceLocation(),left<=right);
+		return left<=right;
 	}
 
 }

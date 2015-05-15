@@ -2,7 +2,10 @@ package jumpingalien.program.statement;
 
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
+import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Foreach extends Statement {
 	
@@ -52,6 +55,12 @@ public class Foreach extends Statement {
 	// LAMBDA UITDRUKKINGEN!!!
 	
 	public void evaluate() {
+		ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind> all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+		jumpingalien.part3.programs.IProgramFactory.Kind kind = getVariableKind();
+		Stream<jumpingalien.part3.programs.IProgramFactory.Kind> stream = all.stream();
+		if (getWhere() != null)
+			stream = stream.filter(t->t.getWhere() == true);
+		
 		// lijst met alle elementen waarover moet ge-itereerd worden!
 		ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind> all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
 		if (getWhere() != null) // pas lijst aan naar where!
@@ -64,4 +73,13 @@ public class Foreach extends Statement {
 		}	
 	}
 
-}
+//all.forEach(p -> getBody().evaluate()) ??
+
+/*Stream treeStream = myTree.stream();
+Stream filteredStream = 
+		treeStream.filter(t -> ((Integer) t) % factor == 0);
+Stream mappedStream = 
+		filteredStream.map(t -> ((Integer)t)*((Integer)t));
+Optional total = 
+		mappedStream.reduce((t, u) -> ((Integer)t+(Integer)u));
+*/

@@ -8,11 +8,10 @@ public class Multiplication extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	@Override
-	public Constant<Double> evaluate() {
+	public double evaluate() {
 		double left = ((Constant<Double>)getLeftExpression()).getValue();
 		double right = ((Constant<Double>)getRightExpression()).getValue();
-		return new Constant<Double>(getSourceLocation(),left*right);
+		return left*right;
 	}
 
 }

@@ -8,13 +8,12 @@ public class Division extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	@Override
-	public Constant<Double> evaluate() throws ArithmeticException {
+	public double evaluate() throws ArithmeticException {
 		double left = ((Constant<Double>)getLeftExpression()).getValue();
 		double right = ((Constant<Double>)getRightExpression()).getValue();
 		if (right == 0)
 			throw new ArithmeticException();
-		return new Constant<Double>(getSourceLocation(),left/right);
+		return left/right;
 	}
 
 }

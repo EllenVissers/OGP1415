@@ -9,8 +9,7 @@ public class SearchObj extends UnaryExpression {
 		super(loc,dir);
 	}
 	
-	@Override
-	public Expression evaluate() {
+	public Object evaluate() {
 		Constant<Direction> dir = (Constant<Direction>)getExpression();
 		Object obj = this;
 		// TODO Auto-generated method stub

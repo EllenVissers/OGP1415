@@ -1,5 +1,6 @@
 package jumpingalien.program.expression;
 import jumpingalien.part3.programs.SourceLocation;
+import jumpingalien.program.program.Program;
 import jumpingalien.program.type.Type;
 
 public class ReadVariable extends Expression {
@@ -8,6 +9,7 @@ public class ReadVariable extends Expression {
 		super(loc);
 		this.name = variableName;
 		this.type = variableType;
+		Program.variableValues.put(variableName, null);
 	}
 	
 	private String name;
@@ -21,7 +23,7 @@ public class ReadVariable extends Expression {
 		return this.type;
 	}
 
-	protected Constant<?> getResult() {
+	protected Constant<?> evaluate() {
 		// TODO Auto-generated method stub
 		int val = 0;
 		// return getGlobalVariables().getValue(getVariableName()) -> key-value list

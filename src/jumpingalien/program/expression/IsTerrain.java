@@ -8,14 +8,11 @@ public class IsTerrain extends UnaryExpression {
 		super(loc,obj);
 	}
 	
-	
 	//Wat wordt er bedoeld met terrain?
-	@Override
-	public Constant<Boolean> evaluate() throws IllegalArgumentException {
+	public boolean evaluate() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		Object obj = getExpression();
-		Boolean result = (obj instanceof Tile);
-		return new Constant<Boolean>(getSourceLocation(),result);
+		return (obj instanceof Tile);
 	}
 
 }

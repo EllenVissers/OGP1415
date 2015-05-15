@@ -18,8 +18,9 @@ public class Sequence extends Statement {
 	
 	@Override
 	public void evaluate() {
-		for (Statement s : getStatements())
-			s.evaluate();
+		getStatements().forEach(s->s.evaluate());
+//		for (Statement s : getStatements())
+//			s.evaluate();
 	}
 
 }

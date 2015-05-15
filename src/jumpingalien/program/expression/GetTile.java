@@ -7,7 +7,6 @@ public class GetTile extends BinaryExpression {
 		super(loc,x,y);
 	}
 	
-	@Override
 	public Expression evaluate() {
 		// TODO Auto-generated method stub
 		return null;

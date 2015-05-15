@@ -16,5 +16,5 @@ public abstract class UnaryExpression extends Expression {
 	}
 	
 	//protected abstract Expression getResult();
-	public abstract Expression evaluate();
+	//public abstract Expression evaluate();
 }
