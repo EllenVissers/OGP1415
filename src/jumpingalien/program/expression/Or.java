@@ -9,7 +9,7 @@ public class Or extends BinaryExpression {
 	}
 	
 	@Override
-	public Constant<Boolean> getResult() {
+	public Constant<Boolean> evaluate() {
 		Boolean left = ((Constant<Boolean>)getLeftExpression()).getValue();
 		Boolean right = ((Constant<Boolean>)getRightExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),left||right);

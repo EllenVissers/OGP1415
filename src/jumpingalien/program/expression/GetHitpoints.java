@@ -12,7 +12,7 @@ public class GetHitpoints extends UnaryExpression {
 	
 	// Class Tile moet nog worden aangemaakt
 	@Override
-	protected Constant<Double> getResult() throws NullPointerException {
+	public Constant<Double> evaluate() throws NullPointerException {
 		Object obj = getExpression();
 		if (obj == null)
 			throw new NullPointerException();

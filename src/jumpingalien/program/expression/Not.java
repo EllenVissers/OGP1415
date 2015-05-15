@@ -11,7 +11,7 @@ public class Not extends UnaryExpression {
 	}
 	
 	@Override
-	protected Constant<Boolean> getResult() {
+	public Constant<Boolean> evaluate() {
 		Boolean val = ((Constant<Boolean>)getExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),! val);
 	}

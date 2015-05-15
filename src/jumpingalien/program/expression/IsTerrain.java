@@ -11,7 +11,7 @@ public class IsTerrain extends UnaryExpression {
 	
 	//Wat wordt er bedoeld met terrain?
 	@Override
-	protected Constant<Boolean> getResult() throws IllegalArgumentException {
+	public Constant<Boolean> evaluate() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		Object obj = getExpression();
 		Boolean result = (obj instanceof Tile);

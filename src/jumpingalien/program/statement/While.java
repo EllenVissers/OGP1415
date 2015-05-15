@@ -24,7 +24,7 @@ public class While extends Statement {
 	}
 	
 	public void evaluate() {
-		while (((Constant<Boolean>) ((BinaryExpression) getCondition()).getResult()).getValue())
+		while (((Constant<Boolean>) ((BinaryExpression) getCondition()).evaluate()).getValue())
 			getBody().evaluate();
 	}
 }

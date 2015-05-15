@@ -10,7 +10,7 @@ public class SquareRoot extends UnaryExpression {
 	}
 	
 	@Override
-	protected Constant<Double> getResult() {
+	public Constant<Double> evaluate() {
 		Double result = Math.sqrt(((Constant<Double>)getExpression()).getValue());
 		return new Constant<Double>(getSourceLocation(),result);
 	}

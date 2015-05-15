@@ -9,7 +9,7 @@ public class Random extends UnaryExpression {
 	}
 	
 	@Override
-	protected Constant<Double> getResult() {
+	public Constant<Double> evaluate() {
 		double value = Math.random() * ((Constant<Double>)getExpression()).getValue();
 		return new Constant<Double>(getSourceLocation(),value);
 	}

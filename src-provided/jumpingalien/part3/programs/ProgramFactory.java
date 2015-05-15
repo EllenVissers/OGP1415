@@ -421,11 +421,9 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 * direction. The where- and sort-expressions are optional, and can be null;
 	 * */
 	@Override
-	public Statement createForEach(
-			String variableName,
+	public Statement createForEach(String variableName,
 			jumpingalien.part3.programs.IProgramFactory.Kind variableKind,
-			Expression where,
-			Expression sort,
+			Expression where,Expression sort,
 			jumpingalien.part3.programs.IProgramFactory.SortDirection sortDirection,
 			Statement body, SourceLocation sourceLocation) {
 		return new Foreach(sourceLocation,variableName,variableKind,where,sort,sortDirection,body);

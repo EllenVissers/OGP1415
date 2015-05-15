@@ -21,6 +21,6 @@ public abstract class BinaryExpression extends Expression {
 		return this.right;
 	}
 	
-	public abstract Expression getResult();
-	
+	//public abstract Expression getResult();
+	public abstract Expression evaluate();
 }

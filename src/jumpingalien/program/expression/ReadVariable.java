@@ -21,9 +21,11 @@ public class ReadVariable extends Expression {
 		return this.type;
 	}
 
-	protected Expression getResult() {
+	protected Constant<?> getResult() {
 		// TODO Auto-generated method stub
-		return null;
+		int val = 0;
+		// return getGlobalVariables().getValue(getVariableName()) -> key-value list
+		return new Constant<>(getSourceLocation(),val);
 	}
 	
 }

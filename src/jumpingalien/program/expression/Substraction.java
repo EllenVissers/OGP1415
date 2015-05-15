@@ -9,7 +9,7 @@ public class Substraction extends BinaryExpression {
 	}
 	
 	@Override
-	public Constant<Double> getResult() {
+	public Constant<Double> evaluate() {
 		Double left = ((Constant<Double>)getLeftExpression()).getValue();
 		Double right = ((Constant<Double>)getRightExpression()).getValue();
 		return new Constant<Double>(getSourceLocation(),left-right);

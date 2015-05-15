@@ -9,7 +9,7 @@ public class IsPassable extends UnaryExpression {
 	}
 	
 	@Override
-	protected Constant<Boolean> getResult() throws IllegalArgumentException {
+	public Constant<Boolean> evaluate() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		Object obj = getExpression();
 		if (! (obj instanceof Tile))

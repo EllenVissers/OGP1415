@@ -9,7 +9,7 @@ public class LessThanOrEqualTo extends BinaryExpression {
 	}
 	
 	@Override
-	public Constant<Boolean> getResult() {
+	public Constant<Boolean> evaluate() {
 		Double left = ((Constant<Double>)getLeftExpression()).getValue();
 		Double right = ((Constant<Double>)getRightExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),left<=right);

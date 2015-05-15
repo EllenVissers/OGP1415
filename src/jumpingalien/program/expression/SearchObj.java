@@ -10,7 +10,7 @@ public class SearchObj extends UnaryExpression {
 	}
 	
 	@Override
-	protected Expression getResult() {
+	public Expression evaluate() {
 		Constant<Direction> dir = (Constant<Direction>)getExpression();
 		Object obj = this;
 		// TODO Auto-generated method stub
