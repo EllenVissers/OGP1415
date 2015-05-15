@@ -12,7 +12,7 @@ public class Not extends UnaryExpression {
 	
 	@Override
 	public Constant<Boolean> evaluate() {
-		Boolean val = ((Constant<Boolean>)getExpression()).getValue();
+		boolean val = ((Constant<Boolean>)getExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),! val);
 	}
 

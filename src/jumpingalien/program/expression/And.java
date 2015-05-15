@@ -10,8 +10,8 @@ public class And extends BinaryExpression {
 	
 	@Override
 	public Constant<Boolean> evaluate() {
-		Boolean left = ((Constant<Boolean>)getLeftExpression()).getValue();
-		Boolean right = ((Constant<Boolean>)getRightExpression()).getValue();
+		boolean left = ((Constant<Boolean>)getLeftExpression()).getValue();
+		boolean right = ((Constant<Boolean>)getRightExpression()).getValue();
 		return new Constant<Boolean>(getSourceLocation(),left&&right);
 	}
 

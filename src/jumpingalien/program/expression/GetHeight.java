@@ -18,7 +18,7 @@ public class GetHeight extends UnaryExpression {
 			throw new NullPointerException();
 		if (obj instanceof Tile)
 			return new Constant<Double>(getSourceLocation(),(double)((Tile)obj).getWorld().getTileSize());
-		Double result = (double)((GameObject)obj).getCurrentSprite().getHeight();
+		double result = ((GameObject)obj).getCurrentSprite().getHeight();
 		return new Constant<Double>(getSourceLocation(),result);
 	}
 

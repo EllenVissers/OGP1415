@@ -10,8 +10,8 @@ public class Substraction extends BinaryExpression {
 	
 	@Override
 	public Constant<Double> evaluate() {
-		Double left = ((Constant<Double>)getLeftExpression()).getValue();
-		Double right = ((Constant<Double>)getRightExpression()).getValue();
+		double left = ((Constant<Double>)getLeftExpression()).getValue();
+		double right = ((Constant<Double>)getRightExpression()).getValue();
 		return new Constant<Double>(getSourceLocation(),left-right);
 	}
 

@@ -16,7 +16,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createReadVariable(String variableName,
 			Type variableType, SourceLocation sourceLocation) {
-		return new ReadVariable(sourceLocation,variableName,variableType);
+		return new ReadVariable(sourceLocation,variableName,variableType); //nog doen
 	}
 
 	/** An expression that evaluates to the given numeric value */
@@ -151,8 +151,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGreaterThan(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThan(sourceLocation,left,right);
 	}
 
 	/**
@@ -162,8 +161,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGreaterThanOrEqualTo(Expression left,
 			Expression right, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThanOrEqualTo(sourceLocation,left,right);
 	}
 
 	/**
@@ -173,8 +171,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Equals(sourceLocation,left,right);
 	}
 
 	/**
@@ -184,8 +181,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createNotEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NotEquals(sourceLocation,left,right);
 	}
 
 	/**
@@ -194,8 +190,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetX(Expression expr, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetX(sourceLocation,expr);
 	}
 
 	/**
@@ -204,8 +199,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetY(Expression expr, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetY(sourceLocation,expr);
 	}
 
 	/**
@@ -244,7 +238,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetTile(Expression x, Expression y, SourceLocation sourceLocation) {
-		return new GetTile(sourceLocation,x,y);
+		return new GetTile(sourceLocation,x,y); //nog doen
 	}
 
 	/**
@@ -254,7 +248,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createSearchObject(Expression direction,
 			SourceLocation sourceLocation) {
-		return new SearchObj(sourceLocation,direction);
+		return new SearchObj(sourceLocation,direction); //nog doen
 	}
 
 	/**
@@ -264,8 +258,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMazub(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsMazub(sourceLocation,expr);
 	}
 
 	/**
@@ -275,8 +268,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsShark(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsShark(sourceLocation,expr);
 	}
 
 	/**
@@ -286,8 +278,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsSlime(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsSlime(sourceLocation,expr);
 	}
 
 	/**
@@ -297,8 +288,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsPlant(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsPlant(sourceLocation,expr);
 	}
 
 	/**
@@ -308,8 +298,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDead(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsDead(sourceLocation,expr);
 	}
 
 	/**
@@ -319,7 +308,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsTerrain(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsTerrain(sourceLocation,expr);
+		return new IsTerrain(sourceLocation,expr); //nog afwerken
 	}
 
 	/**
@@ -368,8 +357,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMoving(Expression expr, Expression direction,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsMoving(sourceLocation,expr,direction);
 	}
 
 	/**
@@ -379,8 +367,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDucking(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsDucking(sourceLocation,expr);
 	}
 
 	/**
@@ -390,8 +377,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsJumping(Expression expr,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IsJumping(sourceLocation,expr);
 	}
 
 	/**
@@ -401,7 +387,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createAssignment(String variableName, Type variableType,
 			Expression value, SourceLocation sourceLocation) {
-		return new Assignment(sourceLocation, variableName,variableType,value);
+		return new Assignment(sourceLocation,variableName,variableType,value);
 	}
 
 	/**
@@ -443,53 +429,51 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createIf(Expression condition, Statement ifBody,
 			Statement elseBody, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new If(sourceLocation,condition,ifBody,elseBody);
 	}
 
 	/** A statement that prints the value of the given expression */
 	@Override
 	public Statement createPrint(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Print(sourceLocation,value);
 	}
 
 	/** A statement that makes the object executing the program start moving */
 	@Override
 	public Statement createStartRun(Expression direction,
 			SourceLocation sourceLocation) {
-		return new StartRun(sourceLocation,direction);
+		return new StartRun(sourceLocation,direction); //nog doen
 	}
 
 	/** A statement that makes the object executing the program stop moving */
 	@Override
 	public Statement createStopRun(Expression direction,
 			SourceLocation sourceLocation) {
-		return new StopRun(sourceLocation,direction);
+		return new StopRun(sourceLocation,direction); //nog doen
 	}
 
 	/** A statement that makes the object executing the program start jumping */
 	@Override
 	public Statement createStartJump(SourceLocation sourceLocation) {
-		return new StartJump(sourceLocation);
+		return new StartJump(sourceLocation); //nog doen
 	}
 
 	/** A statement that makes the object executing the program stop jumping */
 	@Override
 	public Statement createStopJump(SourceLocation sourceLocation) {
-		return new StopJump(sourceLocation);
+		return new StopJump(sourceLocation); //nog doen
 	}
 
 	/** A statement that makes the object executing the program start ducking */
 	@Override
 	public Statement createStartDuck(SourceLocation sourceLocation) {
-		return new StartDuck(sourceLocation);
+		return new StartDuck(sourceLocation); //nog doen
 	}
 
 	/** A statement that makes the object executing the program stop ducking */
 	@Override
 	public Statement createStopDuck(SourceLocation sourceLocation) {
-		return new StopDuck(sourceLocation);
+		return new StopDuck(sourceLocation); //nog doen
 	}
 
 	/**
@@ -499,13 +483,13 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createWait(Expression duration,
 			SourceLocation sourceLocation) {
-		return new Wait(sourceLocation,duration);
+		return new Wait(sourceLocation,duration); //nog doen
 	}
 
 	/** A statement that does nothing */
 	@Override
 	public Statement createSkip(SourceLocation sourceLocation) {
-		return new Wait(sourceLocation,new Constant<Double>(sourceLocation,0.001));
+		return new Wait(sourceLocation,new Constant<Double>(sourceLocation,0.001)); //nog doen
 	}
 
 	/** A statement that executes of a list of statements subsequently */

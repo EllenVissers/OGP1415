@@ -18,7 +18,7 @@ public class GetHitpoints extends UnaryExpression {
 			throw new NullPointerException();
 		if (obj instanceof Tile)
 			return new Constant<Double>(getSourceLocation(),(double)0); // of throw exception?
-		Double result = (double)((GameObject)obj).getHitPoints();
+		double result = ((GameObject)obj).getHitPoints();
 		return new Constant<Double>(getSourceLocation(),result);
 	}
 

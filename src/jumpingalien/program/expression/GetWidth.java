@@ -18,7 +18,7 @@ public class GetWidth extends UnaryExpression {
 			throw new NullPointerException();
 		if (obj instanceof Tile)
 			return new Constant<Double>(getSourceLocation(),(double)((Tile)obj).getWorld().getTileSize());
-		Double result = (double)((GameObject)obj).getCurrentSprite().getWidth();
+		double result = ((GameObject)obj).getCurrentSprite().getWidth();
 		return new Constant<Double>(getSourceLocation(),result);
 	}
 
