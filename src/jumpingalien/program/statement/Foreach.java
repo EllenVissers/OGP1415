@@ -58,7 +58,8 @@ public class Foreach extends Statement {
 			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
 		if (getSort() != null) // sorteer de lijst naar het object in de juiste richting
 			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
-		for (getVariableKind() getVariableName() : all) {
+		//for (getVariableKind() getVariableName() : all) {
+		for (getVariableKind() s : getVariableName())
 			getBody().evaluate();
 		}	
 	}

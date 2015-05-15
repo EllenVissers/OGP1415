@@ -1,9 +1,11 @@
 package jumpingalien.program.program;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.Type;
+import jumpingalien.program.expression.Constant;
 
 public class Program {
 
@@ -11,6 +13,9 @@ public class Program {
 			Map<String, Type> globalVariables) {
 		this.main = mainStatement;
 		this.global = globalVariables;
+		for (Map.Entry<String,Type> entry : globalVariables.entrySet()) {
+		    globalVariableValues.put(entry.getKey(), null);
+		}
 	}
 	
 	private Statement main;
@@ -22,6 +27,12 @@ public class Program {
 	
 	public Map<String,Type> getGlobalVariables() {
 		return this.global;
+	}
+	
+	public static Map<String, Constant<?>> globalVariableValues = new HashMap<String,Constant<?>>();
+	
+	public Map<String,Constant<?>> getGlobalVariableValues() {
+		return globalVariableValues;
 	}
 
 }
