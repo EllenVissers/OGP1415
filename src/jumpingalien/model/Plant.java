@@ -147,30 +147,9 @@ public class Plant extends GameObject {
 	 */
 	private void Move(double time) {
 		double s;
-		if (! isTerminated())
-		{
-			if (reachesTimeSwitch(time))
-			{
-				double t1 = (timeSwitch - timer);
-				double t2 = ((time+timer) - timeSwitch);
-				s = this.getXPosition() + 100*(t1-t2)*getXVelocity();
-				if (this.getOrientation() == Orientation.RIGHT)
-				{
-					this.setOrientation(Orientation.LEFT);
-					setXVelocity(-speed);
-				}
-				else
-				{
-					this.setOrientation(Orientation.RIGHT);
-					setXVelocity(speed);
-				}
-				timer = t2;	
-			}
-			else
-			{
-				s = this.getXPosition() + 100*time*getXVelocity();
-				timer += time;
-			}
+		if (! isTerminated()) {
+			s = getXPosition() + 100*time*getXVelocity();
+			timer += time;
 			try {
 				CheckWorldH(s);
 			} catch (CollisionException exc) {
@@ -196,8 +175,21 @@ public class Plant extends GameObject {
 	 * 			| Move(t)
 	 */
 	private void advance(double t) {
-		if ( (! isTerminated()) && (t != 0))
-			Move(t);
+		if ( (! isTerminated()) && (t != 0)) {
+			if (reachesTimeSwitch(t)) {
+				double t1 = (timeSwitch - timer);
+				double t2 = ((t+timer) - timeSwitch);
+				Move(t1);
+				endMove(getOrientation());
+				if (getOrientation() == Orientation.LEFT)
+					startMove(Orientation.RIGHT);
+				else
+					startMove(Orientation.LEFT);
+				Move(t2);
+			}
+			else
+				Move(t);
+		}
 	}
 	
 	/**
@@ -239,6 +231,7 @@ public class Plant extends GameObject {
 	@Override
 	public void endMove(Orientation orientation) {
 		setXVelocity(0);
+		timer = 0;
 	}
 
 	@Override

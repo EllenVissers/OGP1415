@@ -315,6 +315,10 @@ public class Slime extends GameObject {
 		setYVelocity(getYVelocity() + accy*time);
 	}
 	
+	private boolean reachesTimeSlot(double time) {
+		return ((timer+time)>=timeslot);
+	}
+	
 	/**
 	 * Update the position and the velocity of the slime after a given time duration using its current position and velocity.
 	 * @param 	time
@@ -339,57 +343,18 @@ public class Slime extends GameObject {
 	 */
 	private void Move(double time) {
 		double s;
-		if ((timer+time) >= timeslot)
-		{
-			double t1 = timeslot - timer;
+		if (reachesMaxSpeed(time)) {
+			double t1 = (this.getMaxVel() - this.getXVelocity())/(getXAcc());
 			double t2 = time - t1;
-			double t3; double t4;
-			if (reachesMaxSpeed(t1))
-			{
-				t3 = (this.getMaxVel() - this.getXVelocity())/(getXAcc());
-				t4 = t1 - t3;
-				s = (this.getXPosition() + 100*(t3*this.getXVelocity() + 0.5*(t3*t3 - t2*t2)*this.getXAcc() + 
-						t4*this.getMaxVel()));
-			}
-			else
-				s = (this.getXPosition() + 100*(t1*this.getXVelocity() + 0.5*(t1*t1 - t2*t2)*this.getXAcc()));
-			if (this.getOrientation() == Orientation.RIGHT)
-			{
-				this.setXVelocity(-t2*accx);
-				this.setMaxVel(-maxSpeed);
-				this.setXAcc(-accx);
-				this.setOrientation(Orientation.LEFT);
-			}
-			else
-			{
-				this.setXVelocity(t2*accx);
-				this.setMaxVel(maxSpeed);
-				this.setXAcc(accx);
-				this.setOrientation(Orientation.RIGHT);
-			}
-			timer = t2;
-			timeslot = randomTime();
+			s = (getXPosition() + 100*(t1*getXVelocity() + 0.5*t1*t1*getXAcc() + t2*getMaxVel()));
+			setXVelocity(getMaxVel());
 		}
 		else
 		{
-			double t1; double t2;
-			if (reachesMaxSpeed(time))
-			{
-				t1 = (this.getMaxVel() - this.getXVelocity())/(getXAcc());
-				t2 = time - t1;
-				s = (this.getXPosition() + 100*(t1*this.getXVelocity() + 0.5*t1*t1*this.getXAcc() + t2*this.getMaxVel()));
-				if (this.getOrientation() == Orientation.RIGHT)
-					this.setXVelocity(maxSpeed);
-				else
-					this.setXVelocity(-maxSpeed);
-			}
-			else
-			{
-				s = (this.getXPosition() + 100*(time*this.getXVelocity() + 0.5*time*time*this.getXAcc()));
-				this.setXVelocity(this.getXVelocity() + time*this.getXAcc());
-			}
-			timer += time;
+			s = (getXPosition() + 100*(time*getXVelocity() + 0.5*time*time*getXAcc()));
+			setXVelocity(getXVelocity()+time*getXAcc());
 		}
+		timer += time;
 		try {
 			CheckWorldH(s);
 		} catch (CollisionException exc) {
@@ -442,7 +407,19 @@ public class Slime extends GameObject {
 		}
 		else
 		{
-			Move(t);
+			if (reachesTimeSlot(t)) {
+				double t1 = timeslot - timer;
+				double t2 = t - t1;
+				Move(t1);
+				endMove(getOrientation());
+				if (getOrientation() == Orientation.RIGHT)
+					startMove(Orientation.LEFT);
+				else
+					startMove(Orientation.RIGHT);
+				Move(t2);
+			}
+			else
+				Move(t);
 			setTerminatedTime(0);
 			if (onGround() || onGameObject())
 				setYVelocity(0);
@@ -491,9 +468,15 @@ public class Slime extends GameObject {
 	public void startMove(Orientation orientation) {
 		if (getOrientation() != orientation) {
 			if (orientation == Orientation.RIGHT)
+			{
 				setXAcc(accx);
+				setMaxVel(maxSpeed);
+			}
 			else
+			{
 				setXAcc(-accx);
+				setMaxVel(-maxSpeed);
+			}
 			setXVelocity(0);
 			setOrientation(orientation);
 		}
@@ -504,6 +487,7 @@ public class Slime extends GameObject {
 		if (getOrientation() == orientation) {
 			setXAcc(0);
 			setXVelocity(0);
+			timer = 0;
 		}
 	}
 
