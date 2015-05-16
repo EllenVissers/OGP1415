@@ -1,8 +1,7 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.expression.BinaryExpression;
-import jumpingalien.program.expression.Constant;
+import jumpingalien.program.expression.ComparisonExpression;
 
 public class While extends Statement {
 
@@ -23,9 +22,8 @@ public class While extends Statement {
 		return this.body;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void evaluate() {
-		while (((Constant<Boolean>) ((BinaryExpression) getCondition()).evaluate()).getValue())
+		while (((ComparisonExpression) getCondition()).evaluate())
 			getBody().evaluate();
 	}
 }
