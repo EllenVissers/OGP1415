@@ -8,8 +8,9 @@ public class Break extends Statement {
 	}
 	
 	@Override
-	public void evaluate() {
-		break; 
+	public void evaluate() /*throws BreakException*/ {
+		/*throw new BreakException();*/
+		break;
 	}
 
 }

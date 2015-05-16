@@ -23,9 +23,9 @@ public class StartRun extends Statement {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
-		if (((Constant<Direction>) getDirection()).getValue() == Direction.LEFT)
+		if (((Constant<Direction>) getDirection()).evaluate() == Direction.LEFT)
 			((GameObject) Program.self).startMove(Orientation.LEFT);
-		else if (((Constant<Direction>) getDirection()).getValue() == Direction.RIGHT)
+		else if (((Constant<Direction>) getDirection()).evaluate() == Direction.RIGHT)
 			((GameObject) Program.self).startMove(Orientation.RIGHT);
 	}
 

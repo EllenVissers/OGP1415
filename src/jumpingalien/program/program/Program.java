@@ -2,7 +2,7 @@ package jumpingalien.program.program;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import jumpingalien.model.GameObject;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.Type;
 import jumpingalien.program.expression.Constant;
@@ -34,9 +34,9 @@ public class Program {
 		return variableValues;
 	}
 	
-	public static Object self;
+	public static GameObject self;
 	
-	public void setSelf(Object obj) {
+	public void setSelf(GameObject obj) {
 		self = obj;
 	}
 	

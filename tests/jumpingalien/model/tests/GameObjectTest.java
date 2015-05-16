@@ -1,23 +1,26 @@
 package jumpingalien.model.tests;
-import jumpingalien.model.GameObject;
+import jumpingalien.model.Shark;
+import jumpingalien.model.Plant;
+import jumpingalien.model.Slime;
 import static org.junit.Assert.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
 import jumpingalien.model.Orientation;
-
-
+import jumpingalien.model.School;
 import jumpingalien.part2.internal.Resources;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class GameObjectTest {
 	
 	private static double delta = 1e-3;
-	private static GameObject g1, g2, g3, g4, g5, g6, g7;
+	private static Plant g1, g4, g7;
+	private static Shark g2, g5;
+	private static Slime g3, g6;
 	private static World w1, w2;
 	private static Sprite[] s1, s2, s3;
+	private static School school;
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
@@ -32,18 +35,27 @@ public class GameObjectTest {
 			w2.setFeatureAt(49, i, 1);
 		}
 		
+		
 		s1 = new Sprite[] { Resources.PLANT_SPRITE_LEFT, Resources.PLANT_SPRITE_RIGHT };
 		s2 = new Sprite[] { Resources.SHARK_SPRITE_LEFT, Resources.SHARK_SPRITE_RIGHT };
 		s3 = new Sprite[] { Resources.SLIME_SPRITE_LEFT, Resources.SLIME_SPRITE_RIGHT };
+		school = new School();
 		
-		g1 = new GameObject(49, 49, 0, 0, 0, 0, Orientation.NONE, s1, 100, w2, false,0,null);
-		g2 = new GameObject(580, 49, 1.6, 0, 0.9, 0, Orientation.RIGHT, s2, 120, w2, false,0,null);
-		g3 = new GameObject(1200, 49, -2.14, 0, -0.9, 0, Orientation.LEFT, s3, 170, w2, false,0,null);
-		g4 = new GameObject(413, 49, 2.7, 0, 0.9, 0, Orientation.RIGHT, s1, 360, w2, false,0,null);
-		g5 = new GameObject(864, 49, -1.1, 0, -0.9, 0, Orientation.LEFT, s2, 40, w2, false,0,null);
-		g6 = new GameObject(864, 162, -1.1, 5.3, -0.9, -10, Orientation.LEFT, s3, 40, w1, false,0,null);
-		g7 = new GameObject(49, 49, 1.0, 0, 0.9, 0, Orientation.RIGHT, s1, 120, w2, true,0.8,null);
-		
+		//double x, y, vx, vy, ax, ay, Orientation, sprites, hitPoints, world, terminated, terminatedTime, program
+		g1 = new Plant(49, 49, s2 ,null);
+		g2 = new Shark(580, 49, s2, null);
+		g3 = new Slime(1200, 49,s3,school,null);
+		g4 = new Plant(413, 49, s1,null);
+		g5 = new Shark(864, 49, s2,null);
+		g6 = new Slime(864, 162, s3, school,null);
+		g7 = new Plant(49, 49, s1,null);
+		w2.addPlant(g7);
+		w2.addPlant(g4);
+		w2.addPlant(g1);
+		w2.addShark(g5);
+		w2.addShark(g2);
+		w2.addSlime(g3);
+		w1.addSlime(g6);
 	}
 
 	@Test
@@ -64,7 +76,7 @@ public class GameObjectTest {
 	
 	@Test(expected = ModelException.class)
 	public void Constructor_IllegalCase() {
-		new GameObject(80,65,0,0,0,0,Orientation.NONE,null,50,w1,false,0,null);
+		new Plant(80,65,null,null);
 	}
 
 	@Test

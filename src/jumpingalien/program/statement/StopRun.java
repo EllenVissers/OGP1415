@@ -23,9 +23,9 @@ public class StopRun extends Statement {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
-		if (((Constant<Direction>) getDirection()).getValue() == Direction.LEFT)
+		if (((Constant<Direction>) getDirection()).evaluate() == Direction.LEFT)
 			((GameObject) Program.self).endMove(Orientation.LEFT);
-		else if (((Constant<Direction>) getDirection()).getValue() == Direction.RIGHT)
+		else if (((Constant<Direction>) getDirection()).evaluate() == Direction.RIGHT)
 			((GameObject) Program.self).endMove(Orientation.RIGHT);
 	}
 

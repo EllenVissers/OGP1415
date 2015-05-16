@@ -19,7 +19,7 @@ public class Wait extends Statement {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
-		int time = (int)(double)(((Constant<Double>) getDuration()).getValue());
+		int time = (int)(double)(((Constant<Double>) getDuration()).evaluate());
 		//wait(time);
 		try {
 			Thread.sleep(time);

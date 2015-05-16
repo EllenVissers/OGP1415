@@ -52,4 +52,9 @@ public abstract class AllObjects {
 		return all;
 	}
 
+	public abstract double getXVelocity();
+	public abstract double getYVelocity();
+	public abstract double getXAcc();
+	public abstract double getYAcc();
+	public abstract boolean isTerminated();
 }
