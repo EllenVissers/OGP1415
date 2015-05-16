@@ -7,6 +7,6 @@ public abstract class ComparisonExpression extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	public abstract boolean evaluate();
+	public abstract Boolean evaluate();
 	
 }

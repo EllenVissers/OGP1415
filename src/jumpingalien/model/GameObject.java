@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author 	Ellen Vissers, Nina Versin
  * @version 1.0
  */
-public abstract class GameObject {
+public abstract class GameObject extends AllObjects {
 
 	/**
 	 * Initialize a new Game Object with given position, velocity, acceleration, orientation, sprites, hitpoints, world and
@@ -56,10 +56,11 @@ public abstract class GameObject {
 	public GameObject(double x, double y, double vx, double vy, double ax, double ay, Orientation orientation, 
 			Sprite[] sprites, int hitPoints, World world, boolean terminated, double terminatedTime, Program program) 
 					throws ModelException {
+		super(x,y,world);
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
-		setXPosition(x);
-		setYPosition(y);
+		//setXPosition(x);
+		//setYPosition(y);
 		setXVelocity(vx);
 		setYVelocity(vy);
 		setXAcc(ax);
@@ -67,7 +68,7 @@ public abstract class GameObject {
 		setOrientation(orientation);
 		this.sprites = sprites;
 		setHitPoints(hitPoints);
-		setWorld(world);
+		//setWorld(world);
 		setTerminated(terminated);
 		setTerminatedTime(terminatedTime);
 		setProgram(program);
@@ -76,14 +77,14 @@ public abstract class GameObject {
 	}
 	
 	//VARIABLES
-	/**
-	 * Variable registering the horizontal position.
-	 */
-	private double x;
-	/**
-	 * Variable registering the vertical position.
-	 */
-	private double y;
+//	/**
+//	 * Variable registering the horizontal position.
+//	 */
+//	private double x;
+//	/**
+//	 * Variable registering the vertical position.
+//	 */
+//	private double y;
 	/**
 	 * Variable registering the horizontal velocity.
 	 */
@@ -112,10 +113,10 @@ public abstract class GameObject {
 	 * Variable registering the list of images of the game object.
 	 */
 	private Sprite[] sprites;
-	/**
-	 * Variable registering the world in which the game object is situated.
-	 */
-	private World world;
+//	/**
+//	 * Variable registering the world in which the game object is situated.
+//	 */
+//	private World world;
 	/**
 	 * Variable registering the number of hitpoints.
 	 */
@@ -154,15 +155,15 @@ public abstract class GameObject {
 	private int SharkSlime = 50;
 	
 	//GETTERS AND SETTERS
-	/**
-	 * Return the current horizontal position of the game object.
-	 * @return 	The horizontal position.
-	 * 			| this.x
-	 */
-	@Basic
-	public double getXPosition() {
-		return this.x;
-	}
+//	/**
+//	 * Return the current horizontal position of the game object.
+//	 * @return 	The horizontal position.
+//	 * 			| this.x
+//	 */
+//	@Basic
+//	public double getXPosition() {
+//		return this.x;
+//	}
 	
 	/**
 	 * Set the horizontal position of the game object to the given position.
@@ -174,21 +175,22 @@ public abstract class GameObject {
 	 * @post 	The horizontal position is updated to the given position.
 	 * 			| new.pos_x = position
 	 */
+	@Override
 	protected void setXPosition(double position) {
 		if (! isValidXPosition(position))
 			terminate();
 		this.x = position;
 	}
 	
-	/**
-	 * Return the current vertical position of the game object.
-	 * @return	The vertical position.
-	 * 			| this.y
-	 */
-	@Basic
-	public double getYPosition() {
-		return this.y;
-	}
+//	/**
+//	 * Return the current vertical position of the game object.
+//	 * @return	The vertical position.
+//	 * 			| this.y
+//	 */
+//	@Basic
+//	public double getYPosition() {
+//		return this.y;
+//	}
 	
 	/**
 	 * Set the vertical position of the game object to the given position.
@@ -200,6 +202,7 @@ public abstract class GameObject {
 	 * @post 	The vertical position is updated to the given position.
 	 * 			| new.pos_y = position
 	 */
+	@Override
 	protected void setYPosition(double position) {
 		if (! isValidYPosition(position))
 			terminate();
@@ -344,15 +347,15 @@ public abstract class GameObject {
 		this.hitPoints = points;
 	}
 	
-	/**
-	 * Return the world in which the game object is situated.
-	 * @return 	The game world.
-	 * 			|this.world
-	 */
-	@Basic
-	public World getWorld() {
-		return this.world;
-	}
+//	/**
+//	 * Return the world in which the game object is situated.
+//	 * @return 	The game world.
+//	 * 			|this.world
+//	 */
+//	@Basic
+//	public World getWorld() {
+//		return this.world;
+//	}
 	
 	/**
 	 * Set the game world to the given world.
@@ -368,6 +371,7 @@ public abstract class GameObject {
 	 *			| else if (this instanceof Slime)
 	 *			|	getWorld().getAllSlimes().remove(this);
 	 */
+	@Override
 	protected void setWorld(World world) {
 		if (world != getWorld())
 		{

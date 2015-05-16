@@ -5,12 +5,21 @@ import jumpingalien.program.expression.Expression;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Stream;
+//import java.util.stream.Stream;
+import jumpingalien.part3.programs.IProgramFactory.Kind;
+import jumpingalien.part3.programs.IProgramFactory.SortDirection;
 
+/**
+ * A statement that executes the given body 
+ * with the given variable set to all objects of the given kind 
+ * for which the where-expression evaluates to true, 
+ * sorted by the result of the given sort expression in the given direction. 
+ * The where- and sort-expressions are optional, and can be null;
+ * */
 public class Foreach extends Statement {
 	
-	public Foreach(SourceLocation loc, String variableName, jumpingalien.part3.programs.IProgramFactory.Kind variableKind,
-			Expression where, Expression sort, jumpingalien.part3.programs.IProgramFactory.SortDirection sortDirection,
+	public Foreach(SourceLocation loc, String variableName, Kind variableKind,
+			Expression where, Expression sort, SortDirection sortDirection,
 			Statement body) {
 		super(loc);
 		this.name = variableName;
@@ -22,17 +31,17 @@ public class Foreach extends Statement {
 	}
 	
 	private String name;
-	private jumpingalien.part3.programs.IProgramFactory.Kind kind;
+	private Kind kind;
 	private Expression where;
 	private Expression sort;
-	private jumpingalien.part3.programs.IProgramFactory.SortDirection direction;
+	private SortDirection direction;
 	private Statement body;
 	
 	public String getVariableName() {
 		return this.name;
 	}
 	
-	public jumpingalien.part3.programs.IProgramFactory.Kind getVariableKind() {
+	public Kind getVariableKind() {
 		return this.kind;
 	}
 	
@@ -44,7 +53,7 @@ public class Foreach extends Statement {
 		return this.sort;
 	}
 	
-	public jumpingalien.part3.programs.IProgramFactory.SortDirection getSortDirection() {
+	public SortDirection getSortDirection() {
 		return this.direction;
 	}
 	
@@ -55,23 +64,26 @@ public class Foreach extends Statement {
 	// LAMBDA UITDRUKKINGEN!!!
 	
 	public void evaluate() {
-		ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind> all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
-		jumpingalien.part3.programs.IProgramFactory.Kind kind = getVariableKind();
-		Stream<jumpingalien.part3.programs.IProgramFactory.Kind> stream = all.stream();
-		if (getWhere() != null)
-			stream = stream.filter(t->t.getWhere() == true);
+		String name = getVariableName();
+		Kind kind = getVariableKind();
+		ArrayList<Kind> all = kind.getClass().getAll();
+//		Kind kind = getVariableKind();
+//		Stream<Kind> stream = all.stream();
+//		if (getWhere() != null)
+//			stream = stream.filter(t->t.getWhere() == true);
 		
-		// lijst met alle elementen waarover moet ge-itereerd worden!
-		ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind> all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+/*		// lijst met alle elementen waarover moet ge-itereerd worden!
+		ArrayList<Kind> all = new ArrayList<Kind>();
 		if (getWhere() != null) // pas lijst aan naar where!
-			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+			all = new ArrayList<Kind>();
 		if (getSort() != null) // sorteer de lijst naar het object in de juiste richting
-			all = new ArrayList<jumpingalien.part3.programs.IProgramFactory.Kind>();
+			all = new ArrayList<Kind>();
 		//for (getVariableKind() getVariableName() : all) {
 		for (getVariableKind() s : getVariableName())
 			getBody().evaluate();
-		}	
+		}*/	
 	}
+}
 
 //all.forEach(p -> getBody().evaluate()) ??
 

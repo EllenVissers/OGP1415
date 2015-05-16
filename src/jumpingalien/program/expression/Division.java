@@ -8,9 +8,9 @@ public class Division extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	public double evaluate() throws ArithmeticException {
-		double left = ((Constant<Double>)getLeftExpression()).getValue();
-		double right = ((Constant<Double>)getRightExpression()).getValue();
+	public Double evaluate() throws ArithmeticException {
+		double left = ((Constant<Double>)getLeftExpression()).evaluate();
+		double right = ((Constant<Double>)getRightExpression()).evaluate();
 		if (right == 0)
 			throw new ArithmeticException();
 		return left/right;

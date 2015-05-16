@@ -8,9 +8,9 @@ public class Substraction extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	public double evaluate() {
-		double left = ((Constant<Double>)getLeftExpression()).getValue();
-		double right = ((Constant<Double>)getRightExpression()).getValue();
+	public Double evaluate() {
+		double left = ((Constant<Double>)getLeftExpression()).evaluate();
+		double right = ((Constant<Double>)getRightExpression()).evaluate();
 		return (left-right);
 	}
 

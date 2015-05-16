@@ -9,7 +9,7 @@ public class GetHeight extends UnaryExpression {
 		super(loc,object);
 	}
 	
-	public int evaluate() throws NullPointerException {
+	public Integer evaluate() throws NullPointerException {
 		Object obj = getExpression();
 		if (obj == null)
 			throw new NullPointerException();

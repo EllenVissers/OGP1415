@@ -12,5 +12,7 @@ public abstract class Expression {
 	protected SourceLocation getSourceLocation() {
 		return this.location;
 	}
+	
+	public abstract Object evaluate();
 
 }

@@ -8,9 +8,9 @@ public class Or extends BinaryExpression {
 		super(loc,left,right);
 	}
 	
-	public boolean evaluate() {
-		boolean left = ((Constant<Boolean>)getLeftExpression()).getValue();
-		boolean right = ((Constant<Boolean>)getRightExpression()).getValue();
+	public Boolean evaluate() {
+		boolean left = ((Constant<Boolean>)getLeftExpression()).evaluate();
+		boolean right = ((Constant<Boolean>)getRightExpression()).evaluate();
 		return (left||right);
 	}
 

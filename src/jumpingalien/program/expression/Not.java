@@ -10,8 +10,8 @@ public class Not extends UnaryExpression {
 		super(loc, value);
 	}
 	
-	public boolean evaluate() {
-		return (! ((Constant<Boolean>)getExpression()).getValue());
+	public Boolean evaluate() {
+		return (! ((Constant<Boolean>)getExpression()).evaluate());
 	}
 
 }

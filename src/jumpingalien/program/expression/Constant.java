@@ -10,7 +10,7 @@ public class Constant<T> extends Expression {
 	
 	private T value;
 	
-	public T getValue() {
+	public T evaluate() {
 		return this.value;
 	}
 	

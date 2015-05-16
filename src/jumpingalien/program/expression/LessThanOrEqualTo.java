@@ -8,9 +8,9 @@ public class LessThanOrEqualTo extends ComparisonExpression {
 		super(loc,left,right);
 	}
 	
-	public boolean evaluate() {
-		double left = ((Constant<Double>)getLeftExpression()).getValue();
-		double right = ((Constant<Double>)getRightExpression()).getValue();
+	public Boolean evaluate() {
+		double left = ((Constant<Double>)getLeftExpression()).evaluate();
+		double right = ((Constant<Double>)getRightExpression()).evaluate();
 		return (left<=right);
 	}
 

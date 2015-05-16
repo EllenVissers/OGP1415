@@ -23,7 +23,8 @@ public class ReadVariable extends Expression {
 		return this.type;
 	}
 
-	protected Constant<?> evaluate() {
+	@Override
+	public Object evaluate() {
 		// TODO Auto-generated method stub
 		int val = 0;
 		// return getGlobalVariables().getValue(getVariableName()) -> key-value list

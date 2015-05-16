@@ -8,12 +8,12 @@ public class IsWater extends UnaryExpression {
 		super(loc,obj);
 	}
 	
-	public boolean evaluate() throws IllegalArgumentException {
+	public Boolean evaluate() throws IllegalArgumentException {
 		Object obj = getExpression();
 		if (! (obj instanceof Tile))
 			throw new IllegalArgumentException();
-		int x = ((Tile)obj).getXPosition();
-		int y = ((Tile)obj).getYPosition();
+		int x = (int) Math.round(((Tile)obj).getXPosition());
+		int y = (int) Math.round(((Tile)obj).getYPosition());
 		return (((Tile)obj).getWorld().getFeatureAt(x,y) == 2);
 	}
 
