@@ -176,19 +176,23 @@ public class Plant extends GameObject {
 	 */
 	private void advance(double t) {
 		if ( (! isTerminated()) && (t != 0)) {
-			if (reachesTimeSwitch(t)) {
-				double t1 = (timeSwitch - timer);
-				double t2 = ((t+timer) - timeSwitch);
-				Move(t1);
-				endMove(getOrientation());
-				if (getOrientation() == Orientation.LEFT)
-					startMove(Orientation.RIGHT);
+			if (getProgram() == null) {
+				if (reachesTimeSwitch(t)) {
+					double t1 = (timeSwitch - timer);
+					double t2 = ((t+timer) - timeSwitch);
+					Move(t1);
+					endMove(getOrientation());
+					if (getOrientation() == Orientation.LEFT)
+						startMove(Orientation.RIGHT);
+					else
+						startMove(Orientation.LEFT);
+					Move(t2);
+				}
 				else
-					startMove(Orientation.LEFT);
-				Move(t2);
+					Move(t);
 			}
 			else
-				Move(t);
+				getProgram().execute(t);
 		}
 	}
 	

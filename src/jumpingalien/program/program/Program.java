@@ -1,7 +1,9 @@
 package jumpingalien.program.program;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
 import jumpingalien.model.GameObject;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.Type;
@@ -43,6 +45,29 @@ public class Program {
 	public boolean isWellFormed() {
 		// TODO
 		return true;
+	}
+	
+	public void execute(double time) {
+		Iterator<Statement> iter = getMainStatement().iterator();
+		while(time > 0){
+			if (iter.hasNext()){
+				Statement next = iter.next();
+				if(next != null){
+					time -= 0.001;
+					next.evaluate();
+				}
+			}
+			else {
+				iter = getMainStatement().iterator();
+				if (iter.hasNext()){
+					Statement next = iter.next();
+					if(next != null){
+						time -= 0.001;
+						next.evaluate();
+					}
+				}
+			}
+		}
 	}
 
 }

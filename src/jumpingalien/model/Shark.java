@@ -411,6 +411,18 @@ public class Shark extends GameObject {
 		}
 	}
 	
+	@Override
+	public void startMove(Orientation orientation) {
+		if (getOrientation() != orientation) {
+			if (orientation == Orientation.RIGHT)
+				setXAcc(accx);
+			else
+				setXAcc(-accx);
+			setXVelocity(0);
+			setOrientation(orientation);
+		}
+	}
+	
 	/**
 	 * A method to stop movement of the shark
 	 * @effect	The horizontal acceleration is set to zero with setXAcc.
@@ -418,6 +430,23 @@ public class Shark extends GameObject {
 	 */
 	private void endMove() {
 		setXAcc(0);
+		setXVelocity(0);
+	}
+
+	@Override
+	public void endMove(Orientation orientation) {
+		if (getOrientation() == orientation) {
+			setXAcc(0);
+			setXVelocity(0);
+		}
+	}
+
+	@Override
+	public void startDuck() {
+	}
+
+	@Override
+	public void endDuck() {
 	}
 	
 	/**
@@ -721,34 +750,6 @@ public class Shark extends GameObject {
 				advance(time);
 			time -= dt;
 		}
-	}
-
-	@Override
-	public void startMove(Orientation orientation) {
-		if (getOrientation() != orientation) {
-			if (orientation == Orientation.RIGHT)
-				setXAcc(accx);
-			else
-				setXAcc(-accx);
-			setXVelocity(0);
-			setOrientation(orientation);
-		}
-	}
-
-	@Override
-	public void endMove(Orientation orientation) {
-		if (getOrientation() == orientation) {
-			setXAcc(0);
-			setXVelocity(0);
-		}
-	}
-
-	@Override
-	public void startDuck() {
-	}
-
-	@Override
-	public void endDuck() {
 	}
 	
 }
