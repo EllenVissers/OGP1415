@@ -1,6 +1,8 @@
 package jumpingalien.part3.facade;
 
 import java.util.Collection;
+import java.util.Optional;
+
 import jumpingalien.model.Buzam;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Orientation;
@@ -10,13 +12,14 @@ import jumpingalien.model.Shark;
 import jumpingalien.model.Slime;
 import jumpingalien.model.World;
 import jumpingalien.part2.facade.IFacadePart2;
+import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.part3.programs.ParseOutcome;
-//import jumpingalien.part3.programs.ProgramFactory;
-//import jumpingalien.part3.programs.ProgramParser;
-//import jumpingalien.program.expression.Expression;
+import jumpingalien.part3.programs.ProgramFactory;
+import jumpingalien.part3.programs.ProgramParser;
+import jumpingalien.program.expression.Expression;
 import jumpingalien.program.program.Program;
-//import jumpingalien.program.statement.Statement;
-//import jumpingalien.program.type.Type;
+import jumpingalien.program.statement.Statement;
+import jumpingalien.program.type.Type;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 
@@ -304,13 +307,13 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public ParseOutcome<?> parse(String text) {
-		// TODO Auto-generated method stub
-		//ProgramFactory factory = new ProgramFactory();
-		//ProgramParser<Expression, Statement, Type, Program> parser = ProgramParser.create(factory);
- 		//Program parseResult = parser.parseString(text).get();
- 		//ParseOutcome<?> result = new ParseOutcome<>(parseResult);
-		//return result;
- 		return null;
+		IProgramFactory<Expression,Statement,Type,Program> factory = new ProgramFactory();
+		ProgramParser<Expression,Statement,Type,Program> parser = new ProgramParser<>(factory);
+		Optional<Program> result = parser.parseString(text);
+		if (result.isPresent())
+			return ParseOutcome.success(result.get());
+		else
+			return ParseOutcome.failure(parser.getErrors());
 	}
 
 	@Override
