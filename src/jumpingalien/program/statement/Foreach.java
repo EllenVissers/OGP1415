@@ -8,6 +8,7 @@ import java.util.Optional;
 //import java.util.stream.Stream;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.part3.programs.IProgramFactory.SortDirection;
+import jumpingalien.model.AllObjects;
 
 /**
  * A statement that executes the given body 
@@ -66,8 +67,7 @@ public class Foreach extends Statement {
 	public void evaluate() {
 		String name = getVariableName();
 		Kind kind = getVariableKind();
-		ArrayList<Kind> all = kind.getClass().getAll();
-//		Kind kind = getVariableKind();
+		ArrayList<Kind> all = ((AllObjects)kind.getClass()).getAll();
 //		Stream<Kind> stream = all.stream();
 //		if (getWhere() != null)
 //			stream = stream.filter(t->t.getWhere() == true);

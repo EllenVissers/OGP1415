@@ -185,7 +185,6 @@ public class Mazub extends GameObject {
 	 * A variable registering the time the alien has been in magma.
 	 */
 	private double timerMagma = 0;
-	
 	//GETTERS AND SETTERS
 
 	/**

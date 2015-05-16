@@ -110,6 +110,7 @@ public class Plant extends GameObject {
 	protected void terminate() {
 		setTerminated(true);
 		setWorld(null);
+		removeFromAll(this);
 	}
 	
 	/**
@@ -255,4 +256,5 @@ public class Plant extends GameObject {
 	@Override
 	public void endDuck() {
 	}
+
 }

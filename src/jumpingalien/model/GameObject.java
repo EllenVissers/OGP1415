@@ -557,6 +557,7 @@ public abstract class GameObject extends AllObjects {
 	 */
 	protected void terminate() {
 		setTerminated(true);
+		removeFromAll(this);
 	}
 	
 	/**
