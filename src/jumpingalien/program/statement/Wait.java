@@ -1,7 +1,6 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.expression.Constant;
 
 public class Wait extends Statement {
 
@@ -16,13 +15,13 @@ public class Wait extends Statement {
 		return this.duration;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate() {
-		int time = (int)(double)(((Constant<Double>) getDuration()).evaluate());
+		double time = (double) (getDuration().evaluate());
 		//wait(time);
+		long dt = (long) Math.round(time);
 		try {
-			Thread.sleep(time);
+			Thread.sleep(dt);
 		} catch (InterruptedException e) {
 		}
 	}

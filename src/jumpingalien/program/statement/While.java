@@ -1,7 +1,6 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.expression.ComparisonExpression;
 
 public class While extends Statement {
 
@@ -23,7 +22,7 @@ public class While extends Statement {
 	}
 	
 	public void evaluate() {
-		while (((ComparisonExpression) getCondition()).evaluate())
+		while ((Boolean)(getCondition().evaluate()))
 			getBody().evaluate();
 	}
 }

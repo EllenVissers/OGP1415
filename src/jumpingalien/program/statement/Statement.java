@@ -32,7 +32,7 @@ public abstract class Statement implements Iterable<Statement>{
 			
 			@Override
 			public boolean hasNext() {
-				return ! Statement.this.alreadyReturned();
+				return (! Statement.this.alreadyReturned());
 			}
 		};
 	}

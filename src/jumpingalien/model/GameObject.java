@@ -3,6 +3,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
+import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.program.program.Program;
 import jumpingalien.util.Util;
 
@@ -579,6 +580,52 @@ public abstract class GameObject extends AllObjects {
 			if (getWorld().getFeatureAt(pos[0],pos[1]) == 1)
 				return false;
 		return true;
+	}
+	
+	@Override
+	public boolean isPassable() {
+		return false;
+	}
+	
+	@Override
+	public boolean isMagma() {
+		return false;
+	}
+	
+	@Override
+	public boolean isAir() {
+		return false;
+	}
+	
+	@Override
+	public boolean isWater() {
+		return false;
+	}
+	
+	@Override
+	public boolean isMoving(IProgramFactory.Direction direction) {
+		if (direction == IProgramFactory.Direction.RIGHT)
+			if ((getOrientation() == Orientation.RIGHT) && (getXVelocity() > 0))
+				return true;
+		if (direction == IProgramFactory.Direction.LEFT)
+			if ((getOrientation() == Orientation.LEFT) && (getXVelocity() < 0))
+				return true;
+		return false;
+	}
+	
+	@Override
+	public boolean isJumping() {
+		return (getYVelocity() > 0);
+	}
+	
+	@Override
+	public double getWidth() {
+		return (getCurrentSprite().getWidth());
+	}
+	
+	@Override
+	public double getHeight() {
+		return (getCurrentSprite().getHeight());
 	}
 	
 	/**

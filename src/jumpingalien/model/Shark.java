@@ -200,14 +200,14 @@ public class Shark extends GameObject {
 		return (timer+time >= timeslot);
 	}	
 	
-	/**
-	 * Check whether a shark is jumping.
-	 * @return	True when it is jumping.
-	 * 			| getYVelocity() > 0
-	 */
-	private boolean isJumping() {
-		return (getYVelocity() > 0);
-	}
+//	/**
+//	 * Check whether a shark is jumping.
+//	 * @return	True when it is jumping.
+//	 * 			| getYVelocity() > 0
+//	 */
+//	private boolean isJumping() {
+//		return (getYVelocity() > 0);
+//	}
 	
 	//METHODS
 	/**
@@ -750,6 +750,11 @@ public class Shark extends GameObject {
 				advance(time);
 			time -= dt;
 		}
+	}
+
+	@Override
+	public boolean isDucking() {
+		return false;
 	}
 	
 }

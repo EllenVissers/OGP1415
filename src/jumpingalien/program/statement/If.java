@@ -53,7 +53,6 @@ public class If extends Statement {
 		return new Iterator<Statement>() {
 			
 			private final Iterator<Statement> ifStatementIterator = getIfBody().iterator();
-			
 			private final Iterator<Statement> elseStatementIterator = getElseBody().iterator();
 			
 			public Iterator<Statement> getIfStatementIterator() {

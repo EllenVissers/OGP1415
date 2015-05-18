@@ -2,10 +2,18 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 import java.util.Map;
+
 import jumpingalien.program.expression.*;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.statement.*;
 import jumpingalien.program.type.Type;
+import jumpingalien.program.expression.BinaryExpression;
+import jumpingalien.model.AllObjects;
+import jumpingalien.model.Mazub;
+import jumpingalien.model.Plant;
+import jumpingalien.model.Shark;
+import jumpingalien.model.Slime;
+import jumpingalien.model.Tile;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Type, Program> {
 
@@ -64,34 +72,35 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createAddition(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Addition(sourceLocation,left,right);
+		//return new Addition(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Double>(sourceLocation,left,right,(a,b)->(a+b));
 	}
 
 	/** An expression that evaluates to the difference of the given expressions */
 	@Override
 	public Expression createSubtraction(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Substraction(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Double>(sourceLocation,left,right,(a,b)->a-b);
 	}
 
 	/** An expression that evaluates to the product of the given expressions */
 	@Override
 	public Expression createMultiplication(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Multiplication(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Double>(sourceLocation,left,right,(a,b)->a*b);
 	}
 
 	/** An expression that evaluates to the division of the given expressions */
 	@Override
 	public Expression createDivision(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Division(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Double>(sourceLocation,left,right,(a,b)->a/b);
 	}
 
 	/** An expression that evaluates to the square root of the given expressions */
 	@Override
 	public Expression createSqrt(Expression expr, SourceLocation sourceLocation) {
-		return new SquareRoot(sourceLocation,expr);
+		return new UnaryExpression<Double,Double>(sourceLocation,expr,t->Math.sqrt(t));
 	}
 
 	/**
@@ -101,27 +110,27 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createRandom(Expression maxValue,
 			SourceLocation sourceLocation) {
-		return new Random(sourceLocation,maxValue);
+		return new UnaryExpression<Double,Double>(sourceLocation,maxValue,t->Math.random()*t);
 	}
 
 	/** An expression that evaluates to the conjunction of the given expressions */
 	@Override
 	public Expression createAnd(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new And(sourceLocation,left,right);
+		return new BinaryExpression<Boolean,Boolean,Boolean>(sourceLocation,left,right,(a,b)->(a&&b));
 	}
 
 	/** An expression that evaluates to the disjunction of the given expressions */
 	@Override
 	public Expression createOr(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Or(sourceLocation,left,right);
+		return new BinaryExpression<Boolean,Boolean,Boolean>(sourceLocation,left,right,(a,b)->(a||b));
 	}
 
 	/** An expression that evaluates to the negation of the given expression */
 	@Override
 	public Expression createNot(Expression expr, SourceLocation sourceLocation) {
-		return new Not(sourceLocation,expr);
+		return new UnaryExpression<Boolean,Boolean>(sourceLocation,expr,t->!t);
 	}
 
 	/**
@@ -131,7 +140,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createLessThan(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new LessThan(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a<b));
 	}
 
 	/**
@@ -141,7 +150,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createLessThanOrEqualTo(Expression left,
 			Expression right, SourceLocation sourceLocation) {
-		return new LessThanOrEqualTo(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a<=b));
 	}
 
 	/**
@@ -151,7 +160,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGreaterThan(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new GreaterThan(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a>b));
 	}
 
 	/**
@@ -161,7 +170,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGreaterThanOrEqualTo(Expression left,
 			Expression right, SourceLocation sourceLocation) {
-		return new GreaterThanOrEqualTo(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a>=b));
 	}
 
 	/**
@@ -171,7 +180,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new Equals(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a==b));
 	}
 
 	/**
@@ -181,7 +190,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createNotEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new NotEquals(sourceLocation,left,right);
+		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a!=b));
 	}
 
 	/**
@@ -190,7 +199,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetX(Expression expr, SourceLocation sourceLocation) {
-		return new GetX(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->t.getXPosition());
 	}
 
 	/**
@@ -199,7 +208,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetY(Expression expr, SourceLocation sourceLocation) {
-		return new GetY(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->t.getYPosition());
 	}
 
 	/**
@@ -209,7 +218,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGetWidth(Expression expr,
 			SourceLocation sourceLocation) {
-		return new GetWidth(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->t.getWidth());
 	}
 
 	/**
@@ -219,7 +228,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGetHeight(Expression expr,
 			SourceLocation sourceLocation) {
-		return new GetHeight(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->t.getHeight());
 	}
 
 	/**
@@ -229,7 +238,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGetHitPoints(Expression expr,
 			SourceLocation sourceLocation) {
-		return new GetHitpoints(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->(double)t.getHitPoints());
 	}
 
 	/**
@@ -238,7 +247,8 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetTile(Expression x, Expression y, SourceLocation sourceLocation) {
-		return new GetTile(sourceLocation,x,y); //nog doen
+		//return new BinaryExpression<Double,Double,Tile>(sourceLocation,x,y,(a,b)->new Tile(a,b,getWorld(),getWorld().getFeatureAt(a,b)));
+		return new GetTile(sourceLocation,x,y);
 	}
 
 	/**
@@ -246,9 +256,9 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 * the given direction
 	 */
 	@Override
-	public Expression createSearchObject(Expression direction,
-			SourceLocation sourceLocation) {
-		return new SearchObj(sourceLocation,direction); //nog doen
+	public Expression createSearchObject(Expression direction, SourceLocation sourceLocation) {
+		//return new UnaryExpression<AllObjects,AllObjects>(sourceLocation,direction,t->getNext(t));
+		return new SearchObj(sourceLocation,direction);
 	}
 
 	/**
@@ -258,7 +268,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMazub(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsMazub(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Mazub));
 	}
 
 	/**
@@ -268,7 +278,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsShark(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsShark(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Shark));
 	}
 
 	/**
@@ -278,7 +288,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsSlime(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsSlime(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Slime));
 	}
 
 	/**
@@ -288,7 +298,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsPlant(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsPlant(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Plant));
 	}
 
 	/**
@@ -298,7 +308,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDead(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsDead(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isTerminated());
 	}
 
 	/**
@@ -308,7 +318,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsTerrain(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsTerrain(sourceLocation,expr); //nog afwerken
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Tile));
 	}
 
 	/**
@@ -318,7 +328,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsPassable(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsPassable(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isPassable());
 	}
 
 	/**
@@ -328,7 +338,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsWater(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsWater(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isWater());
 	}
 
 	/**
@@ -338,7 +348,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMagma(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsMagma(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isMagma());
 	}
 
 	/**
@@ -347,7 +357,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createIsAir(Expression expr, SourceLocation sourceLocation) {
-		return new IsAir(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isAir());
 	}
 
 	/**
@@ -357,7 +367,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMoving(Expression expr, Expression direction,
 			SourceLocation sourceLocation) {
-		return new IsMoving(sourceLocation,expr,direction);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isMoving((IProgramFactory.Direction)direction.evaluate()));
 	}
 
 	/**
@@ -367,7 +377,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDucking(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsDucking(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isDucking());
 	}
 
 	/**
@@ -377,7 +387,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsJumping(Expression expr,
 			SourceLocation sourceLocation) {
-		return new IsJumping(sourceLocation,expr);
+		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isJumping());
 	}
 
 	/**

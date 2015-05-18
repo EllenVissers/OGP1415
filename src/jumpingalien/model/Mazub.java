@@ -364,14 +364,14 @@ public class Mazub extends GameObject {
 		return (getLeftButton() || getRightButton());
 	}
 	
-	/**
-	 * Check whether Mazub is jumping.
-	 * @return 	True when Mazub is moving upwards.
-	 * 			| this.vel_y > 0
-	 */
-	private boolean isJumping() {
-		return (this.getYVelocity() > 0);
-	}
+//	/**
+//	 * Check whether Mazub is jumping.
+//	 * @return 	True when Mazub is moving upwards.
+//	 * 			| this.vel_y > 0
+//	 */
+//	private boolean isJumping() {
+//		return (this.getYVelocity() > 0);
+//	}
 	
 	/**
 	 * Check whether Mazub is falling.

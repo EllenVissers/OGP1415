@@ -254,4 +254,9 @@ public class Plant extends GameObject {
 	public void endDuck() {
 	}
 
+	@Override
+	public boolean isDucking() {
+		return false;
+	}
+
 }

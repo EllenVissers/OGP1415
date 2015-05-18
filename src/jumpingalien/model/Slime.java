@@ -506,4 +506,9 @@ public class Slime extends GameObject {
 	@Override
 	public void endDuck() {
 	}
+
+	@Override
+	public boolean isDucking() {
+		return false;
+	}
 }
