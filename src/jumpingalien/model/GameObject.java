@@ -73,8 +73,8 @@ public abstract class GameObject extends AllObjects {
 		setTerminated(terminated);
 		setTerminatedTime(terminatedTime);
 		setProgram(program);
-		if (program != null)
-			program.setSelf(this);
+//		if (program != null)
+//			program.setSelf(this);
 	}
 	
 	//VARIABLES
@@ -1323,4 +1323,12 @@ public abstract class GameObject extends AllObjects {
 	 */
 	public void advanceTime(double time) {
 	}
+
+//	@Override
+//	public boolean isDucking() {
+//		if (! (this instanceof Alien))
+//			return false;
+//		else
+//			return ((Alien)this).isDucking();
+//	}
 }

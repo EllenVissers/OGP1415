@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 
 
+
+import jumpingalien.part3.programs.IProgramFactory;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -622,6 +624,34 @@ public class World {
 				buzams.add(buzam);
 				buzam.setWorld(this);
 			}
+		}
+
+		public ArrayList<Buzam> getAllBuzams(){
+			return buzams;
+		}
+		
+		public ArrayList<GameObject> getAllGameObjects(){
+			ArrayList<GameObject> all = new ArrayList<GameObject>();
+			all.addAll(aliens);
+			all.addAll(buzams);
+			all.addAll(sharks);
+			all.addAll(slimes);
+			all.addAll(plants);
+			return all;
+		}
+		
+		public ArrayList<? extends GameObject> getAll(IProgramFactory.Kind kind) {
+			if (kind == IProgramFactory.Kind.BUZAM)
+				return buzams;
+			if (kind == IProgramFactory.Kind.MAZUB)
+				return aliens;
+			if (kind == IProgramFactory.Kind.SHARK)
+				return sharks;
+			if (kind == IProgramFactory.Kind.SLIME)
+				return slimes;
+			if (kind == IProgramFactory.Kind.PLANT)
+				return plants;
+			return getAllGameObjects();
 		}
 		
 		/**

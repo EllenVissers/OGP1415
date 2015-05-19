@@ -2,12 +2,11 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 import java.util.Map;
-
 import jumpingalien.program.expression.*;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.statement.*;
 import jumpingalien.program.type.Type;
-import jumpingalien.program.expression.BinaryExpression;
+import jumpingalien.model.GameObject;
 import jumpingalien.model.AllObjects;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Plant;
@@ -24,7 +23,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createReadVariable(String variableName,
 			Type variableType, SourceLocation sourceLocation) {
-		return new ReadVariable(sourceLocation,variableName,variableType); //nog doen
+		return new ReadVariable(sourceLocation,variableName,variableType);
 	}
 
 	/** An expression that evaluates to the given numeric value */
@@ -452,38 +451,50 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Statement createStartRun(Expression direction,
 			SourceLocation sourceLocation) {
-		return new StartRun(sourceLocation,direction); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,direction,t->t.startRun());
+				// TODO
+				return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/** A statement that makes the object executing the program stop moving */
 	@Override
 	public Statement createStopRun(Expression direction,
 			SourceLocation sourceLocation) {
-		return new StopRun(sourceLocation,direction); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,direction,t->t.stopRun());
+				// TODO
+				return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/** A statement that makes the object executing the program start jumping */
 	@Override
 	public Statement createStartJump(SourceLocation sourceLocation) {
-		return new StartJump(sourceLocation); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.startJump());
+		// TODO
+		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/** A statement that makes the object executing the program stop jumping */
 	@Override
 	public Statement createStopJump(SourceLocation sourceLocation) {
-		return new StopJump(sourceLocation); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.stopJump());
+		// TODO
+		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/** A statement that makes the object executing the program start ducking */
 	@Override
 	public Statement createStartDuck(SourceLocation sourceLocation) {
-		return new StartDuck(sourceLocation); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.startDuck());
+		// TODO
+		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/** A statement that makes the object executing the program stop ducking */
 	@Override
 	public Statement createStopDuck(SourceLocation sourceLocation) {
-		return new StopDuck(sourceLocation); //nog doen
+		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.stopDuck());
+		// TODO
+		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
 	}
 
 	/**
@@ -539,8 +550,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 * with the name of the variable as the key.
 	 */
 	@Override
-	public Program createProgram(Statement mainStatement,
-			Map<String, Type> globalVariables) {
+	public Program createProgram(Statement mainStatement, Map<String, Type> globalVariables) {
 		return new Program(mainStatement, globalVariables);
 	}
 	

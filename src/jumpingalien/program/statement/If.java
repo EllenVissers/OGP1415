@@ -2,8 +2,7 @@ package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.expression.Constant;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import jumpingalien.program.program.Program;
 
 public class If extends Statement {
 
@@ -43,52 +42,17 @@ public class If extends Statement {
 	@Override
 	public void evaluate() {
 		if (((Constant<Boolean>) getCondition()).evaluate())
-			getIfBody().evaluate();
+		{
+			Program.timer -= 0.001;
+			if (! (Program.timer < 0))
+				getIfBody().evaluate();
+		}
 		else
-			getElseBody().evaluate();
+		{
+			Program.timer -= 0.001;
+			if (! (Program.timer < 0))
+				getElseBody().evaluate();
+		}
 	}
 	
-	@Override
-	public Iterator<Statement> iterator() {
-		return new Iterator<Statement>() {
-			
-			private final Iterator<Statement> ifStatementIterator = getIfBody().iterator();
-			private final Iterator<Statement> elseStatementIterator = getElseBody().iterator();
-			
-			public Iterator<Statement> getIfStatementIterator() {
-				return this.ifStatementIterator;
-			}
-			
-			public Iterator<Statement> getElseStatementIterator() {
-				return this.elseStatementIterator;
-			}
-			
-			@Override
-			public Statement next() {
-				if (! this.hasNext()) {
-					throw new NoSuchElementException();
-				}
-				if (! If.this.alreadyReturned()){
-					If.this.Return();
-					return If.this;
-				}
-				if (If.this.getResult()) {
-					return this.getIfStatementIterator().next();
-				}
-				else {
-					return this.getElseStatementIterator().next();
-				}
-				
-			}
-			
-			@Override
-			public boolean hasNext() {
-				if (If.this.getResult())
-					return this.getIfStatementIterator().hasNext();
-				else
-					return this.getElseStatementIterator().hasNext();
-			}
-		};
-	}
-
 }

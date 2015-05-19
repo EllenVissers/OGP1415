@@ -9,7 +9,7 @@ public abstract class Expression {
 		this.location = location;
 	}
 	
-	protected SourceLocation getSourceLocation() {
+	public SourceLocation getSourceLocation() {
 		return this.location;
 	}
 	

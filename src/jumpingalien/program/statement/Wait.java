@@ -1,6 +1,7 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
+import jumpingalien.program.program.Program;
 
 public class Wait extends Statement {
 
@@ -18,12 +19,12 @@ public class Wait extends Statement {
 	@Override
 	public void evaluate() {
 		double time = (double) (getDuration().evaluate());
-		//wait(time);
 		long dt = (long) Math.round(time);
 		try {
 			Thread.sleep(dt);
 		} catch (InterruptedException e) {
 		}
+		Program.timer -= time;
 	}
 
 }
