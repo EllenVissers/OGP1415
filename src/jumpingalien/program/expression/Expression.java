@@ -1,5 +1,7 @@
 package jumpingalien.program.expression;
 import jumpingalien.part3.programs.SourceLocation;
+import java.util.Map;
+import jumpingalien.program.type.Type;
 
 public abstract class Expression {
 
@@ -13,6 +15,6 @@ public abstract class Expression {
 		return this.location;
 	}
 	
-	public abstract Object evaluate();
+	public abstract Object evaluate(Map<String,Type> globals);
 
 }

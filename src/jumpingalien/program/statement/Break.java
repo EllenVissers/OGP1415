@@ -9,10 +9,8 @@ public class Break extends Statement {
 	}
 	
 	@Override
-	public void evaluate() /*throws BreakException*/ {
-		/*throw new BreakException();*/
-		Program.timer -= 0.001;
-		break;
+	public void evaluate() throws BreakException {
+		throw new BreakException();
 	}
 
 }

@@ -1,16 +1,9 @@
 package jumpingalien.program.type;
+import java.util.Map;
+import jumpingalien.program.expression.Expression;
 
-public enum Type {
-	Double, Bool, GameObject , Direction;
+public abstract class Type {
 	
-	public Class<?> getType() {
-		if (this == Type.Bool)
-			return java.lang.Boolean.class;
-		else if (this == Type.Double)
-			return java.lang.Double.class;
-		else if (this == Type.GameObject)
-			return jumpingalien.model.GameObject.class;
-		else
-			return jumpingalien.part3.programs.IProgramFactory.Direction.class;
-	}
+	public abstract Type set(Expression value, Map<String,Type> globals);
+
 }

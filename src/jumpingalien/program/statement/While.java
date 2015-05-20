@@ -1,7 +1,10 @@
 package jumpingalien.program.statement;
+import java.util.Map;
+
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.program.Program;
+import jumpingalien.program.type.Type;
 
 public class While extends Statement {
 
@@ -22,15 +25,15 @@ public class While extends Statement {
 		return this.body;
 	}
 	
-	public void evaluate() {
-		while ((Boolean)(getCondition().evaluate()))
-		{
-			Program.timer -= 0.001;
-			if (!(Program.timer < 0))
-				getBody().evaluate();
-			else
-				Program.resetTimer();
+	public void evaluate(Map<String,Type> globals, double time) {
+		try {
+			while ((Boolean)(getCondition().evaluate()))
+			{
+				getBody().evaluate(globals,time);
+			}
+		} catch(BreakException exc) {
 		}
+		
 			
 	}
 }

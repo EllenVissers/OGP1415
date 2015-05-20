@@ -1,6 +1,7 @@
 package jumpingalien.program.expression;
 import java.util.ArrayList;
-
+import java.util.Map;
+import jumpingalien.program.type.Type;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
@@ -21,15 +22,15 @@ public class SearchObj extends Expression {
 		return this.direction;
 	}
 	
-	public Object evaluate() {
-		World world = null;
-		ArrayList<GameObject> all = world.getAllGameObjects();
-		IProgramFactory.Direction dir = (Direction) getDirection().evaluate();
-		Object obj = this;
+	public Object evaluate(Map<String,Type> globals) {
+		GameObject obj = globals.get("this").getGameObject();
+		World world = obj.getWorld();
 		double xmin = obj.getXPosition();
 		double xmax = xmin + obj.getCurrentSprite().getWidth()-1;
 		double ymin = obj.getYPosition();
 		double ymax = ymin + obj.getCurrentSprite().getHeight()-1;
+		ArrayList<GameObject> all = world.getAllGameObjects();
+		IProgramFactory.Direction dir = (Direction) getDirection().evaluate(globals);
 		if (dir == IProgramFactory.Direction.RIGHT)
 		{
 			for (int i=1; i<=(world.getWorldWidth()-1-xmax); i++)

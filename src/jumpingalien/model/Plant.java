@@ -53,6 +53,7 @@ public class Plant extends GameObject {
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
 		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,program);
+		program.addVariable("this", this);
 	}
 	
 	/**

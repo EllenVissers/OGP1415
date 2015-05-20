@@ -2,6 +2,8 @@ package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.program.Program;
+import java.util.Map;
+import jumpingalien.program.type.Type;
 
 public class Wait extends Statement {
 
@@ -17,14 +19,8 @@ public class Wait extends Statement {
 	}
 	
 	@Override
-	public void evaluate() {
-		double time = (double) (getDuration().evaluate());
-		long dt = (long) Math.round(time);
-		try {
-			Thread.sleep(dt);
-		} catch (InterruptedException e) {
-		}
-		Program.timer -= time;
+	public void evaluate(Map<String,Type> globals, double time) {
+		globals.put("timer",new DoubleType(time-getDuration()));
 	}
 
 }

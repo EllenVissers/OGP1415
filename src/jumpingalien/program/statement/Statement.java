@@ -1,4 +1,6 @@
 package jumpingalien.program.statement;
+import java.util.Map;
+import jumpingalien.program.type.Type;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.program.Program;
 
@@ -15,7 +17,7 @@ public abstract class Statement{
 		return this.sourceLocation;
 	}
 	
-	public abstract void evaluate();
+	public abstract void evaluate(Map<String,Type> globals, double time);
 	
 	public Program getProgram() {
 		return program;

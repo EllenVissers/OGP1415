@@ -1,9 +1,8 @@
 package jumpingalien.program.statement;
+import java.util.Map;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.program.Program;
 import jumpingalien.program.type.Type;
-import jumpingalien.program.expression.Constant;
 
 public class Assignment extends Statement {
 
@@ -30,8 +29,8 @@ public class Assignment extends Statement {
 		return this.value;
 	}
 	
-	public void evaluate() {
-		Program.variableValues.put(getVariableName(),(Constant<?>) getExpression());
+	public void evaluate(Map<String,Type> globals, double time) {
+		globals.put(getVariableName(),getVariableType().set(value,globals));
 	}
 	
 }
