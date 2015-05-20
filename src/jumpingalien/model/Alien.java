@@ -446,7 +446,7 @@ public abstract class Alien extends GameObject {
 		public abstract void endDuck();
 		
 		/**
-		 * Update Mazub's new position and velocity after the given time duration.
+		 * Update the alien's new position and velocity after the given time duration.
 		 * @param 	time
 		 * 			The time duration between this position and the next one.
 		 * @effect	The time it takes to move 1 pixel is computed with getDT.
@@ -461,7 +461,7 @@ public abstract class Alien extends GameObject {
 		public abstract void advanceTime(double time);
 		
 		/**
-		 * A method that returns Mazub's current sprite.
+		 * A method that returns the alien's current sprite.
 		 * @pre 	The length of the sprites array must be even.
 		 * @pre 	The length of the sprites array must be greater than 10.
 		 * @return 	Mazub's current sprite.
