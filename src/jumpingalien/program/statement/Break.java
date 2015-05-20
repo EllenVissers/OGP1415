@@ -1,6 +1,7 @@
 package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
-import jumpingalien.program.program.Program;
+import jumpingalien.program.type.Type;
+import java.util.Map;
 
 public class Break extends Statement {
 
@@ -9,7 +10,7 @@ public class Break extends Statement {
 	}
 	
 	@Override
-	public void evaluate() throws BreakException {
+	public void evaluate(Map<String,Type> globals, double time) throws BreakException {
 		throw new BreakException();
 	}
 

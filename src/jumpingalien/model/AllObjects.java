@@ -1,8 +1,7 @@
 package jumpingalien.model;
-
 import java.util.ArrayList;
-
 import jumpingalien.part3.programs.IProgramFactory;
+import jumpingalien.part3.programs.IProgramFactory.Kind;
 
 public abstract class AllObjects {
 	
@@ -52,6 +51,22 @@ public abstract class AllObjects {
 
 	public ArrayList<AllObjects> getAll() {
 		return all;
+	}
+	
+	public boolean isKind(Kind kind) {
+		if (kind == Kind.MAZUB)
+			return (this instanceof Mazub);
+		if (kind == Kind.BUZAM)
+			return (this instanceof Buzam);
+		if (kind == Kind.SLIME)
+			return (this instanceof Slime);
+		if (kind == Kind.SHARK)
+			return (this instanceof Shark);
+		if (kind == Kind.PLANT)
+			return (this instanceof Plant);
+		if (kind == Kind.TERRAIN)
+			return (this instanceof Tile);
+		return true;
 	}
 
 	public abstract double getXVelocity();

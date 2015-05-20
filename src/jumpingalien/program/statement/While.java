@@ -1,9 +1,7 @@
 package jumpingalien.program.statement;
 import java.util.Map;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.program.Program;
 import jumpingalien.program.type.Type;
 
 public class While extends Statement {
@@ -27,7 +25,7 @@ public class While extends Statement {
 	
 	public void evaluate(Map<String,Type> globals, double time) {
 		try {
-			while ((Boolean)(getCondition().evaluate()))
+			while ((Boolean)(getCondition().evaluate(globals)))
 			{
 				getBody().evaluate(globals,time);
 			}

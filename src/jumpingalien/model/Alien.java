@@ -370,7 +370,7 @@ public abstract class Alien extends GameObject {
 		 * 			| else
 		 * 			|   setMaxVel(-maxSpeed)
 		 */
-		public abstract void startMove(Orientation orientation);
+		public abstract Void startMove(Orientation orientation);
 		
 		/**
 		 * Stop movement of Mazub in a given direction.
@@ -391,7 +391,7 @@ public abstract class Alien extends GameObject {
 		 * 			| setXAcc(0)
 		 * 			
 		 */
-		public abstract void endMove(Orientation orientation);
+		public abstract Void endMove(Orientation orientation);
 		
 		/**
 		 * Initiate Mazub to jump.
@@ -408,7 +408,7 @@ public abstract class Alien extends GameObject {
 		 * 			| if (onGround() || onGameObject())
 		 * 			|    setYAcc(accy)
 		 */
-		public abstract void startJump();
+		public abstract Void startJump();
 
 		
 		/**
@@ -417,7 +417,7 @@ public abstract class Alien extends GameObject {
 		 * 			| if (this.getYVelocity() == 0)
 		 * 			|   then setYVelocity(0)
 		 */
-		public abstract void endJump();
+		public abstract Void endJump();
 		
 		/**
 		 * Initiate Mazub to duck.
@@ -431,7 +431,7 @@ public abstract class Alien extends GameObject {
 		 * @effect	Mazub's ducking state is set to true with setDuck.
 		 * 			| setDuck(true);
 		 */
-		public abstract void startDuck();
+		public abstract Void startDuck();
 		
 		/**
 		 * Stop ducking.
@@ -443,7 +443,7 @@ public abstract class Alien extends GameObject {
 		 * @effect	Mazub's ducking state is set to false with setDuck.
 		 * 			| setDuck(false);
 		 */
-		public abstract void endDuck();
+		public abstract Void endDuck();
 		
 		/**
 		 * Update Mazub's new position and velocity after the given time duration.

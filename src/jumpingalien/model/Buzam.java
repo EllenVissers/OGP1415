@@ -1,6 +1,6 @@
 package jumpingalien.model;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import jumpingalien.program.program.Program;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
@@ -35,27 +35,33 @@ public class Buzam extends Alien {
 	}
 
 	@Override
-	public void startMove(Orientation orientation) {
+	public Void startMove(Orientation orientation) {
+		return null;
 	}
 
 	@Override
-	public void endMove(Orientation orientation) {
+	public Void endMove(Orientation orientation) {
+		return null;
 	}
 
 	@Override
-	public void startJump() {
+	public Void startJump() {
+		return null;
 	}
 
 	@Override
-	public void endJump() {
+	public Void endJump() {
+		return null;
 	}
 
 	@Override
-	public void startDuck() {
+	public Void startDuck() {
+		return null;
 	}
 
 	@Override
-	public void endDuck() {
+	public Void endDuck() {
+		return null;
 	}
 
 	@Override

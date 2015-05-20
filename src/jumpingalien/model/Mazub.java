@@ -547,7 +547,7 @@ public class Mazub extends GameObject {
 	 * 			| else
 	 * 			|   setMaxVel(-maxSpeed)
 	 */
-	public void startMove(Orientation orientation) {
+	public Void startMove(Orientation orientation) {
 		assert isValidDirection(orientation);
 		setNb(0);
 		time2 = 0;
@@ -572,6 +572,7 @@ public class Mazub extends GameObject {
 			else
 				setMaxVel(-maxSpeed);
 		}
+		return null;
 	}
 	
 	/**
@@ -593,7 +594,7 @@ public class Mazub extends GameObject {
 	 * 			| setXAcc(0)
 	 * 			
 	 */
-	public void endMove(Orientation orientation) {
+	public Void endMove(Orientation orientation) {
 		if (orientation == Orientation.LEFT) 
 			setLeftButton(false);
 		else
@@ -610,6 +611,7 @@ public class Mazub extends GameObject {
 			setXVelocity(0);
 			setXAcc(0);
 		}
+		return null;
 	}
 	
 	/**
@@ -627,13 +629,14 @@ public class Mazub extends GameObject {
 	 * 			| if (onGround() || onGameObject())
 	 * 			|    setYAcc(accy)
 	 */
-	public void startJump() {
+	public Void startJump() {
 		if (onGround() || onGameObject())
 		{
 			setYVelocity(startVelY);
 			setYAcc(accy);
 			setNb(0);
 		}
+		return null;
 	}
 
 	
@@ -643,9 +646,10 @@ public class Mazub extends GameObject {
 	 * 			| if (this.getYVelocity() == 0)
 	 * 			|   then setYVelocity(0)
 	 */
-	public void endJump() {
+	public Void endJump() {
 		if (getYVelocity() > 0)
 			setYVelocity(0);
+		return null;
 	}
 	
 	/**
@@ -660,13 +664,14 @@ public class Mazub extends GameObject {
 	 * @effect	Mazub's ducking state is set to true with setDuck.
 	 * 			| setDuck(true);
 	 */
-	public void startDuck() {
+	public Void startDuck() {
 		if (isMovingLeft())
 			setMaxVel(-maxSpeedDuck);
 		else
 			setMaxVel(maxSpeedDuck);
 		setDuck(true);
 		setNb(0);
+		return null;
 	}
 	
 	/**
@@ -679,7 +684,7 @@ public class Mazub extends GameObject {
 	 * @effect	Mazub's ducking state is set to false with setDuck.
 	 * 			| setDuck(false);
 	 */
-	public void endDuck() {
+	public Void endDuck() {
 		if (canStandUp())
 		{
 			if (isMovingLeft())
@@ -688,6 +693,7 @@ public class Mazub extends GameObject {
 				setMaxVel(maxSpeed);
 		}
 		setDuck(false);
+		return null;
 	}
 	
 	/**

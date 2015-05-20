@@ -4,6 +4,7 @@ import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
 import jumpingalien.program.program.Program;
+import jumpingalien.program.type.ObjectType;
 
 
 /**
@@ -53,7 +54,6 @@ public class Plant extends GameObject {
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
 		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,program);
-		program.addVariable("this", this);
 	}
 	
 	/**
@@ -225,34 +225,40 @@ public class Plant extends GameObject {
 	}
 
 	@Override
-	public void startMove(Orientation orientation) {
+	public Void startMove(Orientation orientation) {
 		if (orientation == Orientation.RIGHT)
 			setXVelocity(speed);
 		else
 			setXVelocity(-speed);
 		setOrientation(orientation);
+		return null;
 	}
 
 	@Override
-	public void endMove(Orientation orientation) {
+	public Void endMove(Orientation orientation) {
 		setXVelocity(0);
 		timer = 0;
+		return null;
 	}
 
 	@Override
-	public void startJump() {
+	public Void startJump() {
+		return null;
 	}
 
 	@Override
-	public void endJump() {
+	public Void endJump() {
+		return null;
 	}
 
 	@Override
-	public void startDuck() {
+	public Void startDuck() {
+		return null;
 	}
 
 	@Override
-	public void endDuck() {
+	public Void endDuck() {
+		return null;
 	}
 
 	@Override

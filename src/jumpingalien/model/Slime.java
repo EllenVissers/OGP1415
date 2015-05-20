@@ -2,9 +2,7 @@ package jumpingalien.model;
 
 import jumpingalien.model.School;
 import jumpingalien.program.program.Program;
-
 import java.util.ArrayList;
-
 import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
@@ -465,7 +463,7 @@ public class Slime extends GameObject {
 	}
 
 	@Override
-	public void startMove(Orientation orientation) {
+	public Void startMove(Orientation orientation) {
 		if (getOrientation() != orientation) {
 			if (orientation == Orientation.RIGHT)
 			{
@@ -480,31 +478,37 @@ public class Slime extends GameObject {
 			setXVelocity(0);
 			setOrientation(orientation);
 		}
+		return null;
 	}
 
 	@Override
-	public void endMove(Orientation orientation) {
+	public Void endMove(Orientation orientation) {
 		if (getOrientation() == orientation) {
 			setXAcc(0);
 			setXVelocity(0);
 			timer = 0;
 		}
+		return null;
 	}
 
 	@Override
-	public void startJump() {
+	public Void startJump() {
+		return null;
 	}
 
 	@Override
-	public void endJump() {
+	public Void endJump() {
+		return null;
 	}
 
 	@Override
-	public void startDuck() {
+	public Void startDuck() {
+		return null;
 	}
 
 	@Override
-	public void endDuck() {
+	public Void endDuck() {
+		return null;
 	}
 
 	@Override

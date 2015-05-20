@@ -7,6 +7,7 @@ import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
+import jumpingalien.program.type.ObjectType;
 
 @SuppressWarnings(value="all")
 public class SearchObj extends Expression {
@@ -23,7 +24,7 @@ public class SearchObj extends Expression {
 	}
 	
 	public Object evaluate(Map<String,Type> globals) {
-		GameObject obj = globals.get("this").getGameObject();
+		GameObject obj = (GameObject) ((ObjectType)globals.get("this")).getValue();
 		World world = obj.getWorld();
 		double xmin = obj.getXPosition();
 		double xmax = xmin + obj.getCurrentSprite().getWidth()-1;

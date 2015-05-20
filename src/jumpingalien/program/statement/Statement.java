@@ -17,7 +17,7 @@ public abstract class Statement{
 		return this.sourceLocation;
 	}
 	
-	public abstract void evaluate(Map<String,Type> globals, double time);
+	public abstract void evaluate(Map<String,Type> globals, double time) throws BreakException;
 	
 	public Program getProgram() {
 		return program;

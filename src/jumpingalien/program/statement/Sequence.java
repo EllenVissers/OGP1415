@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import jumpingalien.part3.programs.SourceLocation;
+import java.util.Map;
+import jumpingalien.program.type.Type;
 
 public class Sequence extends Statement {
 
@@ -29,10 +31,14 @@ public class Sequence extends Statement {
 	}
 	
 	@Override
-	public void evaluate() {
-		getStatements().forEach(s->s.evaluate());
+	public void evaluate(Map<String,Type> globals, double time) {
 		for (Statement s : getStatements())
-			s.evaluate();
+		{
+			try {
+				s.evaluate(globals,time);
+			} catch (BreakException exc) {
+			}
+		}
 	}
 
 }

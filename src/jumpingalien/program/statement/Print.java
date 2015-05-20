@@ -1,8 +1,9 @@
 package jumpingalien.program.statement;
 
+import java.util.Map;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-import jumpingalien.program.program.Program;
+import jumpingalien.program.type.Type;
 
 public class Print extends Statement {
 
@@ -18,9 +19,8 @@ public class Print extends Statement {
 	}
 
 	@Override
-	public void evaluate() {
-		Program.timer -= 0.001;
-		System.out.println(getExpression().evaluate());
+	public void evaluate(Map<String,Type> globals, double time) {
+		System.out.println(getExpression().evaluate(globals));
 	}
 
 }

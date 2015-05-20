@@ -6,7 +6,7 @@ import jumpingalien.program.expression.Expression;
 
 public class BoolType extends Type {
 
-	public BoolType(boolean bool) {
+	public BoolType(Boolean bool) {
 		this.bool = bool;
 	}
 	
@@ -14,9 +14,9 @@ public class BoolType extends Type {
 		this.bool = true;
 	}
 	
-	private boolean bool;
+	private Boolean bool;
 	
-	public boolean getBool() {
+	public Boolean getValue() {
 		return this.bool;
 	}
 

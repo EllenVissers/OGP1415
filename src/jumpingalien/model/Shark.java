@@ -1,6 +1,5 @@
 package jumpingalien.model;
 import java.util.ArrayList;
-
 import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
@@ -412,7 +411,7 @@ public class Shark extends GameObject {
 	}
 	
 	@Override
-	public void startMove(Orientation orientation) {
+	public Void startMove(Orientation orientation) {
 		if (getOrientation() != orientation) {
 			if (orientation == Orientation.RIGHT)
 				setXAcc(accx);
@@ -421,6 +420,7 @@ public class Shark extends GameObject {
 			setXVelocity(0);
 			setOrientation(orientation);
 		}
+		return null;
 	}
 	
 	/**
@@ -434,19 +434,22 @@ public class Shark extends GameObject {
 	}
 
 	@Override
-	public void endMove(Orientation orientation) {
+	public Void endMove(Orientation orientation) {
 		if (getOrientation() == orientation) {
 			setXAcc(0);
 			setXVelocity(0);
 		}
+		return null;
 	}
 
 	@Override
-	public void startDuck() {
+	public Void startDuck() {
+		return null;
 	}
 
 	@Override
-	public void endDuck() {
+	public Void endDuck() {
+		return null;
 	}
 	
 	/**
@@ -458,10 +461,11 @@ public class Shark extends GameObject {
 	 * 			| lastJump = 5
 	 */
 	@Override
-	public void startJump() {
+	public Void startJump() {
 		lastJump = 5;
 		setYVelocity(startVelY);
 		setYAcc(accy);
+		return null;
 	}
 	
 	/**
@@ -473,10 +477,11 @@ public class Shark extends GameObject {
 	 * 			|	setYVelocity(0)
 	 */
 	@Override
-	public void endJump() {
+	public Void endJump() {
 		setYAcc(0);
 		if (getYVelocity() > 0)
 			setYVelocity(0);
+		return null;
 	}
 	
 	/**

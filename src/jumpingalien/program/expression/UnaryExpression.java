@@ -2,6 +2,8 @@ package jumpingalien.program.expression;
 
 import java.util.function.Function;
 import jumpingalien.part3.programs.SourceLocation;
+import java.util.Map;
+import jumpingalien.program.type.Type;
 
 public class UnaryExpression<I,O> extends Expression {
 
@@ -24,9 +26,9 @@ public class UnaryExpression<I,O> extends Expression {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public O evaluate() {
+	public O evaluate(Map<String,Type> globals) {
 		Function<I,O> d = getOperator();
-		return d.apply((I) getExpression().evaluate());
+		return d.apply((I) getExpression().evaluate(globals));
 	}
 
 }

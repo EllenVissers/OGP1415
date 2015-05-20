@@ -5,6 +5,7 @@ import jumpingalien.util.Sprite;
 import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.program.program.Program;
+import jumpingalien.program.type.ObjectType;
 import jumpingalien.util.Util;
 
 import java.util.ArrayList;
@@ -60,8 +61,6 @@ public abstract class GameObject extends AllObjects {
 		super(x,y,world);
 		if (sprites == null)
 			throw new ModelException("Empty array of sprites");
-		//setXPosition(x);
-		//setYPosition(y);
 		setXVelocity(vx);
 		setYVelocity(vy);
 		setXAcc(ax);
@@ -69,12 +68,9 @@ public abstract class GameObject extends AllObjects {
 		setOrientation(orientation);
 		this.sprites = sprites;
 		setHitPoints(hitPoints);
-		//setWorld(world);
 		setTerminated(terminated);
 		setTerminatedTime(terminatedTime);
 		setProgram(program);
-//		if (program != null)
-//			program.setSelf(this);
 	}
 	
 	//VARIABLES
@@ -440,6 +436,7 @@ public abstract class GameObject extends AllObjects {
 	 */
 	protected void setProgram(Program program) {
 		this.program = program;
+		program.addVariable("this", new ObjectType(this));
 	}
 	
 	/**
@@ -1309,12 +1306,12 @@ public abstract class GameObject extends AllObjects {
 			return getSprites()[1];
 	}
 	
-	public abstract void startMove(Orientation orientation);
-	public abstract void endMove(Orientation orientation);
-	public abstract void startJump();
-	public abstract void endJump();
-	public abstract void startDuck();
-	public abstract void endDuck();
+	public abstract Void startMove(Orientation orientation);
+	public abstract Void endMove(Orientation orientation);
+	public abstract Void startJump();
+	public abstract Void endJump();
+	public abstract Void startDuck();
+	public abstract Void endDuck();
 	
 	/**
 	 * Advance the timers and update the game object's position and velocity after the given time duration.

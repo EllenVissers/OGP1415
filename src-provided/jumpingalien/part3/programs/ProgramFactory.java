@@ -2,19 +2,12 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 import java.util.Map;
-
+import jumpingalien.program.type.*;
 import jumpingalien.program.expression.*;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.statement.*;
-import jumpingalien.program.type.Type;
 import jumpingalien.util.Util;
-import jumpingalien.model.GameObject;
-import jumpingalien.model.AllObjects;
-import jumpingalien.model.Mazub;
-import jumpingalien.model.Plant;
-import jumpingalien.model.Shark;
-import jumpingalien.model.Slime;
-import jumpingalien.model.Tile;
+import jumpingalien.model.*;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Type, Program> {
 
@@ -247,7 +240,6 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createGetTile(Expression x, Expression y, SourceLocation sourceLocation) {
-		//return new BinaryExpression<Double,Double,Tile>(sourceLocation,x,y,(a,b)->new Tile(a,b,getWorld(),getWorld().getFeatureAt(a,b)));
 		return new GetTile(sourceLocation,x,y);
 	}
 
@@ -257,7 +249,6 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createSearchObject(Expression direction, SourceLocation sourceLocation) {
-		//return new UnaryExpression<AllObjects,AllObjects>(sourceLocation,direction,t->getNext(t));
 		return new SearchObj(sourceLocation,direction);
 	}
 
@@ -365,9 +356,8 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 * given expression is moving
 	 */
 	@Override
-	public Expression createIsMoving(Expression expr, Expression direction,
-			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isMoving((IProgramFactory.Direction)direction.evaluate()));
+	public Expression createIsMoving(Expression expr, Expression direction,SourceLocation sourceLocation) {
+		return new BinaryExpression<AllObjects,IProgramFactory.Direction,Boolean>(sourceLocation,expr,direction,(t,d)->t.isMoving(d));
 	}
 
 	/**
@@ -450,52 +440,38 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 
 	/** A statement that makes the object executing the program start moving */
 	@Override
-	public Statement createStartRun(Expression direction,
-			SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,direction,t->t.startRun());
-		// TODO
-		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+	public Statement createStartRun(Expression direction,SourceLocation sourceLocation) {
+		return new ActionStatement<GameObject,Void>(sourceLocation,direction,(t,d)->t.startMove(d));
 	}
 
 	/** A statement that makes the object executing the program stop moving */
 	@Override
-	public Statement createStopRun(Expression direction,
-			SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,direction,t->t.stopRun());
-				// TODO
-				return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+	public Statement createStopRun(Expression direction,SourceLocation sourceLocation) {
+		return new ActionStatement<GameObject,Void>(sourceLocation,direction,(t,d)->t.endMove(d));
 	}
 
 	/** A statement that makes the object executing the program start jumping */
 	@Override
 	public Statement createStartJump(SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.startJump());
-		// TODO
-		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+		return new ActionStatement<GameObject,Void>(sourceLocation,t->t.startJump());
 	}
 
 	/** A statement that makes the object executing the program stop jumping */
 	@Override
 	public Statement createStopJump(SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.stopJump());
-		// TODO
-		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+		return new ActionStatement<GameObject,Void>(sourceLocation,t->t.endJump());
 	}
 
 	/** A statement that makes the object executing the program start ducking */
 	@Override
 	public Statement createStartDuck(SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.startDuck());
-		// TODO
-		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+		return new ActionStatement<GameObject,Void>(sourceLocation,t->t.startDuck());
 	}
 
 	/** A statement that makes the object executing the program stop ducking */
 	@Override
 	public Statement createStopDuck(SourceLocation sourceLocation) {
-		//return new ActionStatement<GameObject,Void>(sourceLocation,obj,t->t.stopDuck());
-		// TODO
-		return new ActionStatement<ProgramFactory,ProgramFactory>(sourceLocation,this,t->t);
+		return new ActionStatement<GameObject,Void>(sourceLocation,t->t.endDuck());
 	}
 
 	/**
@@ -536,7 +512,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	/** The type of game object values and variables */
 	@Override
 	public Type getGameObjectType() {
-		return new GameObjectType();
+		return new ObjectType();
 	}
 
 	/** The type of direction values and variables */
