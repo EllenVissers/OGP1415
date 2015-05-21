@@ -436,7 +436,8 @@ public abstract class GameObject extends AllObjects {
 	 */
 	protected void setProgram(Program program) {
 		this.program = program;
-		program.addVariable("this", new ObjectType(this));
+		if (program != null)
+			program.addVariable("this", new ObjectType(this));
 	}
 	
 	/**

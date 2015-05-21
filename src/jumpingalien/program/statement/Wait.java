@@ -20,8 +20,15 @@ public class Wait extends Statement {
 	}
 	
 	@Override
-	public void evaluate(Map<String,Type> globals, double time) {
-		globals.put("timer",new DoubleType(time-((Constant<Double>)getDuration()).evaluate(globals)));
+	public double evaluate(Map<String,Type> globals, double time, int counter) {
+		if (counter == getStatementCounter())
+		{
+			double newtime = time-((Double)getDuration().evaluate(globals));
+			globals.put("timer",new DoubleType(newtime));
+			resetCounter();
+			return newtime;
+		}
+		return time;
 	}
 
 }

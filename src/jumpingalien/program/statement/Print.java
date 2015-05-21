@@ -1,8 +1,10 @@
 package jumpingalien.program.statement;
 
 import java.util.Map;
+
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
+import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.Type;
 
 public class Print extends Statement {
@@ -19,8 +21,16 @@ public class Print extends Statement {
 	}
 
 	@Override
-	public void evaluate(Map<String,Type> globals, double time) {
-		System.out.println(getExpression().evaluate(globals));
+	public double evaluate(Map<String,Type> globals, double time, int counter) {
+		if (counter == getStatementCounter())
+		{
+			double timer = (double) globals.get("timer").getValue();
+			globals.put("timer", new DoubleType(timer-0.001));
+			System.out.println(getExpression().evaluate(globals));
+			resetCounter();
+			return (time-0.001);
+		}
+		return time;
 	}
 
 }
