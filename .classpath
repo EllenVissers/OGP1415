@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src-provided"/>
+	<classpathentry excluding="src-provided/|src-provided/" kind="src" path="src-provided"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="src" path="src"/>

@@ -4,7 +4,6 @@ import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
 import jumpingalien.program.program.Program;
-import jumpingalien.program.type.ObjectType;
 
 
 /**
@@ -37,6 +36,7 @@ public class Plant extends GameObject {
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites) throws ModelException {
 		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,null);
+		this.timer = 0;
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class Plant extends GameObject {
 	/**
 	 * Variable registering the time a Plant is moving in the same direction.
 	 */
-	private double timer = 0;
+	private double timer;
 	
 	/**
 	 * Method to set the vertical velocity to a certain value.
@@ -114,6 +114,14 @@ public class Plant extends GameObject {
 		removeFromAll(this);
 	}
 	
+	public double getTimer() {
+		return this.timer;
+	}
+	
+	public void setTimer(double t) {
+		this.timer = t;
+	}
+	
 	/**
 	 * Method to check whether the time switch is reached within the next time duration.
 	 * @param 	time
@@ -121,7 +129,7 @@ public class Plant extends GameObject {
 	 * @return	True if the time switch is reached.
 	 */
 	private boolean reachesTimeSwitch(double time) {
-		return ((timer + time) >= timeSwitch);
+		return ((getTimer() + time) >= timeSwitch);
 	}
 	
 	/**
@@ -150,7 +158,7 @@ public class Plant extends GameObject {
 		double s;
 		if (! isTerminated()) {
 			s = getXPosition() + 100*time*getXVelocity();
-			timer += time;
+			setTimer(getTimer()+time);
 			try {
 				CheckWorldH(s);
 			} catch (CollisionException exc) {
@@ -176,25 +184,10 @@ public class Plant extends GameObject {
 	 * 			| Move(t)
 	 */
 	private void advance(double t) {
-		if ( (! isTerminated()) && (t != 0)) {
-			if (getProgram() == null) {
-				if (reachesTimeSwitch(t)) {
-					double t1 = (timeSwitch - timer);
-					double t2 = ((t+timer) - timeSwitch);
-					Move(t1);
-					endMove(getOrientation());
-					if (getOrientation() == Orientation.LEFT)
-						startMove(Orientation.RIGHT);
-					else
-						startMove(Orientation.LEFT);
-					Move(t2);
-				}
-				else
-					Move(t);
-			}
-			else
-				getProgram().execute(t);
-		}
+//		if ( (! isTerminated()) && (t != 0)) {
+//			Move(t);
+//		}
+		Move(t);
 	}
 	
 	/**
@@ -213,6 +206,38 @@ public class Plant extends GameObject {
 	public void advanceTime(double time) {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
+		if (getProgram() != null)
+		{
+			getProgram().execute(getProgram().getGlobalVariables(), time);
+			advanceWithDT(time);
+		}
+		else
+		{
+			if (reachesTimeSwitch(time))
+			{
+				double t1 = (timeSwitch - getTimer());
+				double t2 = ((time+getTimer()) - timeSwitch);
+				advanceWithDT(t1);
+				endMove(getOrientation());
+				if (getOrientation() == Orientation.LEFT)
+				{
+					startMove(Orientation.RIGHT);
+					setOrientation(Orientation.RIGHT);
+				}
+				else
+				{
+					startMove(Orientation.LEFT);
+					setOrientation(Orientation.LEFT);
+				}
+				advanceWithDT(t2);
+			}
+			else
+				advanceWithDT(time);
+			setTimer(getTimer()+time);
+		}
+	}
+	
+	public void advanceWithDT(double time) {
 		while (time > 0)
 		{
 			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
@@ -237,7 +262,7 @@ public class Plant extends GameObject {
 	@Override
 	public Void endMove(Orientation orientation) {
 		setXVelocity(0);
-		timer = 0;
+		setTimer(0);
 		return null;
 	}
 

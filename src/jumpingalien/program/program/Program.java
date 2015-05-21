@@ -1,8 +1,10 @@
 package jumpingalien.program.program;
 
 import java.util.Map;
+
 import jumpingalien.program.statement.BreakException;
 import jumpingalien.program.statement.Statement;
+import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.Type;
 
 public class Program {
@@ -10,10 +12,12 @@ public class Program {
 	public Program(Statement mainStatement, Map<String, Type> globalVariables) {
 		this.main = mainStatement;
 		this.global = globalVariables;
+		this.counter = 0;
 	}
 	
 	private Statement main;
 	private Map<String,Type> global;
+	private int counter;
 	
 	public Statement getMainStatement() {
 		return this.main;
@@ -21,6 +25,14 @@ public class Program {
 	
 	public Map<String,Type> getGlobalVariables() {
 		return this.global;
+	}
+	
+	public int getCounter() {
+		return this.counter;
+	}
+	
+	public void setCounter(int c) {
+		this.counter = c;
 	}
 	
 	public void addVariable(String key, Type value) {
@@ -33,10 +45,15 @@ public class Program {
 	}
 	
 	public void execute(Map<String,Type> globals, double time) {
+		globals.put("timer", new DoubleType(time));
 		try {
-			getMainStatement().evaluate(globals,time);
+			getMainStatement().evaluate(globals,time,getCounter());
 		} catch (BreakException exc) {
 		}
+		if (getCounter() == 0)
+			setCounter(1);
+		else
+			setCounter(0);
 	}
 
 }

@@ -1,14 +1,13 @@
 package jumpingalien.model;
-
-//import java.util.ArrayList;
+import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.program.program.Program;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 
 public class Buzam extends Alien {
 
 	private int startHitPoints = 500;
-	private int maxHitPoints = 500;
 	private double startVelocity = 1.0;
 	private final double maxSpeed = 3.0;
 	
@@ -31,7 +30,34 @@ public class Buzam extends Alien {
 	
 	@Override
 	public void advanceTime(double time) {
-		Object p = getProgram();
+		if (! (isValidTime(time)))
+			throw new ModelException("Invalid time");
+		if (getProgram() != null)
+		{
+			getProgram().execute(getProgram().getGlobalVariables(), time);
+			advanceWithDT(time);
+		}
+	}
+	
+	public void advanceWithDT(double time) {
+		while (time > 0)
+		{
+			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
+			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
+				advance(dt);
+			else
+				advance(time);
+			time -= dt;
+		}
+	}
+	
+	public void advance(double time) {
+		if (isMoving(IProgramFactory.Direction.LEFT) || isMoving(IProgramFactory.Direction.RIGHT) )
+			Move(time);
+		if (isJumping())
+			Jump(time);
+		else
+			Fall(time);
 	}
 
 	@Override

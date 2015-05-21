@@ -167,6 +167,7 @@ public abstract class Alien extends GameObject {
 		 * Variable registering the maximum number of hitpoints of an alien.
 		 */
 		protected static final int maxHitPoints = 500;
+		private double accx = 0.9;
 		
 		//GETTERS AND SETTERS
 		/**
@@ -469,4 +470,98 @@ public abstract class Alien extends GameObject {
 		 */
 		@Basic @Override
 		public abstract Sprite getCurrentSprite();
+		
+		private boolean reachesMaxSpeed(double time) {
+			return ((Math.abs(time*getXAcc()) + Math.abs(this.getXVelocity())) >= Math.abs(this.getMaxVel()));
+		}
+		
+		protected void Move(double time) {
+			double s;
+			if (Util.fuzzyLessThanOrEqualTo(getXVelocity(),getMaxVel()))
+			{
+				if (getOrientation() == Orientation.RIGHT)
+					setXAcc(accx);
+				else
+					setXAcc(-accx);
+			}
+			if (reachesMaxSpeed(time))
+			{
+				double t1 = (getMaxVel() - getXVelocity())/(getXAcc());
+				double t2 = time - t1;
+				if (Util.fuzzyGreaterThanOrEqualTo(getXVelocity(),getMaxVel()))
+					s = getXPosition() + 100*(getMaxVel()*time);
+				else
+					s = getXPosition() + 100*(getXVelocity()*t1 + 0.5*(getXAcc())*t1*t1 + getMaxVel()*t2);
+				setXVelocity(getMaxVel());		
+				setXAcc(0);
+			}
+			else
+			{
+				s = getXPosition() + 100*(getXVelocity()*time + 0.5*(getXAcc())*time*time);
+				setXVelocity(getXVelocity() + (getXAcc())*time);
+			}
+			if (! isValidXPosition(s))
+				terminate();
+			try {
+				CheckCollH(s);
+			} catch (CollisionException exc) {
+				if (exc.getCollided())
+					s = collH(exc,s);
+				else
+					s = fixCollH(exc,s);
+			}
+			try {
+				CheckWorldH(s);
+			} catch (CollisionException exc) {
+				s = fixWorldH(exc,s);
+			}
+			setXPosition(s);
+		}
+		
+		protected void Jump(double time) {
+			double h = getYPosition() + 100*((getYVelocity()*time) + (getYAcc()*0.5*time*time));
+			this.setYVelocity(getYVelocity() + getYAcc()*time);
+			if (! isValidYPosition(h))
+				terminate();
+			try {
+				CheckCollV(h);
+			} catch (CollisionException exc) {
+				if (exc.getCollided())
+					h = collV(exc,h);
+				else
+					h = fixCollV(exc,h);
+			}
+			try {
+				CheckWorldV(h);
+			} catch (CollisionException exc) {
+				h = fixWorldV(exc,h);
+			}
+			setYPosition(h);
+		}
+		
+		protected void Fall(double time) {
+			setYAcc(accy);
+			double h = getYPosition() + 100*(getYVelocity()*time + 0.5*getYAcc()*time*time);
+			try {
+				CheckCollV(h);
+			} catch (CollisionException exc) {
+				if (exc.getCollided())
+					h = collV(exc,h);
+				else
+					h = fixCollV(exc,h);
+			}
+			try {
+				CheckWorldV(h);
+			} catch (CollisionException exc) {
+				h = fixWorldV(exc,h);
+			}
+			setYPosition(h);
+			if (onGround() || onGameObject())
+			{
+				setYVelocity(0);
+				setYAcc(0);
+			}
+			else
+				setYVelocity(getYVelocity() + getYAcc()*time);
+		}
 	}

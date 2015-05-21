@@ -1,8 +1,10 @@
 package jumpingalien.program.statement;
 import java.util.Map;
+
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.expression.Constant;
+import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.Type;
 
 public class If extends Statement {
@@ -41,21 +43,32 @@ public class If extends Statement {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void evaluate(Map<String,Type> globals, double time) {
-		if (((Constant<Boolean>) getCondition()).evaluate(globals))
+	public double evaluate(Map<String,Type> globals, double time, int counter) {
+		if (counter == getStatementCounter())
 		{
-			try {
-				getIfBody().evaluate(globals,time);
-			} catch (BreakException exc){
+			double timer = (double) globals.get("timer").getValue();
+			globals.put("timer", new DoubleType(timer-0.001));
+			if (((Constant<Boolean>) getCondition()).evaluate(globals))
+			{
+				try {
+					time = checkTime(getIfBody().evaluate(globals,time,counter),getIfBody());
+				} catch (BreakException exc){
+					time = exc.getTime();
+				} catch (TerminateException exc) {
+				}
 			}
-		}
-		else
-		{
-			try {
-				getElseBody().evaluate(globals,time);
-			} catch (BreakException exc){
+			else
+			{
+				try {
+					time = getElseBody().evaluate(globals,time,counter);
+				} catch (BreakException exc){
+					time = exc.getTime();
+				}
 			}
+			return (time-0.001);
 		}
+		resetCounter();
+		return time;
 	}
 	
 }

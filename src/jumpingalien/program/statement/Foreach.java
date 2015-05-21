@@ -4,9 +4,11 @@ import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.*;
 import jumpingalien.model.AllObjects;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class Foreach extends Statement {
 			Expression where, Expression sort, SortDirection sortDirection,
 			Statement body) {
 		super(loc);
+		this.forEachCounter = 0;
 		this.name = variableName;
 		this.kind = variableKind;
 		this.where = where;
@@ -43,6 +46,7 @@ public class Foreach extends Statement {
 	private Expression sort;
 	private SortDirection direction;
 	private Statement body;
+	private int forEachCounter;
 	
 	public String getVariableName() {
 		return this.name;
@@ -68,53 +72,73 @@ public class Foreach extends Statement {
 		return this.body;
 	}
 	
-	//TODO werken met lambda uitdrukkingen! (all.forEach(p -> getBody().evaluate()))
-	public void evaluate(Map<String,Type> globals, double time) {
-		String name = getVariableName();
-		Kind kind = getVariableKind();
-		ArrayList<Type> all = new ArrayList<Type>(globals.values());
-		Stream allStream = all.stream();
-		Stream filteredStream = allStream.filter(t->((AllObjects)((Type)t).getValue()).isKind(kind));
-		if (getWhere() != null)
+	public int getForEachCounter() {
+		return this.forEachCounter;
+	}
+	
+	public void setForEachCounter(int c) {
+		this.forEachCounter = c;
+	}
+	
+	public double evaluate(Map<String,Type> globals, double time, int counter) {
+		if (counter == getStatementCounter())
 		{
-			Type oldthis = globals.get("this");
-			for (Type o : all)
+			String name = getVariableName();
+			Kind kind = getVariableKind();
+			ArrayList<Type> all = new ArrayList<Type>(globals.values());
+			Stream allStream = all.stream();
+			Stream filteredStream = allStream.filter(t->((AllObjects)((Type)t).getValue()).isKind(kind));
+			if (getWhere() != null)
 			{
-				globals.put("this", o);
-				if (! (Boolean)(getWhere().evaluate(globals)))
-					all.remove(o);
-			}
-			globals.put("this",oldthis);
-		}
-		if (getSort() != null)
-		{
-			Type oldthis = globals.get("this");
-			ArrayList<Double> values = new ArrayList<Double>();
-			for (Type o : all)
-			{
-				globals.put("this", o);
-				double val = (double) getSort().evaluate(globals);
-				values.add(val);
-				Map<Double,Type> unsorted = new HashMap<Double,Type>();
-				for (int i = 0; i<values.size(); i++)
+				Type oldthis = globals.get("this");
+				for (Type o : all)
 				{
-					unsorted.put(values.get(i), all.get(i));
+					globals.put("this", o);
+					if (! (Boolean)(getWhere().evaluate(globals)))
+						all.remove(o);
 				}
-				Map<Double,Type> sorted = new TreeMap<Double,Type>(unsorted);
-				all = new ArrayList<Type>(sorted.values());
+				globals.put("this",oldthis);
 			}
-			globals.put("this",oldthis);
-		}
-		Type old = globals.get(name);
-		for (Type o : all)
-		{
-			try {
-				globals.put(name, o);
-				getBody().evaluate(globals,time);
-			} catch (BreakException exc) {
+			if (getSort() != null)
+			{
+				Type oldthis = globals.get("this");
+				ArrayList<Double> values = new ArrayList<Double>();
+				for (Type o : all)
+				{
+					globals.put("this", o);
+					double val = (double) getSort().evaluate(globals);
+					values.add(val);
+					Map<Double,Type> unsorted = new HashMap<Double,Type>();
+					for (int i = 0; i<values.size(); i++)
+					{
+						unsorted.put(values.get(i), all.get(i));
+					}
+					Map<Double,Type> sorted = new TreeMap<Double,Type>(unsorted);
+					all = new ArrayList<Type>(sorted.values());
+				}
+				globals.put("this",oldthis);
 			}
+			Type old = globals.get(name);
+			ArrayList<Type> newall = new ArrayList(all.subList(getForEachCounter(), all.size()));
+			for (Type o : newall)
+			{
+				try {
+					globals.put(name, o);
+					time = checkTime(getBody().evaluate(globals,time,counter),getBody());
+				} catch (BreakException exc) {
+					time = exc.getTime();
+				} catch (TerminateException exc) {
+					setForEachCounter(all.indexOf(o));
+				}
+			}
+			globals.put(name,old);
+			double timer = (double) globals.get("timer").getValue();
+			globals.put("timer", new DoubleType(timer-0.001));
+			resetCounter();
+			setForEachCounter(0);
+			return (time-0.001);
 		}
-		globals.put(name,old);
+		return time;
 	}
 }
 

@@ -50,18 +50,26 @@ public class ActionStatement<GameObject,Void> extends Statement {
 	}
 
 	@Override
-	public void evaluate(Map<String,Type> globals, double time) {
-		GameObject obj = (GameObject)((ObjectType)globals.get("this")).getValue();
-		if (getBiFunction() == null) {
-			Function<GameObject,Void> f = getFunction();
-			f.apply(obj);
-		}
-		else
+	public double evaluate(Map<String,Type> globals, double time, int counter) {
+		if (counter == getStatementCounter())
 		{
-			Orientation d = getDirection(globals);
-			BiFunction<GameObject,Orientation,Void> f = getBiFunction();
-			f.apply(obj,d);
+			GameObject obj = (GameObject)((ObjectType)globals.get("this")).getValue();
+			if (getBiFunction() == null) {
+				Function<GameObject,Void> f = getFunction();
+				f.apply(obj);
+			}
+			else
+			{
+				Orientation d = getDirection(globals);
+				BiFunction<GameObject,Orientation,Void> f = getBiFunction();
+				f.apply(obj,d);
+			}
+			double timer = (double) globals.get("timer").getValue();
+			globals.put("timer", new DoubleType(timer-0.001));
+			resetCounter();
+			return (time-0.001);
 		}
+		return time;
 	}
 
 }
