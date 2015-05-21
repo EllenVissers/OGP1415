@@ -642,20 +642,7 @@ public class Shark extends GameObject {
 		}
 		else
 		{
-			if (reachesTimeSlot(time))
-			{
-				double t1 = timeslot - timer;
-				double t2 = (timer+time) - timeslot;
-				UpdatePositions(t1);
-				endOfTimeSlot();
-				UpdatePositions(t2);
-				timer = t2;
-			}
-			else
-			{
-				UpdatePositions(time);
-				timer += time;
-			}
+			UpdatePositions(time);
 			ArrayList<Integer> medium = CheckMedium();
 			if (medium.contains(0))
 				touchAir(time);
@@ -746,6 +733,24 @@ public class Shark extends GameObject {
 	public void advanceTime(double time) throws ModelException {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
+		if (getProgram() != null)
+			getProgram().execute(getProgram().getGlobalVariables(), time);
+		else
+		{
+			if (reachesTimeSlot(time))
+			{
+				double t1 = timeslot - timer;
+				double t2 = (timer+time) - timeslot;
+				advanceWithDT(t1);
+				endOfTimeSlot();
+				advanceWithDT(t2);
+			}
+			else
+				advanceWithDT(time);
+		}
+	}
+	
+	public void advanceWithDT(double time) {
 		while (time > 0)
 		{
 			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());

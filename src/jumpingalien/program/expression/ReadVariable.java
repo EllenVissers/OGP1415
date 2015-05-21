@@ -23,7 +23,7 @@ public class ReadVariable extends Expression {
 	}
 
 	@Override
-	public Object evaluate(Map<String,Type> globals) {
+	public Type evaluate(Map<String,Type> globals) {
 		return globals.get(getVariableName());
 	}
 	

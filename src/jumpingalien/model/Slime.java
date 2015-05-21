@@ -405,19 +405,7 @@ public class Slime extends GameObject {
 		}
 		else
 		{
-			if (reachesTimeSlot(t)) {
-				double t1 = timeslot - timer;
-				double t2 = t - t1;
-				Move(t1);
-				endMove(getOrientation());
-				if (getOrientation() == Orientation.RIGHT)
-					startMove(Orientation.LEFT);
-				else
-					startMove(Orientation.RIGHT);
-				Move(t2);
-			}
-			else
-				Move(t);
+			Move(t);
 			setTerminatedTime(0);
 			if (onGround() || onGameObject())
 				setYVelocity(0);
@@ -451,6 +439,27 @@ public class Slime extends GameObject {
 	public void advanceTime(double time) {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
+		if (getProgram() != null)
+		{
+			getProgram().execute(getProgram().getGlobalVariables(),time);
+			advanceWithDT(time);
+		}
+		else
+		{
+			if (reachesTimeSlot(time)) {
+				double t1 = timeslot - timer;
+				double t2 = time - t1;
+				advanceWithDT(t1);
+				endMove(getOrientation());
+				startMove();
+				advanceWithDT(t2);
+			}
+			else
+				advanceWithDT(time);
+		}
+	}
+	
+	public void advanceWithDT(double time) {
 		while (time > 0)
 		{
 			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
@@ -479,6 +488,14 @@ public class Slime extends GameObject {
 			setOrientation(orientation);
 		}
 		return null;
+	}
+	
+	public void startMove() {
+		int val = (int) Math.round(Math.random()*10);
+		if (val%2 == 0)
+			startMove(Orientation.RIGHT);
+		else
+			startMove(Orientation.LEFT);
 	}
 
 	@Override

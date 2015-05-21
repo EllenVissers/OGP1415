@@ -80,7 +80,8 @@ public class Foreach extends Statement {
 		this.forEachCounter = c;
 	}
 	
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
 			String name = getVariableName();
@@ -124,19 +125,23 @@ public class Foreach extends Statement {
 			{
 				try {
 					globals.put(name, o);
-					time = checkTime(getBody().evaluate(globals,time,counter),getBody());
+					time = getBody().evaluate(globals,counter);
 				} catch (BreakException exc) {
 					time = exc.getTime();
+				}
+				try {
+					
+					time = checkTime(time,getBody());
+					globals.put("timer", new DoubleType(time));
+					resetCounter();
+					setForEachCounter(0);
 				} catch (TerminateException exc) {
 					setForEachCounter(all.indexOf(o));
+					globals.put("timer",new DoubleType());
+					throw new BreakException(0);
 				}
+				globals.put(name,old);
 			}
-			globals.put(name,old);
-			double timer = (double) globals.get("timer").getValue();
-			globals.put("timer", new DoubleType(timer-0.001));
-			resetCounter();
-			setForEachCounter(0);
-			return (time-0.001);
 		}
 		return time;
 	}

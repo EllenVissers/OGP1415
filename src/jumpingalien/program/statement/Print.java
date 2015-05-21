@@ -21,14 +21,19 @@ public class Print extends Statement {
 	}
 
 	@Override
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
-			double timer = (double) globals.get("timer").getValue();
-			globals.put("timer", new DoubleType(timer-0.001));
-			System.out.println(getExpression().evaluate(globals));
-			resetCounter();
-			return (time-0.001);
+			try {
+				time = checkTime(time-0.001,this);
+				resetCounter();
+				globals.put("timer", new DoubleType(time));
+				System.out.println(getExpression().evaluate(globals));
+			} catch (TerminateException exc) {
+				globals.put("timer", new DoubleType());
+				throw new BreakException(0);
+			}
 		}
 		return time;
 	}

@@ -31,14 +31,19 @@ public class Assignment extends Statement {
 		return this.value;
 	}
 	
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
-			globals.put(getVariableName(),getVariableType().set(value,globals));
-			double timer = (double) globals.get("timer").getValue();
-			globals.put("timer", new DoubleType(timer-0.001));
-			resetCounter();
-			return (time-0.001);
+			try {
+				time = checkTime(time-0.001,this);
+				resetCounter();
+				globals.put(getVariableName(),getVariableType().set(value,globals));
+				globals.put("timer", new DoubleType(time));
+			} catch (TerminateException exc) {
+				globals.put("timer", new DoubleType());
+				throw new BreakException(0);
+			}
 		}
 		return time;
 	}

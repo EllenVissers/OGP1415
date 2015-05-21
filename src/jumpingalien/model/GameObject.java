@@ -77,11 +77,11 @@ public abstract class GameObject extends AllObjects {
 //	/**
 //	 * Variable registering the horizontal position.
 //	 */
-//	private double x;
+	private double x;
 //	/**
 //	 * Variable registering the vertical position.
 //	 */
-//	private double y;
+	private double y;
 	/**
 	 * Variable registering the horizontal velocity.
 	 */
@@ -157,10 +157,10 @@ public abstract class GameObject extends AllObjects {
 //	 * @return 	The horizontal position.
 //	 * 			| this.x
 //	 */
-//	@Basic
-//	public double getXPosition() {
-//		return this.x;
-//	}
+	@Basic
+	public double getXPosition() {
+		return this.x;
+	}
 	
 	/**
 	 * Set the horizontal position of the game object to the given position.
@@ -184,10 +184,10 @@ public abstract class GameObject extends AllObjects {
 //	 * @return	The vertical position.
 //	 * 			| this.y
 //	 */
-//	@Basic
-//	public double getYPosition() {
-//		return this.y;
-//	}
+	@Basic
+	public double getYPosition() {
+		return this.y;
+	}
 	
 	/**
 	 * Set the vertical position of the game object to the given position.

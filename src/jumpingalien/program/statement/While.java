@@ -35,33 +35,43 @@ public class While extends Statement {
 		this.whileCounter = c;
 	}
 	
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
 			if (getWhileCounter() == 1)
 			{
 				try {
-				time = checkTime(getBody().evaluate(globals,time,counter),getBody());
-				} catch(BreakException exc) {
+					time = getBody().evaluate(globals,counter);
+				} catch (BreakException exc) {
 					time = exc.getTime();
+				}
+				try {
+					time = checkTime(time,this);
+					globals.put("timer",new DoubleType(time));
+					setWhileCounter(0);
 				} catch (TerminateException exc) {
+					globals.put("timer",new DoubleType());
+					throw new BreakException(0);
 				}
 			}
-			try {
-				while ((Boolean)(getCondition().evaluate(globals)))
-				{
-					double timer = (double) globals.get("timer").getValue();
-					globals.put("timer", new DoubleType(timer-0.001));
-					time -= 0.001;
-					time = checkTime(getBody().evaluate(globals,time,counter),getBody());
+			while ((Boolean)(getCondition().evaluate(globals)))
+			{
+				try {
+					time = getBody().evaluate(globals,counter);
+				} catch (BreakException exc) {
+					time = exc.getTime();
 				}
-			} catch(BreakException exc) {
-				time = exc.getTime();
-			} catch (TerminateException exc) {
-				setWhileCounter(1);
+				try {
+					time = checkTime(time-0.001,getBody());
+					globals.put("timer",new DoubleType(time));
+					resetCounter();
+				} catch (TerminateException exc) {
+					setWhileCounter(1);
+					globals.put("timer",new DoubleType());
+					throw new BreakException(0);
+				}
 			}
-			setWhileCounter(0);
-			resetCounter();
 		}
 		return time;
 	}

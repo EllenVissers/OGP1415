@@ -38,6 +38,11 @@ public class BinaryExpression<L,R,O> extends Expression {
 	@Override
 	public O evaluate(Map<String,Type> globals) {
 		BiFunction<L,R,O> d = getOperator();
+		L left;
+		if (getLeftExpression().evaluate(globals) instanceof Type)
+			left = (L) ((Type) getLeftExpression().evaluate(globals)).getValue();
+		else
+			left = (L) getLeftExpression().evaluate(globals);
 		if (getRightExpression().evaluate(globals) instanceof IProgramFactory.Direction)
 		{
 			Orientation or;
@@ -48,9 +53,14 @@ public class BinaryExpression<L,R,O> extends Expression {
 				or = Orientation.LEFT;
 			else
 				or = Orientation.NONE;
-			return d.apply(((L)getLeftExpression().evaluate(globals)),(R)or);
+			return d.apply(left,(R)or);
 		}
-		return d.apply(((L)getLeftExpression().evaluate(globals)),((R)getRightExpression().evaluate(globals)));
+		R right;
+		if (getRightExpression().evaluate(globals) instanceof Type)
+			right = (R) ((Type) getRightExpression().evaluate(globals)).getValue();
+		else
+			right = (R) getRightExpression().evaluate(globals);
+		return d.apply(left,right);
 	}
 
 }

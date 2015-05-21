@@ -4,12 +4,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+
 import jumpingalien.program.expression.Constant;
+import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.Orientation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.part3.programs.IProgramFactory;
+import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.type.*;
 
@@ -42,15 +45,21 @@ public class ActionStatement<GameObject,Void> extends Statement {
 	}
 	
 	public Orientation getDirection(Map<String,Type> globals) {
-		if (((Constant<IProgramFactory.Direction>)this.direction).evaluate(globals) == IProgramFactory.Direction.RIGHT)
+		Direction dir;
+		if (this.direction.evaluate(globals) instanceof Type)
+			dir = (Direction) ((Type) this.direction.evaluate(globals)).getValue();
+		else
+			dir = (Direction) this.direction.evaluate(globals);
+		if (dir == IProgramFactory.Direction.RIGHT)
 			return Orientation.RIGHT;
-		if (((Constant<IProgramFactory.Direction>)this.direction).evaluate(globals) == IProgramFactory.Direction.LEFT)
+		if (dir == IProgramFactory.Direction.LEFT)
 			return Orientation.LEFT;
 		return Orientation.NONE;
 	}
 
 	@Override
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
 			GameObject obj = (GameObject)((ObjectType)globals.get("this")).getValue();
@@ -64,10 +73,14 @@ public class ActionStatement<GameObject,Void> extends Statement {
 				BiFunction<GameObject,Orientation,Void> f = getBiFunction();
 				f.apply(obj,d);
 			}
-			double timer = (double) globals.get("timer").getValue();
-			globals.put("timer", new DoubleType(timer-0.001));
-			resetCounter();
-			return (time-0.001);
+			try {
+				time = checkTime(time-0.001,this);
+				resetCounter();
+				globals.put("timer", new DoubleType(time));
+			} catch (TerminateException exc) {
+				globals.put("timer", new DoubleType());
+				throw new BreakException(0);
+			}
 		}
 		return time;
 	}

@@ -46,14 +46,19 @@ public class Program {
 	
 	public void execute(Map<String,Type> globals, double time) {
 		globals.put("timer", new DoubleType(time));
-		try {
-			getMainStatement().evaluate(globals,time,getCounter());
-		} catch (BreakException exc) {
+		while (((DoubleType)globals.get("timer")).getValue() > 0)
+		{
+			try {
+				time = getMainStatement().evaluate(globals,getCounter());
+				if (getCounter() == 0)
+					setCounter(1);
+				else
+					setCounter(0);
+				globals.put("timer",new DoubleType(time));
+			} catch (BreakException exc) {
+				globals.put("timer",new DoubleType());
+			}
 		}
-		if (getCounter() == 0)
-			setCounter(1);
-		else
-			setCounter(0);
 	}
 
 }

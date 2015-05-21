@@ -45,24 +45,29 @@ public class Sequence extends Statement {
 	}
 	
 	@Override
-	public double evaluate(Map<String,Type> globals, double time, int counter) {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
 			ArrayList<Statement> list = new ArrayList<Statement>(getStatements().subList(getSequenceCounter(), getStatements().size()));
 			for (Statement s : list)
 			{
 				try {
-					double timer = (double) globals.get("timer").getValue();
-					globals.put("timer", new DoubleType(timer-0.001));
-					time = checkTime(s.evaluate(globals,time,counter),s);
+					time = s.evaluate(globals,counter);
 				} catch (BreakException exc) {
 					time = exc.getTime();
+				}
+				try {
+					time = checkTime(time,s);
+					resetCounter();
+					setSequenceCounter(0);
+					globals.put("timer", new DoubleType(time));
 				} catch (TerminateException exc) {
 					setSequenceCounter(getStatements().indexOf(s));
+					globals.put("timer", new DoubleType());
+					throw new BreakException(0);
 				}
 			}
-			resetCounter();
-			setSequenceCounter(0);
 		}
 		return time;
 	}

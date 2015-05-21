@@ -47,7 +47,7 @@ public abstract class Statement{
 			setStatementCounter(0);
 	}
 	
-	public abstract double evaluate(Map<String,Type> globals, double time, int counter) throws BreakException;
+	public abstract double evaluate(Map<String,Type> globals, int counter) throws BreakException;
 	
 	public Program getProgram() {
 		return program;

@@ -12,13 +12,19 @@ public class Break extends Statement {
 	}
 	
 	@Override
-	public double evaluate(Map<String,Type> globals, double time, int counter) throws BreakException {
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
-			double timer = (double) globals.get("timer").getValue();
-			globals.put("timer", new DoubleType(timer-0.001));
-			resetCounter();
-			throw new BreakException(time-0.001);
+			try {
+				time = checkTime(time-0.001,this);
+				globals.put("timer", new DoubleType(time));
+				resetCounter();
+				throw new BreakException(time);
+			} catch (TerminateException exc) {
+				globals.put("timer", new DoubleType());
+				throw new BreakException(0);
+			}
 		}
 		return time;
 	}

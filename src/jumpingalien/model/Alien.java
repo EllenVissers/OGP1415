@@ -167,7 +167,8 @@ public abstract class Alien extends GameObject {
 		 * Variable registering the maximum number of hitpoints of an alien.
 		 */
 		protected static final int maxHitPoints = 500;
-		private double accx = 0.9;
+		protected static double accx = 0.9;
+		protected static double accy = -10;
 		
 		//GETTERS AND SETTERS
 		/**
