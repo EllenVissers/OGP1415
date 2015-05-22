@@ -21,23 +21,23 @@ public class If extends Statement {
 	private Statement elseBody;
 	private boolean result;
 	
-	public boolean getResult() {
+	protected boolean getResult() {
 		return result;
 	}
 
-	public void setResult(boolean result) {
+	protected void setResult(boolean result) {
 		this.result = result;
 	}
 	
-	public Expression getCondition() {
+	private Expression getCondition() {
 		return this.condition;
 	}
 	
-	public Statement getIfBody() {
+	private Statement getIfBody() {
 		return this.ifBody;
 	}
 	
-	public Statement getElseBody() {
+	private Statement getElseBody() {
 		return this.elseBody;
 	}
 
@@ -72,20 +72,23 @@ public class If extends Statement {
 					throw new BreakException(0);
 				}
 			}
-			if (getElseBody() != null)
+			else
 			{
-				try {
-					time = getElseBody().evaluate(globals,counter);
-				} catch (BreakException exc) {
-					time = exc.getTime();
-				}
-				try {
-					time = checkTime(time,this);
-					globals.put("timer",new DoubleType(time));
-					resetCounter();
-				} catch (TerminateException exc) {
-					globals.put("timer",new DoubleType());
-					throw new BreakException(0);
+				if (getElseBody() != null)
+				{
+					try {
+						time = getElseBody().evaluate(globals,counter);
+					} catch (BreakException exc) {
+						time = exc.getTime();
+					}
+					try {
+						time = checkTime(time,this);
+						globals.put("timer",new DoubleType(time));
+						resetCounter();
+					} catch (TerminateException exc) {
+						globals.put("timer",new DoubleType());
+						throw new BreakException(0);
+					}
 				}
 			}
 		}

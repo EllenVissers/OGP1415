@@ -25,19 +25,19 @@ public class Sequence extends Statement {
 	private List<Statement> statements;
 	private int SequenceCounter;
 	
-	public List<Statement> getStatements() {
+	protected List<Statement> getStatements() {
 		return this.statements;
 	}
 	
-	public int getSequenceCounter() {
+	private int getSequenceCounter() {
 		return this.SequenceCounter;
 	}
 	
-	public void setSequenceCounter(int c) {
+	private void setSequenceCounter(int c) {
 		this.SequenceCounter = c;
 	}
 
-	public Statement getStatementAt(int i) throws IndexOutOfBoundsException{
+	protected Statement getStatementAt(int i) throws IndexOutOfBoundsException{
 		if((i<0 || i >= getStatements().size()))
 			throw new IndexOutOfBoundsException();
 		else

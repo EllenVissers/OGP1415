@@ -17,7 +17,7 @@ public class Wait extends Statement {
 	
 	private Expression duration;
 	
-	public Expression getDuration() {
+	private Expression getDuration() {
 		return this.duration;
 	}
 	

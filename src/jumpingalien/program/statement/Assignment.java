@@ -1,6 +1,5 @@
 package jumpingalien.program.statement;
 import java.util.Map;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.DoubleType;
@@ -19,15 +18,15 @@ public class Assignment extends Statement {
 	private Type type;
 	private Expression value;
 	
-	public String getVariableName() {
+	private String getVariableName() {
 		return this.name;
 	}
 	
-	public Type getVariableType() {
+	private Type getVariableType() {
 		return this.type;
 	}
 	
-	public Expression getExpression() {
+	protected Expression getExpression() {
 		return this.value;
 	}
 	

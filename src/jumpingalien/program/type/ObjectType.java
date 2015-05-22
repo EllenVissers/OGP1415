@@ -1,5 +1,4 @@
 package jumpingalien.program.type;
-
 import java.util.Map;
 
 import jumpingalien.model.AllObjects;
@@ -17,6 +16,7 @@ public class ObjectType extends Type {
 	
 	private AllObjects obj;
 	
+	@Override
 	public AllObjects getValue() {
 		return this.obj;
 	}

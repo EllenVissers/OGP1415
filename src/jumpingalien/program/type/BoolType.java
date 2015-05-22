@@ -1,7 +1,5 @@
 package jumpingalien.program.type;
-
 import java.util.Map;
-
 import jumpingalien.program.expression.Expression;
 
 public class BoolType extends Type {
@@ -16,6 +14,7 @@ public class BoolType extends Type {
 	
 	private Boolean bool;
 	
+	@Override
 	public Boolean getValue() {
 		return this.bool;
 	}

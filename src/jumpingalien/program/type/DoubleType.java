@@ -1,5 +1,4 @@
 package jumpingalien.program.type;
-
 import java.util.Map;
 import jumpingalien.program.expression.Expression;
 
@@ -15,6 +14,7 @@ public class DoubleType extends Type {
 	
 	private Double value;
 	
+	@Override
 	public Double getValue() {
 		return this.value;
 	}

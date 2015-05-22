@@ -412,7 +412,7 @@ public class Shark extends GameObject {
 	
 	@Override
 	public Void startMove(Orientation orientation) {
-		if (getOrientation() != orientation) {
+		if ((getOrientation() != orientation) || ((getOrientation() == orientation) && (getXVelocity() == 0))) {
 			if (orientation == Orientation.RIGHT)
 				setXAcc(accx);
 			else

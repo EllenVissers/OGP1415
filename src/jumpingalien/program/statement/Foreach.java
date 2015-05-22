@@ -3,7 +3,7 @@ package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.*;
-import jumpingalien.model.AllObjects;
+import jumpingalien.model.*;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import static java.util.stream.Collectors.toList;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.part3.programs.IProgramFactory.SortDirection;
 
@@ -40,7 +41,7 @@ public class Foreach extends Statement {
 		this.direction = sortDirection;
 		this.body = body;
 	}
-	
+
 	private String name;
 	private Kind kind;
 	private Expression where;
@@ -49,35 +50,35 @@ public class Foreach extends Statement {
 	private Statement body;
 	private int forEachCounter;
 	
-	public String getVariableName() {
+	private String getVariableName() {
 		return this.name;
 	}
 	
-	public Kind getVariableKind() {
+	private Kind getVariableKind() {
 		return this.kind;
 	}
 	
-	public Expression getWhere() {
+	private Expression getWhere() {
 		return this.where;
 	}
 	
-	public Expression getSort() {
+	private Expression getSort() {
 		return this.sort;
 	}
 	
-	public SortDirection getSortDirection() {
+	private SortDirection getSortDirection() {
 		return this.direction;
 	}
 	
-	public Statement getBody() {
+	private Statement getBody() {
 		return this.body;
 	}
 	
-	public int getForEachCounter() {
+	private int getForEachCounter() {
 		return this.forEachCounter;
 	}
 	
-	public void setForEachCounter(int c) {
+	private void setForEachCounter(int c) {
 		this.forEachCounter = c;
 	}
 	
@@ -106,40 +107,53 @@ public class Foreach extends Statement {
 			String name = getVariableName();
 			Kind kind = getVariableKind();
 			ArrayList<Type> all = new ArrayList<Type>(globals.values());
-			Stream allStream = all.stream();
-			Stream filteredStream = allStream.filter(t->((AllObjects)((Type)t).getValue()).isKind(kind));
+			ArrayList<Type> list = new ArrayList<Type>();
+			for (Type t : all)
+			{
+				if ((t instanceof ObjectType) && ((AllObjects)t.getValue()).isKind(kind))
+					list.add(t);
+			}
+			System.out.println(list.size());
 			if (getWhere() != null)
 			{
 				Type oldthis = globals.get("this");
-				for (Type o : all)
+				for (Type o : list)
+					System.out.println(o.getValue());
+				for (Type o : list)
 				{
+					System.out.println(o.getValue());
 					globals.put("this", o);
-					if (! (Boolean)(getWhere().evaluate(globals)))
-						all.remove(o);
+					System.out.println(! (Boolean)(getWhere().evaluate(globals)));
+//					if (! (Boolean)(getWhere().evaluate(globals)))
+//					{
+//						System.out.println("hier");
+//						list.remove(o);
+//					}
+						
 				}
 				globals.put("this",oldthis);
 			}
+			System.out.println("hier");
 			if (getSort() != null)
 			{
 				Type oldthis = globals.get("this");
 				ArrayList<Double> values = new ArrayList<Double>();
-				for (Type o : all)
+				for (Type o : list)
 				{
 					globals.put("this", o);
 					double val = (double) getSort().evaluate(globals);
 					values.add(val);
-					Map<Double,Type> unsorted = new HashMap<Double,Type>();
-					for (int i = 0; i<values.size(); i++)
-					{
-						unsorted.put(values.get(i), all.get(i));
-					}
-					Map<Double,Type> sorted = new TreeMap<Double,Type>(unsorted);
-					all = new ArrayList<Type>(sorted.values());
 				}
+				Map<Double,Type> unsorted = new HashMap<Double,Type>();
+				for (int i = 0; i<values.size(); i++)
+					unsorted.put(values.get(i), list.get(i));
+				Map<Double,Type> sorted = new TreeMap<Double,Type>(unsorted);
+				list = new ArrayList<Type>(sorted.values());
 				globals.put("this",oldthis);
 			}
+			System.out.println(list.size());
 			Type old = globals.get(name);
-			ArrayList<Type> newall = new ArrayList(all.subList(getForEachCounter(), all.size()));
+			ArrayList<Type> newall = new ArrayList(list.subList(getForEachCounter(), list.size()));
 			for (Type o : newall)
 			{
 				try {
@@ -149,7 +163,6 @@ public class Foreach extends Statement {
 					time = exc.getTime();
 				}
 				try {
-					
 					time = checkTime(time,getBody());
 					globals.put("timer", new DoubleType(time));
 					resetCounter();
@@ -157,10 +170,11 @@ public class Foreach extends Statement {
 				} catch (TerminateException exc) {
 					setForEachCounter(all.indexOf(o));
 					globals.put("timer",new DoubleType());
+					globals.put(name,old);
 					throw new BreakException(0);
 				}
-				globals.put(name,old);
 			}
+			globals.put(name,old);
 		}
 		return time;
 	}

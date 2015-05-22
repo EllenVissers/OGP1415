@@ -20,19 +20,19 @@ public class While extends Statement {
 	private Statement body;
 	private int whileCounter;
 	
-	public Expression getCondition() {
+	private Expression getCondition() {
 		return this.condition;
 	}
 	
-	public Statement getBody() {
+	private Statement getBody() {
 		return this.body;
 	}
 	
-	public int getWhileCounter() {
+	private int getWhileCounter() {
 		return this.whileCounter;
 	}
 	
-	public void setWhileCounter(int c) {
+	private void setWhileCounter(int c) {
 		this.whileCounter = c;
 	}
 	

@@ -19,11 +19,11 @@ public abstract class Statement{
 		return this.sourceLocation;
 	}
 	
-	public int getStatementCounter() {
+	protected int getStatementCounter() {
 		return this.SCounter;
 	}
 	
-	public void setStatementCounter(int c) {
+	private void setStatementCounter(int c) {
 		this.SCounter = c;
 	}
 	
@@ -40,7 +40,7 @@ public abstract class Statement{
 		}
 	}
 	
-	public void resetCounter() {
+	protected void resetCounter() {
 		if (getStatementCounter() == 0)
 			setStatementCounter(1);
 		else
@@ -49,7 +49,7 @@ public abstract class Statement{
 	
 	public abstract double evaluate(Map<String,Type> globals, int counter) throws BreakException;
 	
-	public Program getProgram() {
+	protected Program getProgram() {
 		return program;
 	}
 }

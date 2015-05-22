@@ -1,5 +1,4 @@
 package jumpingalien.program.type;
-
 import java.util.Map;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.program.expression.Expression;
@@ -16,6 +15,7 @@ public class DirectionType extends Type {
 	
 	private Direction dir;
 	
+	@Override
 	public Direction getValue() {
 		return this.dir;
 	}
