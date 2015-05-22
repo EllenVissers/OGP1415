@@ -1,4 +1,5 @@
 package jumpingalien.program.statement;
+import java.util.List;
 import java.util.Map;
 
 import jumpingalien.part3.programs.SourceLocation;
@@ -36,6 +37,15 @@ public class While extends Statement {
 	}
 	
 	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		if (getBody() instanceof Break)
+			this.getProgram().setWellFormed(false);
+		if (getBody() instanceof Sequence){
+			List<Statement> statements = ((Sequence) getBody()).getStatements();
+			for (Statement s : statements){
+				if (s instanceof Break)
+					this.getProgram().setWellFormed(false);
+			}
+		}
 		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{

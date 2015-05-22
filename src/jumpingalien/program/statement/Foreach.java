@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
@@ -81,6 +82,24 @@ public class Foreach extends Statement {
 	}
 	
 	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		if (getBody() instanceof Break)
+			this.getProgram().setWellFormed(false);
+		if (getBody() instanceof Sequence){
+			List<Statement> statements = ((Sequence) getBody()).getStatements();
+			for (Statement s : statements){
+				if (s instanceof Break)
+					this.getProgram().setWellFormed(false);
+			}
+		}
+		if (getBody() instanceof ActionStatement)
+			this.getProgram().setWellFormed(false);
+		if (getBody() instanceof Sequence){
+			List<Statement> statements = ((Sequence) getBody()).getStatements();
+			for (Statement s : statements){
+				if (s instanceof ActionStatement)
+					this.getProgram().setWellFormed(false);
+			}
+		}
 		double time = (double) globals.get("timer").getValue();
 		if (counter == getStatementCounter())
 		{
