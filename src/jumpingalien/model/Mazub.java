@@ -24,7 +24,7 @@ import jumpingalien.model.CollisionException;
  * @invar 	Mazub's horizontal speed will never be greater than the maximum speed.
  * 			| this.getXVelocity() <= this.getMaxVel()
  * @author Ellen Vissers, Nina Versin
- * @version 2.0
+ * @version 3.0
  */
 public class Mazub extends GameObject {
 
@@ -361,7 +361,7 @@ public class Mazub extends GameObject {
 	 * 			| getLeftButton() || getRightButton()
 	 */
 	private boolean isMoving() {
-		return (getLeftButton() || getRightButton());
+		return (isMovingLeft() || isMovingRight());
 	}
 	
 //	/**
@@ -925,7 +925,7 @@ public class Mazub extends GameObject {
 		if (isTerminated())
 		{
 			setTerminatedTime(getTerminatedTime() + t);
-			if (Util.fuzzyGreaterThanOrEqualTo(getTerminatedTime(),0.6))
+			if (Util.fuzzyGreaterThanOrEqualTo(getTerminatedTime(),0.6) && (! (this instanceof Buzam)))
 				getWorld().setGameOver(true);
 		}
 		if ((! isTerminated()) && (t != 0.0))
@@ -963,7 +963,9 @@ public class Mazub extends GameObject {
 			else
 				timerMagma = 0;
 		}
-		checkWon();
+		//TODO
+		if (! (this instanceof Buzam))
+			checkWon();
 	}
 	
 	/**
@@ -982,13 +984,11 @@ public class Mazub extends GameObject {
 	}
 	
 	/**
-	 * Update Mazub's new position and velocity after the given time duration.
+	 * Update Buzam's new position and velocity after the given time duration.
 	 * @param 	time
 	 * 			The time duration between this position and the next one.
-	 * @effect	The time it takes to move 1 pixel is computed with getDT.
-	 * 			| getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc())
-	 * @effect	The new position and velocity are computed with the method advance.
-	 * 			| advance(dt)
+	 * @effect	The new position and velocity are computed with the method advanceWithDT.
+	 * 			| advanceWithDT(time)
 	 * @throws	ModelException
 	 * 			The given time is not valid (between 0 and 0.2)
 	 * 			| ! isValidTime(time)
@@ -997,6 +997,10 @@ public class Mazub extends GameObject {
 	public void advanceTime(double time) throws ModelException {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
+		advanceWithDT(time);
+	}
+	
+	public void advanceWithDT(double time) {
 		while (time > 0)
 		{
 			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());

@@ -6,8 +6,6 @@ import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.type.ObjectType;
-import jumpingalien.util.Util;
-
 import java.util.ArrayList;
 
 
@@ -20,7 +18,7 @@ import java.util.ArrayList;
  * @invar 	The horizontal speed will never be greater than the maximum speed.
  * 			| getXVelocity() <= getMaxVel()
  * @author 	Ellen Vissers, Nina Versin
- * @version 1.0
+ * @version 2.0
  */
 public abstract class GameObject extends AllObjects {
 
@@ -74,14 +72,6 @@ public abstract class GameObject extends AllObjects {
 	}
 	
 	//VARIABLES
-//	/**
-//	 * Variable registering the horizontal position.
-//	 */
-	private double x;
-//	/**
-//	 * Variable registering the vertical position.
-//	 */
-	private double y;
 	/**
 	 * Variable registering the horizontal velocity.
 	 */
@@ -110,10 +100,6 @@ public abstract class GameObject extends AllObjects {
 	 * Variable registering the list of images of the game object.
 	 */
 	private Sprite[] sprites;
-//	/**
-//	 * Variable registering the world in which the game object is situated.
-//	 */
-//	private World world;
 	/**
 	 * Variable registering the number of hitpoints.
 	 */
@@ -150,68 +136,19 @@ public abstract class GameObject extends AllObjects {
 	 * Variable registering the number of hitpoints a shark and a slime lose when they collide.
 	 */
 	private int SharkSlime = 50;
+	/**
+	 * Variable registering the number of hitpoints an mazub and a buzam lose when they collide.
+	 */
+	private int MazubBuzam = 50;
 	
 	//GETTERS AND SETTERS
-//	/**
-//	 * Return the current horizontal position of the game object.
-//	 * @return 	The horizontal position.
-//	 * 			| this.x
-//	 */
-	@Basic
-	public double getXPosition() {
-		return this.x;
-	}
-	
-	/**
-	 * Set the horizontal position of the game object to the given position.
-	 * @param 	position  
-	 * 			The position we want to set the horizontal position to.
-	 * @post 	If the given position is not a valid one, the object is terminated.
-	 * 			| if (! isValidXPosition(position))
-	 * 			| then terminate()
-	 * @post 	The horizontal position is updated to the given position.
-	 * 			| new.pos_x = position
-	 */
-	@Override
-	protected void setXPosition(double position) {
-		if (! isValidXPosition(position))
-			terminate();
-		this.x = position;
-	}
-	
-//	/**
-//	 * Return the current vertical position of the game object.
-//	 * @return	The vertical position.
-//	 * 			| this.y
-//	 */
-	@Basic
-	public double getYPosition() {
-		return this.y;
-	}
-	
-	/**
-	 * Set the vertical position of the game object to the given position.
-	 * @param 	position 
-	 * 			The position we want to set the vertical position to.
-	 * @post 	If the given position is not a valid one, the object is terminated.
-	 * 			| if (! isValidYPosition(position))
-	 * 			| then terminate()
-	 * @post 	The vertical position is updated to the given position.
-	 * 			| new.pos_y = position
-	 */
-	@Override
-	protected void setYPosition(double position) {
-		if (! isValidYPosition(position))
-			terminate();
-		this.y = position;
-	}
 	
 	/**
 	 * Return the current horizontal velocity of the game object.
 	 * @return	The horizontal velocity.
 	 * 			|this.vx
 	 */
-	@Basic
+	@Basic @Override
 	public double getXVelocity() {
 		return this.vx;
 	}
@@ -232,7 +169,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The vertical velocity.
 	 * 			| this.vy
 	 */
-	@Basic
+	@Basic @Override
 	public double getYVelocity() {
 		return this.vy;
 	}
@@ -253,7 +190,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The horizontal acceleration.
 	 * 			|this.ax
 	 */
-	@Basic
+	@Basic @Override
 	public double getXAcc() {
 		return this.ax;
 	}
@@ -274,7 +211,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The vertical acceleration.
 	 * 			| this.ay
 	 */
-	@Basic
+	@Basic @Override
 	public double getYAcc() {
 		return this.ay;
 	}
@@ -325,7 +262,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return 	The current number of hitpoints.
 	 * 			|this.hitPoints
 	 */
-	@Basic
+	@Basic @Override
 	public int getHitPoints() {
 		return this.hitPoints;
 	}
@@ -342,50 +279,6 @@ public abstract class GameObject extends AllObjects {
 		if (! isValidNbHitPoints(points))
 			terminate();
 		this.hitPoints = points;
-	}
-	
-//	/**
-//	 * Return the world in which the game object is situated.
-//	 * @return 	The game world.
-//	 * 			|this.world
-//	 */
-//	@Basic
-//	public World getWorld() {
-//		return this.world;
-//	}
-	
-	/**
-	 * Set the game world to the given world.
-	 * @param 	world
-	 * 			The new game world.
-	 * @post	If the new world is null, the object is removed from the old world.
-	 * 			| if (this instanceof Mazub)
-	 *			| 	getWorld().getAllAliens().remove(this);
-	 *			| else if (this instanceof Plant)
-	 *			|	getWorld().getAllPlants().remove(this);
-	 *			| else if (this instanceof Shark)
-	 *			|	getWorld().getAllSharks().remove(this);
-	 *			| else if (this instanceof Slime)
-	 *			|	getWorld().getAllSlimes().remove(this);
-	 */
-	@Override
-	protected void setWorld(World world) {
-		if (world != getWorld())
-		{
-			if (world == null)
-			{
-				if (this instanceof Mazub)
-					getWorld().getAllAliens().remove(this);
-				else if (this instanceof Plant)
-					getWorld().getAllPlants().remove(this);
-				else if (this instanceof Shark)
-					getWorld().getAllSharks().remove(this);
-				else if (this instanceof Slime)
-					getWorld().getAllSlimes().remove(this);
-			}
-			else
-				this.world = world;
-		}
 	}
 	
 	/**
@@ -475,33 +368,6 @@ public abstract class GameObject extends AllObjects {
 	}
 	
 	//CHECKERS
-	/**
-	 * Check whether the given position is a valid horizontal position.
-	 * @param 	pos
-	 * 			The given position.
-	 * @return	True if the position is valid.
-	 * 			| (pos > 0) && (pos < getWorld().getNbTilesX() * getWorld().getTileSize())
-	 */
-	protected boolean isValidXPosition(double pos) {
-		if (getWorld() == null)
-			return true;
-		int xmax = getWorld().getNbTilesX() * getWorld().getTileSize();
-		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,xmax-1));
-	}
-	
-	/**
-	 * Check whether the given position is a valid vertical position.
-	 * @param 	pos
-	 * 			The given position.
-	 * @return	True if the position is valid.
-	 * 			| (pos >= 0) && (pos < getWorld().getNbTilesY() * getWorld().getTileSize())
-	 */
-	protected boolean isValidYPosition(double pos) {
-		if (getWorld() == null)
-			return true;
-		int ymax = getWorld().getNbTilesY() * getWorld().getTileSize();
-		return (Util.fuzzyLessThanOrEqualTo(0,pos) && Util.fuzzyLessThanOrEqualTo(pos,ymax-1));
-	}
 	
 	/**
 	 * Check whether the given number of points is a valid number of hitpoints.
@@ -636,10 +502,12 @@ public abstract class GameObject extends AllObjects {
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
 		ArrayList<Shark> sharks = getWorld().getAllSharks();
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<Buzam> buzams = getWorld().getAllBuzams();
 		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
 		allobjects.addAll(aliens);
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
+		allobjects.addAll(buzams);
 		allobjects.remove(this);
 		int ymin = (int) Math.round(getYPosition());
 		for (GameObject obj : allobjects)
@@ -818,12 +686,14 @@ public abstract class GameObject extends AllObjects {
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
 		ArrayList<Shark> sharks = getWorld().getAllSharks();
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<Buzam> buzams = getWorld().getAllBuzams();
 		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
 		allobjects.addAll(aliens);
 		if (this instanceof Mazub)
 			allobjects.addAll(plants);
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
+		allobjects.addAll(buzams);
 		allobjects.remove(this);
 		if (this instanceof Plant)
 		{
@@ -854,6 +724,8 @@ public abstract class GameObject extends AllObjects {
 	
 	/**
 	 * Update the states of a Plant and an alien after collision.
+	 * @param 	mazub
+	 * 			The Mazub with which the game object Plant collides.
 	 * @param 	plant
 	 * 			The Plant with which the game object Mazub collides.
 	 * @effect	If Mazub has not reached his maximum number of hitpoints, the plant is terminated with terminate and the number of
@@ -871,8 +743,12 @@ public abstract class GameObject extends AllObjects {
 	
 	/**
 	 * Update the states of a Shark and an alien after collision.
+	 * @param 	mazub
+	 * 			The Mazub with which the game object Shark collides.
 	 * @param 	shark
 	 * 			The Shark with which the game object Mazub collides.
+	 * @param	hit
+	 * 			A boolean registering whether the object has to get hit or not (Mazub's bottom perimeter cannot get hit).
 	 * @effect	The number of hitpoints of the shark is updated with reduceHitPoints.
 	 * 			| shark.reduceHitPoints(MazubShark)
 	 * @effect	If Mazub is not immune, his number of hitpoints is updated with reduceHitPoints and his immune time is
@@ -891,8 +767,12 @@ public abstract class GameObject extends AllObjects {
 	
 	/**
 	 * Update the states of a Slime and an alien after collision.
+	 * @param 	mazub
+	 * 			The Mazub with which the game object Slime collides.
 	 * @param 	slime
 	 * 			The Slime with which the game object Mazub collides.
+	 * @param	hit
+	 * 			A boolean registering whether the object has to get hit or not (Mazub's bottom perimeter cannot get hit).
 	 * @effect	The number of hitpoints of the slime is updated with reduceHitPoints.
 	 * 			| slime.reduceHitPoints(MazubSlime)
 	 * @effect	If Mazub is not immune, his number of hitpoints is updated with reduceHitPoints and his immune time is
@@ -910,7 +790,38 @@ public abstract class GameObject extends AllObjects {
 	}
 	
 	/**
+	 * Update the states of a Buzam and a Mazub after collision.
+	 * @param 	mazub
+	 * 			The Mazub with which the game object Buzam collides.
+	 * @param 	buzam
+	 * 			The Buzam with which the game object Mazub collides.
+	 * @param	hit
+	 * 			A boolean registering whether the object has to get hit or not (Mazub's bottom perimeter cannot get hit).
+	 * @effect	If the alien is not immunue, the number of hitpoints of the aliens is updated with reduceHitPoints and their 
+	 * 			immune time is set with setImmuneTime.
+	 * 			| alien.reduceHitPoints(MazubSlime)
+	 * 			| alien.setImmuneTime(immuneDT)
+	 */
+	private void CollisionMazubBuzam(Mazub mazub, Buzam buzam, boolean hit) {
+		if (! (mazub instanceof Buzam))
+		{
+			if ((! mazub.isImmune()) && hit)
+			{
+				mazub.reduceHitPoints(MazubBuzam);
+				mazub.setImmuneTime(immuneDT);
+			}
+			if ((! mazub.isImmune()) && hit)
+			{
+				buzam.reduceHitPoints(MazubBuzam);
+				buzam.setImmuneTime(immuneDT);
+			}
+		}
+	}
+	
+	/**
 	 * Update the states of a Shark and a Slime after collision.
+	 * @param 	shark
+	 * 			The Shark with which the game object Slime collides.
 	 * @param 	slime
 	 * 			The Slime with which the game object Shark collides.
 	 * @effect	The number of hitpoints of the shark is updated with reduceHitPoints.
@@ -973,6 +884,8 @@ public abstract class GameObject extends AllObjects {
 				CollisionMazubShark((Mazub)this,(Shark)obj,true);
 			else if (obj instanceof Slime)
 				CollisionMazubSlime((Mazub)this,(Slime)obj,true);
+			else if (obj instanceof Buzam)
+				CollisionMazubBuzam((Mazub)this,(Buzam)obj,true);
 			return collH(exc,s);
 		}
 		if (this instanceof Shark)
@@ -1163,12 +1076,14 @@ public abstract class GameObject extends AllObjects {
 		ArrayList<Slime> slimes = getWorld().getAllSlimes();
 		ArrayList<Shark> sharks = getWorld().getAllSharks();
 		ArrayList<Mazub> aliens = getWorld().getAllAliens();
+		ArrayList<Buzam> buzams = getWorld().getAllBuzams();
 		ArrayList<GameObject> allobjects = new ArrayList<GameObject>();
 		allobjects.addAll(aliens);
 		if (this instanceof Mazub)
 			allobjects.addAll(plants);
 		allobjects.addAll(sharks);
 		allobjects.addAll(slimes);
+		allobjects.addAll(buzams);
 		allobjects.remove(this);
 		if (this instanceof Plant)
 		{
@@ -1227,6 +1142,13 @@ public abstract class GameObject extends AllObjects {
 					CollisionMazubSlime((Mazub)this,(Slime)obj,true);
 				else
 					CollisionMazubSlime((Mazub)this,(Slime)obj,false);
+			}
+			else if (obj instanceof Buzam)
+			{
+				if (exc.getVertical())
+					CollisionMazubBuzam((Mazub)this,(Buzam)obj,true);
+				else
+					CollisionMazubBuzam((Mazub)this,(Buzam)obj,false);
 			}
 			return collV(exc,h);
 		}
@@ -1321,12 +1243,4 @@ public abstract class GameObject extends AllObjects {
 	 */
 	public void advanceTime(double time) {
 	}
-
-//	@Override
-//	public boolean isDucking() {
-//		if (! (this instanceof Alien))
-//			return false;
-//		else
-//			return ((Alien)this).isDucking();
-//	}
 }
