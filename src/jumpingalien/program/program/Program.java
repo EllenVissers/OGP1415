@@ -39,9 +39,14 @@ public class Program {
 		getGlobalVariables().put(key,value);
 	}
 	
+	public boolean isWellFormed = true;
+	
+	public void setWellFormed(boolean bool){
+		this.isWellFormed = bool;
+	}
+	
 	public boolean isWellFormed() {
-		// TODO
-		return true;
+		return this.isWellFormed;
 	}
 	
 	public void execute(Map<String,Type> globals, double time) {
