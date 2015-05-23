@@ -8,6 +8,8 @@ import jumpingalien.model.Tile;
 import jumpingalien.model.World;
 import jumpingalien.program.expression.BinaryExpression;
 import jumpingalien.program.expression.Constant;
+//import jumpingalien.program.expression.GetTile;
+//import jumpingalien.program.expression.SearchObj;
 import jumpingalien.program.expression.UnaryExpression;
 import jumpingalien.program.type.*;
 import jumpingalien.part2.internal.Resources;
@@ -44,7 +46,9 @@ public class ExpressionTests {
 	private static UnaryExpression<AllObjects, Boolean> e14;
 	private static UnaryExpression<AllObjects, Boolean> e15;
 	private static UnaryExpression<AllObjects, Boolean> e16;
+//	private static SearchObj e17;
 	private static Constant<Direction> c3;
+//	private static GetTile e18;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -63,7 +67,7 @@ public class ExpressionTests {
 		
 		w1 = new World(50,40,25,500,175,35,21);
 		p1 = new Plant(0,0,s);
-		t1 = new Tile(0,0,w1,2);
+		t1 = new Tile(0.0,0.0,w1,2);
 		
 		w1.addPlant(p1);
 		
@@ -75,7 +79,7 @@ public class ExpressionTests {
 		c3 = new Constant<Direction>(loc,IProgramFactory.Direction.RIGHT);
 		
 		globals.put("plant", o1);
-		globals.put("tile", o2);
+		globals.put("this", o2);
 		
 		e1 = new UnaryExpression<Double,Double>(loc,d2,t->Math.sqrt(t));
 		e2 = new UnaryExpression<Boolean,Boolean>(loc,b1,t->!t);
@@ -93,6 +97,9 @@ public class ExpressionTests {
 		e14 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isMagma());
 		e15 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isWater());
 		e16 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isPassable());
+//		e17 = new SearchObj(loc,c3);
+//		System.out.println(t1);
+//		e18 = new GetTile(loc,new Constant<Double>(loc,0.0),new Constant<Double>(loc,0.0));
 		
 	}
 
@@ -120,13 +127,23 @@ public class ExpressionTests {
 		assertEquals(e10.evaluate(globals),new Boolean(true));
 	}
 	
+//	@Test
+//	public void SearchObjTest(){
+//		assertEquals(e17.evaluate(globals),p1);
+//	}
+	
 	@Test
 	public void ConstantTest(){
 		assertEquals(c1.evaluate(globals),p1);
 		assertEquals(c3.evaluate(globals),IProgramFactory.Direction.RIGHT);
 		assertEquals(b2.evaluate(globals),false);
 	}
-
+	
+//	@Test
+//	public void getTileTest(){
+//		assertEquals(e18.evaluate(globals),t1);
+//		System.out.println(w1.getTile(0, 0));
+//	}
 	
 	@Test
 	public void readVariableTest(){
