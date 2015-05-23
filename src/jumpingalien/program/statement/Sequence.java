@@ -25,7 +25,7 @@ public class Sequence extends Statement {
 	private List<Statement> statements;
 	private int SequenceCounter;
 	
-	protected List<Statement> getStatements() {
+	public List<Statement> getStatements() {
 		return this.statements;
 	}
 	

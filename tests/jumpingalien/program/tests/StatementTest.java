@@ -110,6 +110,8 @@ public class StatementTest {
 	public void Constructor_LegalCase() {
 		assertTrue(s6.getSourceLocation() == sl);
 		assertTrue(((Print)s6).getExpression().evaluate(globals) == new Constant<String>(sl,"print").evaluate(globals));
+		for (Statement s : ((Sequence)s7).getStatements())
+			assertTrue(s instanceof Print);
 	}
 	
 	@Test

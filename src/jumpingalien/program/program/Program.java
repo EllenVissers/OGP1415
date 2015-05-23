@@ -1,9 +1,10 @@
 package jumpingalien.program.program;
-
 import java.util.Map;
 
 import jumpingalien.model.AllObjects;
+import jumpingalien.program.statement.Break;
 import jumpingalien.program.statement.BreakException;
+import jumpingalien.program.statement.Sequence;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.ObjectType;
@@ -15,6 +16,12 @@ public class Program {
 		this.main = mainStatement;
 		this.global = globalVariables;
 		this.counter = 0;
+		if (mainStatement instanceof Break)
+			setWellFormed(false);
+		if (mainStatement instanceof Sequence)
+			for (Statement s : ((Sequence) mainStatement).getStatements())
+				if (s instanceof Break)
+					setWellFormed(false);
 	}
 	
 	public AllObjects getGameObject() {
