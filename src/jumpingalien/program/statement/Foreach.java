@@ -113,27 +113,19 @@ public class Foreach extends Statement {
 				if ((t instanceof ObjectType) && ((AllObjects)t.getValue()).isKind(kind))
 					list.add(t);
 			}
-			System.out.println(list.size());
 			if (getWhere() != null)
 			{
 				Type oldthis = globals.get("this");
-				for (Type o : list)
-					System.out.println(o.getValue());
+				ArrayList<Type> wherelist = new ArrayList<Type>();
 				for (Type o : list)
 				{
-					System.out.println(o.getValue());
 					globals.put("this", o);
-					System.out.println(! (Boolean)(getWhere().evaluate(globals)));
-//					if (! (Boolean)(getWhere().evaluate(globals)))
-//					{
-//						System.out.println("hier");
-//						list.remove(o);
-//					}
-						
+					if ((Boolean)(getWhere().evaluate(globals)))
+						wherelist.add(o);
 				}
+				list = wherelist;
 				globals.put("this",oldthis);
 			}
-			System.out.println("hier");
 			if (getSort() != null)
 			{
 				Type oldthis = globals.get("this");
@@ -144,20 +136,46 @@ public class Foreach extends Statement {
 					double val = (double) getSort().evaluate(globals);
 					values.add(val);
 				}
-				Map<Double,Type> unsorted = new HashMap<Double,Type>();
+				Map<Double,List<Type>> unsorted = new HashMap<Double,List<Type>>();
 				for (int i = 0; i<values.size(); i++)
-					unsorted.put(values.get(i), list.get(i));
-				Map<Double,Type> sorted = new TreeMap<Double,Type>(unsorted);
-				list = new ArrayList<Type>(sorted.values());
+				{
+					Double key = values.get(i);
+					List<Type> l;
+					if (unsorted.containsKey(key))
+						l = unsorted.get(key);
+					else
+						l = new ArrayList<Type>();
+					l.add(list.get(i));
+					unsorted.put(key, l);
+				}
+				Map<Double,List<Type>> sorted;
+				if (unsorted.size() > 1)
+					sorted = new TreeMap<Double,List<Type>>(unsorted);
+				else
+					sorted = unsorted;
+				List<List<Type>> sortedlist = new ArrayList<List<Type>>(sorted.values());
+				list = new ArrayList<Type>();
+				if (getSortDirection() == SortDirection.ASCENDING)
+				{
+					for (int i = 0; i<sorted.size(); i++)
+						for (int j = 0; j<sortedlist.get(i).size(); j++)
+							list.add(sortedlist.get(i).get(j));
+				}
+				else
+				{
+					for (int i = sorted.size()-1; i>=0; i--)
+						for (int j = sortedlist.get(i).size()-1; j>=0; j--)
+							list.add(sortedlist.get(i).get(j));
+				}
 				globals.put("this",oldthis);
 			}
-			System.out.println(list.size());
 			Type old = globals.get(name);
 			ArrayList<Type> newall = new ArrayList(list.subList(getForEachCounter(), list.size()));
 			for (Type o : newall)
 			{
 				try {
 					globals.put(name, o);
+					getBody().setStatementCounter(counter);
 					time = getBody().evaluate(globals,counter);
 				} catch (BreakException exc) {
 					time = exc.getTime();

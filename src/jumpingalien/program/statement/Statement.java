@@ -23,7 +23,7 @@ public abstract class Statement{
 		return this.SCounter;
 	}
 	
-	private void setStatementCounter(int c) {
+	protected void setStatementCounter(int c) {
 		this.SCounter = c;
 	}
 	

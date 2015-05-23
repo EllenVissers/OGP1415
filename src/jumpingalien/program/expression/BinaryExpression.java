@@ -62,5 +62,39 @@ public class BinaryExpression<L,R,O> extends Expression {
 			right = (R) getRightExpression().evaluate(globals);
 		return d.apply(left,right);
 	}
+	
+	/*
+	 public O evaluate(Map<String,Type> globals) {
+		BiFunction<L,R,O> d = getOperator();
+		L left;
+		if (getLeftExpression().evaluate(globals) == null)
+			left = (L) globals.get("this").getValue();
+		else if (getLeftExpression().evaluate(globals) instanceof Type)
+			left = (L) ((Type) getLeftExpression().evaluate(globals)).getValue();
+		else
+			left = (L) getLeftExpression().evaluate(globals);
+		
+		R right;
+		if (getRightExpression() == null)
+			right = (R) globals.get("this").getValue();
+		else if (getRightExpression().evaluate(globals) instanceof Type)
+			right = (R) ((Type) getRightExpression().evaluate(globals)).getValue();
+		else if (getRightExpression().evaluate(globals) instanceof IProgramFactory.Direction)
+		{
+			Orientation or;
+			IProgramFactory.Direction dir = (Direction) getRightExpression().evaluate(globals);
+			if (dir == Direction.RIGHT)
+				or = Orientation.RIGHT;
+			else if (dir == Direction.LEFT)
+				or = Orientation.LEFT;
+			else
+				or = Orientation.NONE;
+			return d.apply(left,(R)or);
+		}
+		else
+			right = (R) getRightExpression().evaluate(globals);
+		return d.apply(left,right);
+	}
+	 */
 
 }

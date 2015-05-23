@@ -28,7 +28,12 @@ public class UnaryExpression<I,O> extends Expression {
 	@Override
 	public O evaluate(Map<String,Type> globals) {
 		Function<I,O> d = getOperator();
-		return d.apply((I) getExpression().evaluate(globals));
+		I expr;
+		if (getExpression() != null)
+			expr = (I) getExpression().evaluate(globals);
+		else
+			expr = (I) globals.get("this").getValue();
+		return d.apply(expr);
 	}
 
 }
