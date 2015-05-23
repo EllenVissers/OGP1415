@@ -98,7 +98,7 @@ public class StatementTest {
 		sh3.endMove(Orientation.RIGHT);
 		sh3.endMove(Orientation.LEFT);
 		globals.put("this", new ObjectType(sh3));
-		s9 = new While(sl,(Expression)new BinaryExpression<Double,Double,Boolean>(sl,new UnaryExpression<AllObjects,Double>(sl,new Constant<AllObjects>(sl,sh3),t->t.getXAcc()),new Constant<Double>(sl,1.0),(a,b)->(a<b)),
+		s9 = new While(sl,(Expression)new BinaryExpression<Double,Double,Boolean>(sl,new UnaryExpression<GameObject,Double>(sl,new Constant<GameObject>(sl,sh3),t->t.getXAcc()),new Constant<Double>(sl,1.0),(a,b)->(a<b)),
 				(Statement)new ActionStatement<GameObject,Void>(sl,new Constant<Direction>(sl,Direction.RIGHT),(t,d)->t.startMove(d)));
 		// While (sh3.getXAcc()<1) do this.startMove(right);
 		globals.put("this", new ObjectType(sh4));

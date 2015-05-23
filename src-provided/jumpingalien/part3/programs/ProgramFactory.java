@@ -231,7 +231,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createGetHitPoints(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Double>(sourceLocation,expr,t->(double)t.getHitPoints());
+		return new UnaryExpression<GameObject,Double>(sourceLocation,expr,t->(double)t.getHitPoints());
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMazub(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Mazub));
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->(t instanceof Mazub));
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsShark(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Shark));
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->(t instanceof Shark));
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsSlime(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Slime));
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->(t instanceof Slime));
 	}
 
 	/**
@@ -289,7 +289,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsPlant(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->(t instanceof Plant));
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->(t instanceof Plant));
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDead(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isTerminated());
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->t.isTerminated());
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsPassable(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isPassable());
+		return new UnaryExpression<Tile,Boolean>(sourceLocation,expr,t->t.isPassable());
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsWater(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isWater());
+		return new UnaryExpression<Tile,Boolean>(sourceLocation,expr,t->t.isWater());
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsMagma(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isMagma());
+		return new UnaryExpression<Tile,Boolean>(sourceLocation,expr,t->t.isMagma());
 	}
 
 	/**
@@ -348,7 +348,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createIsAir(Expression expr, SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isAir());
+		return new UnaryExpression<Tile,Boolean>(sourceLocation,expr,t->t.isAir());
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createIsMoving(Expression expr, Expression direction,SourceLocation sourceLocation) {
-		return new BinaryExpression<AllObjects,IProgramFactory.Direction,Boolean>(sourceLocation,expr,direction,(t,d)->t.isMoving(d));
+		return new BinaryExpression<GameObject,IProgramFactory.Direction,Boolean>(sourceLocation,expr,direction,(t,d)->t.isMoving(d));
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsDucking(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isDucking());
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->t.isDucking());
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createIsJumping(Expression expr,
 			SourceLocation sourceLocation) {
-		return new UnaryExpression<AllObjects,Boolean>(sourceLocation,expr,t->t.isJumping());
+		return new UnaryExpression<GameObject,Boolean>(sourceLocation,expr,t->t.isJumping());
 	}
 
 	/**

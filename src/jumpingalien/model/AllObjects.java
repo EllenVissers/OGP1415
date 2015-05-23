@@ -1,6 +1,5 @@
 package jumpingalien.model;
 import java.util.ArrayList;
-import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.util.Util;
 
@@ -203,19 +202,10 @@ public abstract class AllObjects {
 		return true;
 	}
 
-	public abstract double getXVelocity();
-	public abstract double getYVelocity();
-	public abstract double getXAcc();
-	public abstract double getYAcc();
-	public abstract boolean isTerminated();
-	public abstract int getHitPoints();
-	public abstract boolean isPassable();
-	public abstract boolean isMagma();
-	public abstract boolean isAir();
-	public abstract boolean isWater();
-	public abstract boolean isMoving(IProgramFactory.Direction direction);
-	public abstract boolean isDucking();
-	public abstract boolean isJumping();
+	//public abstract double getXVelocity();
+	//public abstract double getYVelocity();
+	//public abstract double getXAcc();
+	//public abstract double getYAcc();
 	public abstract double getWidth();
 	public abstract double getHeight();
 }
