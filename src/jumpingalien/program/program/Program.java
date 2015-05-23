@@ -2,9 +2,11 @@ package jumpingalien.program.program;
 
 import java.util.Map;
 
+import jumpingalien.model.AllObjects;
 import jumpingalien.program.statement.BreakException;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.DoubleType;
+import jumpingalien.program.type.ObjectType;
 import jumpingalien.program.type.Type;
 
 public class Program {
@@ -15,9 +17,18 @@ public class Program {
 		this.counter = 0;
 	}
 	
+	public AllObjects getGameObject() {
+		return this.gameObject;
+	}
+	
+	public void setGameObject(AllObjects obj){
+		this.gameObject = obj;
+	}
+
 	private Statement main;
 	private Map<String,Type> global;
 	private int counter;
+	private AllObjects gameObject;
 	
 	public Statement getMainStatement() {
 		return this.main;
@@ -50,6 +61,7 @@ public class Program {
 	}
 	
 	public void execute(Map<String,Type> globals, double time) {
+		globals.put("this", new ObjectType(getGameObject()));
 		globals.put("timer", new DoubleType(time));
 		while (((DoubleType)globals.get("timer")).getValue() > 0)
 		{

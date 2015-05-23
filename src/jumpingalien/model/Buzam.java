@@ -79,6 +79,7 @@ public class Buzam extends Mazub {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
 		if (getProgram() != null)
+			getProgram().setGameObject(this);
 			getProgram().execute(getProgram().getGlobalVariables(), time);
 		advanceWithDT(time);
 	}

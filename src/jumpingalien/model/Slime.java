@@ -441,6 +441,7 @@ public class Slime extends GameObject {
 			throw new ModelException("Invalid time");
 		if (getProgram() != null)
 		{
+			getProgram().setGameObject(this);
 			getProgram().execute(getProgram().getGlobalVariables(),time);
 			advanceWithDT(time);
 		}

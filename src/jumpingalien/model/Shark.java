@@ -733,8 +733,10 @@ public class Shark extends GameObject {
 	public void advanceTime(double time) throws ModelException {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
-		if (getProgram() != null)
+		if (getProgram() != null){
+			getProgram().setGameObject(this);
 			getProgram().execute(getProgram().getGlobalVariables(), time);
+		}
 		else
 		{
 			if (reachesTimeSlot(time))
