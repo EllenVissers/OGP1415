@@ -29,7 +29,6 @@ public class GetTile extends Expression {
 	public Tile evaluate(Map<String,Type> globals) {
 		double x = ((Constant<Double>)getLeftExpression()).evaluate(globals);
 		double y = ((Constant<Double>)getRightExpression()).evaluate(globals);
-		System.out.println(globals.get("this"));
 		World world = ((ObjectType)globals.get("this")).getValue().getWorld();
 		int feature = world.getFeatureAt((int) Math.round(x), (int) Math.round(y));
 		return new Tile(x,y,world,feature);
