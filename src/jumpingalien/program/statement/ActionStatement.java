@@ -10,6 +10,7 @@ import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.Orientation;
 import jumpingalien.model.Plant;
+import jumpingalien.model.Shark;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.part3.programs.IProgramFactory;

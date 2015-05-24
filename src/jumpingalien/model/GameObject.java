@@ -5,6 +5,7 @@ import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
+import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.type.ObjectType;
 
@@ -474,12 +475,19 @@ public abstract class GameObject extends AllObjects {
 		return true;
 	}
 	
+	private Orientation setToOrientation(IProgramFactory.Direction dir) {
+		if (dir == Direction.RIGHT)
+			return Orientation.RIGHT;
+		else if (dir == Direction.LEFT)
+			return Orientation.LEFT;
+		return Orientation.NONE;
+	}
+	
 	public boolean isMoving(IProgramFactory.Direction direction) {
-		if (direction == IProgramFactory.Direction.RIGHT)
-			if ((getOrientation() == Orientation.RIGHT) && (getXVelocity() > 0))
+		Orientation or = setToOrientation(direction);
+		if ((or == Orientation.RIGHT) && (getXVelocity() > 0))
 				return true;
-		if (direction == IProgramFactory.Direction.LEFT)
-			if ((getOrientation() == Orientation.LEFT) && (getXVelocity() < 0))
+		else if ((or == Orientation.LEFT) && (getXVelocity() < 0))
 				return true;
 		return false;
 	}

@@ -20,7 +20,7 @@ import jumpingalien.util.Util;
  * 			| this.Orientation != Orientation.NONE
  * 
  * @author Ellen Vissers, Nina Versin
- * @version 1.0
+ * @version 2.0
  */
 public class Slime extends GameObject {
 

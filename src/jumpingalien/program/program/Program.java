@@ -116,8 +116,6 @@ public class Program {
 	public void execute(Map<String,Type> globals, double time) {
 		globals.put("this", new ObjectType(getGameObject()));
 		globals.put("timer", new DoubleType(time));
-		if (getMainStatement() instanceof Break)
-			setWellFormed(false);
 		while (((DoubleType)globals.get("timer")).getValue() > 0)
 		{
 			if (getMainStatement().isDone())

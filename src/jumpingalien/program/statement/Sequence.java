@@ -53,8 +53,8 @@ public class Sequence extends Statement {
 					globals.put("timer",new DoubleType());
 					throw new BreakException(0);
 				}
+				s.setDone(true);
 			}
-			s.setDone(true);
 		}
 		this.setDone(true);
 		return time;

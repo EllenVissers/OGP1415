@@ -16,7 +16,7 @@ import jumpingalien.program.program.Program;
  * @invar 	A Plant's orientation will never be NONE.
  * 			| getOrientation() != Orientation.NONE
  * @author Ellen Vissers, Nina Versin
- * @version 1.0
+ * @version 2.0
  */
 public class Plant extends GameObject {
 	

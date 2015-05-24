@@ -3,6 +3,12 @@ import java.util.ArrayList;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.util.Util;
 
+/**
+ * A class of Objects involving a horizontal and vertical position and a world.
+ * 
+ * @author Ellen Vissers, Nina Versin
+ * @version 1.0
+ */
 public abstract class AllObjects {
 	
 	/**

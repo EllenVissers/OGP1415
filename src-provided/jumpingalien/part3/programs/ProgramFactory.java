@@ -5,7 +5,6 @@ import jumpingalien.program.type.*;
 import jumpingalien.program.expression.*;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.statement.*;
-import jumpingalien.util.Util;
 import jumpingalien.model.*;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Type, Program> {
@@ -51,7 +50,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	 */
 	@Override
 	public Expression createSelf(SourceLocation sourceLocation) {
-		return new Constant<Object>(sourceLocation,this);
+		return new Self(sourceLocation);
 	}
 
 	/** An expression that evaluates to the given direction */
@@ -172,7 +171,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(Util.fuzzyEquals(a,b)));
+		return new BinaryExpression<Object,Object,Boolean>(sourceLocation,left,right,(a,b)->a==b);
 	}
 
 	/**
@@ -182,7 +181,7 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Ty
 	@Override
 	public Expression createNotEquals(Expression left, Expression right,
 			SourceLocation sourceLocation) {
-		return new BinaryExpression<Double,Double,Boolean>(sourceLocation,left,right,(a,b)->(a!=b));
+		return new BinaryExpression<Object,Object,Boolean>(sourceLocation,left,right,(a,b)->(a!=b));
 	}
 
 	/**

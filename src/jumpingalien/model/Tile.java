@@ -1,5 +1,10 @@
 package jumpingalien.model;
-
+/**
+ * A class of Tiles involving a horizontal and vertical position, a world and a feature.
+ * 
+ * @author Ellen Vissers, Nina Versin
+ * @version 1.0
+ */
 public class Tile extends AllObjects{
 
 	/**
@@ -15,7 +20,10 @@ public class Tile extends AllObjects{
 	 */
 	public Tile(double pixelX, double pixelY, World world, int feature) {
 		super(pixelX,pixelY,world);
-		this.feature = feature;
+		if (world == null)
+			this.feature = 0;
+		else
+			this.feature = feature;
 	}
 	
 	/**

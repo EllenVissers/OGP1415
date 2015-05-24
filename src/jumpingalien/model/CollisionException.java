@@ -7,9 +7,8 @@ import jumpingalien.model.GameObject;
  * @author Ellen Vissers, Nina Versin
  * @version	2.0
  */
+@SuppressWarnings("all")
 public class CollisionException extends Exception {
-
-	private static final long serialVersionUID = 113601848752683609L;
 	
 	private GameObject object;
 	private Orientation orientation;

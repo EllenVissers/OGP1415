@@ -25,12 +25,12 @@ public class GetTile extends Expression {
 		return this.y;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Tile evaluate(Map<String,Type> globals) {
-		double x = ((Constant<Double>)getLeftExpression()).evaluate(globals);
-		double y = ((Constant<Double>)getRightExpression()).evaluate(globals);
+		double x = (double) getLeftExpression().evaluate(globals);
+		double y = (double) getRightExpression().evaluate(globals);
 		World world = ((ObjectType)globals.get("this")).getValue().getWorld();
-		int feature = world.getFeatureAt((int) Math.round(x), (int) Math.round(y));
+		int[][] tilepos = world.getTilePositions((int)Math.round(x),(int)Math.round(y),(int)Math.round(x),(int)Math.round(y));
+		int feature = world.getFeatureAt(tilepos[0][0], tilepos[0][1]);
 		return new Tile(x,y,world,feature);
 	}
 

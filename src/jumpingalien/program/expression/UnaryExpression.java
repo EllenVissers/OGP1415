@@ -1,5 +1,4 @@
 package jumpingalien.program.expression;
-
 import java.util.function.Function;
 import jumpingalien.part3.programs.SourceLocation;
 import java.util.Map;
@@ -29,7 +28,9 @@ public class UnaryExpression<I,O> extends Expression {
 	public O evaluate(Map<String,Type> globals) {
 		Function<I,O> d = getOperator();
 		I expr;
-		if (getExpression() != null)
+		if (getExpression() instanceof ReadVariable)
+			expr = (I) ((Type)getExpression().evaluate(globals)).getValue();
+		else if (getExpression() != null)
 			expr = (I) getExpression().evaluate(globals);
 		else
 			expr = (I) globals.get("this").getValue();

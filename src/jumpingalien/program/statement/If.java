@@ -1,6 +1,5 @@
 package jumpingalien.program.statement;
 import java.util.Map;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.DoubleType;
@@ -73,7 +72,7 @@ public class If extends Statement {
 			}
 		}
 		else {
-			Boolean cond;
+			boolean cond;
 			if (getCondition().evaluate(globals) instanceof Type)
 				cond = ((BoolType) getCondition().evaluate(globals)).getValue();
 			else

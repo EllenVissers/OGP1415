@@ -5,12 +5,9 @@ import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Util;
-
 /**
  * A class of sharks involving a horizontal and vertical position, velocity and acceleration, a list of images, an orientation, 
  * a number of hitpoints, a world, a maximum velocity,a variable registering whether the shark is terminated, and the time it has been terminated.
- * @author Ellen Vissers, Nina Versin
- * @version 1.0
  * @invar A shark will never move faster than a given maximum velocity
  * 			| this.getXVelocity() <= maxSpeed
  * @invar The shark will always stay within the boundaries of the game world
@@ -18,6 +15,8 @@ import jumpingalien.util.Util;
  * 			| this.getYPosition() >= 0 && this.getYPosition() <= this.getWorld().getWorldHeight()
  * @invar The orientation of a shark will never be NONE
  * 			| this.Orientation != Orientation.NONE
+ * @author Ellen Vissers, Nina Versin
+ * @version 2.0
  */
 public class Shark extends GameObject {
 
@@ -121,46 +120,6 @@ public class Shark extends GameObject {
 	 */
 	private double timeslot;
 	
-	private double getTimer() {
-		return this.timer;
-	}
-	
-	private void setTimer(double t) {
-		this.timer = t;
-	}
-	
-	private double getTimerAir() {
-		return this.timerAir;
-	}
-	
-	private void setTimerAir(double t) {
-		this.timerAir = t;
-	}
-	
-	private double getTimerMagma() {
-		return this.timerMagma;
-	}
-	
-	private void setTimerMagma(double t) {
-		this.timerMagma = t;
-	}
-	
-	private double getTimeSlot() {
-		return this.timeslot;
-	}
-	
-	private void resetTimeSlot() {
-		this.timeslot = randomTime();
-	}
-	
-	private int getLastJump() {
-		return this.lastJump;
-	}
-	
-	private void setLastJump(int t) {
-		this.lastJump = t;
-	}
-	
 	//GETTERS AND SETTERS
 	/**
 	 * Return the maximum velocity of the shark.
@@ -181,6 +140,85 @@ public class Shark extends GameObject {
 	 */
 	protected void setMaxVel(double vel) {
 		this.maxVel = vel;
+	}
+	
+	/**
+	 * Return the value of the timer
+	 */
+	private double getTimer() {
+		return this.timer;
+	}
+	
+	/**
+	 * Set the timer to the given value;
+	 * @param 	t
+	 * 			The new value of the timer;
+	 */
+	private void setTimer(double t) {
+		this.timer = t;
+	}
+	
+	/**
+	 * Return the value of the timer for air.
+	 */
+	private double getTimerAir() {
+		return this.timerAir;
+	}
+	
+	/**
+	 * Set the timer for air to the given value.
+	 * @param 	t
+	 * 			The new value of the timer.
+	 */
+	private void setTimerAir(double t) {
+		this.timerAir = t;
+	}
+	
+	/**
+	 * Return the value of the timer for magma.
+	 */
+	private double getTimerMagma() {
+		return this.timerMagma;
+	}
+	
+	/**
+	 * Set the timer for magma to the given value.
+	 * @param 	t
+	 * 			The new value of the timer.
+	 */
+	private void setTimerMagma(double t) {
+		this.timerMagma = t;
+	}
+	
+	/**
+	 * Return the value of the timeslot.
+	 */
+	private double getTimeSlot() {
+		return this.timeslot;
+	}
+	
+	/**
+	 * Reset the timeslot to a random time within the marges.
+	 * @effect	The timeslot is set to a random time evaluated by randomTime().
+	 */
+	private void resetTimeSlot() {
+		this.timeslot = randomTime();
+	}
+	
+	/**
+	 * Return the number of time durations since the last jump.
+	 */
+	private int getLastJump() {
+		return this.lastJump;
+	}
+	
+	/**
+	 * Set the timer for the last jump to the given number.
+	 * @param 	t
+	 * 			The new number of time durations since the last jump.
+	 */
+	private void setLastJump(int t) {
+		this.lastJump = t;
 	}
 	
 	//CHECKERS
@@ -242,15 +280,6 @@ public class Shark extends GameObject {
 	private boolean reachesTimeSlot(double time) {
 		return (getTimer()+time >= getTimeSlot());
 	}	
-	
-//	/**
-//	 * Check whether a shark is jumping.
-//	 * @return	True when it is jumping.
-//	 * 			| getYVelocity() > 0
-//	 */
-//	private boolean isJumping() {
-//		return (getYVelocity() > 0);
-//	}
 	
 	//METHODS
 	/**
@@ -456,7 +485,15 @@ public class Shark extends GameObject {
 	
 	@Override
 	public Void startMove(Orientation orientation) {
+//		if (getProgram() != null)
+//		{
+//			System.out.println("in startMove " + orientation);
+//			System.out.println(getOrientation() != orientation);
+//			System.out.println(((getOrientation() == orientation) && (getXVelocity() == 0)));
+//		}
 		if ((getOrientation() != orientation) || ((getOrientation() == orientation) && (getXVelocity() == 0))) {
+//			if (getProgram() != null)
+//				System.out.println("hier");
 			if (orientation == Orientation.RIGHT)
 				setXAcc(accx);
 			else
@@ -786,6 +823,7 @@ public class Shark extends GameObject {
 		if (getProgram() != null){
 			getProgram().setGameObject(this);
 			getProgram().execute(getProgram().getGlobalVariables(), time);
+			advanceWithDT(time);
 		}
 		else
 		{

@@ -26,7 +26,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 		| ! gameWorldFull()
  * 
  * @author Nina Versin, Ellen Vissers
- * @version 1.0
+ * @version 2.0
  */
 public class World {
 	
@@ -775,11 +775,13 @@ public class World {
 			ArrayList<Plant> plants = getAllPlants();
 			ArrayList<Shark> sharks = getAllSharks();
 			ArrayList<Slime> slimes = getAllSlimes();
+			ArrayList<Buzam> buzams = getAllBuzams();
 			ArrayList<GameObject> objects = new ArrayList<GameObject>();
 			objects.addAll(aliens);
 			objects.addAll(plants);
 			objects.addAll(sharks);
 			objects.addAll(slimes);
+			objects.addAll(buzams);
 			for (GameObject object : objects)
 				object.advanceTime(time);
 		}	

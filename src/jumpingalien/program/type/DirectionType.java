@@ -22,7 +22,10 @@ public class DirectionType extends Type {
 	
 	@Override
 	public Type set(Expression dir, Map<String, Type> globals) {
-		this.dir = (Direction)dir.evaluate(globals);
+		if (dir.evaluate(globals) instanceof DirectionType)
+			this.dir = ((DirectionType) dir.evaluate(globals)).getValue();
+		else
+			this.dir = (Direction)dir.evaluate(globals);
 		return this;
 	}
 
