@@ -1,7 +1,5 @@
 package jumpingalien.program.statement;
-import java.util.List;
 import java.util.Map;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.DoubleType;
@@ -36,53 +34,48 @@ public class While extends Statement {
 		this.whileCounter = c;
 	}
 	
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
-		if (getBody() instanceof Break)
-			this.getProgram().setWellFormed(false);
-		if (getBody() instanceof Sequence){
-			List<Statement> statements = ((Sequence) getBody()).getStatements();
-			for (Statement s : statements){
-				if (s instanceof Break)
-					this.getProgram().setWellFormed(false);
-			}
-		}
+	public void resetDone() {
+		this.setDone(false);
+		getBody().resetDone();
+	}
+	
+	@Override
+	public double evaluate(Map<String,Type> globals) throws BreakException {
 		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter())
+		if (getBody().isDone())
+			getBody().resetDone();
+		if (getWhileCounter() == 1)
 		{
-			if (getWhileCounter() == 1)
-			{
-				try {
-					time = getBody().evaluate(globals,counter);
-				} catch (BreakException exc) {
-					time = exc.getTime();
-				}
-				try {
-					time = checkTime(time,this);
-					globals.put("timer",new DoubleType(time));
-					setWhileCounter(0);
-				} catch (TerminateException exc) {
-					globals.put("timer",new DoubleType());
-					throw new BreakException(0);
-				}
-			}
-			while ((Boolean)(getCondition().evaluate(globals)))
-			{
-				try {
-					time = getBody().evaluate(globals,counter);
-				} catch (BreakException exc) {
-					time = exc.getTime();
-				}
-				try {
-					time = checkTime(time-0.001,getBody());
-					globals.put("timer",new DoubleType(time));
-					resetCounter();
-				} catch (TerminateException exc) {
-					setWhileCounter(1);
-					globals.put("timer",new DoubleType());
-					throw new BreakException(0);
-				}
+			try {
+				time = getBody().evaluate(globals);
+				setWhileCounter(0);
+				globals.put("timer",new DoubleType(time));
+				getBody().resetDone();
+			} catch (BreakException exc) {
+				setWhileCounter(1);
+				globals.put("timer",new DoubleType());
+				throw new BreakException(0);
 			}
 		}
+		while ((Boolean) getCondition().evaluate(globals))
+		{
+			try {
+				time = checkTime(time-0.001); //evaluate condition
+			} catch (TerminateException exc) { 
+				throw new BreakException(0); // evaluatie niet compleet
+			}
+			try {
+				time = getBody().evaluate(globals);
+				setWhileCounter(0);
+				globals.put("timer",new DoubleType(time));
+				getBody().resetDone();
+			} catch (BreakException exc) {
+				setWhileCounter(1);
+				globals.put("timer",new DoubleType());
+				throw new BreakException(0);
+			}
+		}
+		this.setDone(true);
 		return time;
 	}
 }

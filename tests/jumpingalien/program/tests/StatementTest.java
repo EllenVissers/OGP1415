@@ -62,7 +62,7 @@ public class StatementTest {
 		globals.put("this",new ObjectType(sh4));
 		globals.put("p1",new ObjectType(p1));
 		globals.put("p2",new ObjectType(p2));
-		globals.put("timer",new DoubleType((double)114000));
+		globals.put("timer",new DoubleType((double)25));
 		globals.put("name", new ObjectType(p2));
 		list = new ArrayList<Statement>();
 		st1 = new Print(sl,new Constant<String>(sl,"statement1"));
@@ -121,7 +121,7 @@ public class StatementTest {
 	@Test
 	public void evaluateAssignmentTest() {
 		try {
-			s1.evaluate(globals,0);
+			s1.evaluate(globals);
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Assignment statement");
 		}
@@ -133,7 +133,7 @@ public class StatementTest {
 	@Test
 	public void evaluateBreakTest() {
 		try {
-			s2.evaluate(globals,0); // This should throw a BreakException
+			s2.evaluate(globals); // This should throw a BreakException
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Break statement");
 			System.out.println("time left: " + exc.getTime());
@@ -145,7 +145,7 @@ public class StatementTest {
 	@Test
 	public void evaluateForeachTest() {
 		try {
-			s3.evaluate(globals,0); //
+			s3.evaluate(globals); //
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Foreach statement");
 		}
@@ -156,7 +156,7 @@ public class StatementTest {
 	@Test
 	public void evaluateIfBodyTest() {
 		try {
-			s4.evaluate(globals,0); 
+			s4.evaluate(globals); 
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating If statement");
 		}
@@ -167,7 +167,7 @@ public class StatementTest {
 	@Test
 	public void evaluateElseBodyTest() {
 		try {
-			s5.evaluate(globals,0); 
+			s5.evaluate(globals); 
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating If statement");
 		}
@@ -178,7 +178,7 @@ public class StatementTest {
 	@Test
 	public void evaluatePrintTest() {
 		try {
-			s6.evaluate(globals,0); // This should print "print"
+			s6.evaluate(globals); // This should print "print"
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Print statement");
 		}
@@ -189,7 +189,7 @@ public class StatementTest {
 	@Test
 	public void evaluateSequenceTest() {
 		try {
-			s7.evaluate(globals,0); // This should print "statement1" and "statement2"
+			s7.evaluate(globals); // This should print "statement1" and "statement2"
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Sequence statement");
 		}
@@ -201,7 +201,7 @@ public class StatementTest {
 	public void evaluateWaitTest() {
 		System.out.println(globals.get("timer").getValue());
 		try {
-			s8.evaluate(globals,0); 
+			s8.evaluate(globals); 
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating Wait statement");
 		}
@@ -217,7 +217,7 @@ public class StatementTest {
 		globals.put("this", new ObjectType(sh3));
 		assertTrue(Util.fuzzyEquals(sh3.getXAcc(),0,delta));
 		try {
-			s9.evaluate(globals,0); 
+			s9.evaluate(globals); 
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating While statement");
 			System.out.println(exc.getTime());
@@ -232,7 +232,7 @@ public class StatementTest {
 		globals.put("this", new ObjectType(sh4));
 		globals.put("timer",new DoubleType((double)4581));
 		try {
-			s10.evaluate(globals,0); 
+			s10.evaluate(globals); 
 		} catch (BreakException exc) {
 			System.out.println("BreakException thrown by evaluating ActionStatement");
 		}

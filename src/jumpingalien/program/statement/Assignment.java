@@ -30,19 +30,21 @@ public class Assignment extends Statement {
 		return this.value;
 	}
 	
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+	public void resetDone() {
+		this.setDone(false);
+	}
+	
+	@Override
+	public double evaluate(Map<String,Type> globals) throws BreakException {
 		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter())
-		{
-			try {
-				time = checkTime(time-0.001,this);
-				resetCounter();
-				globals.put(getVariableName(),getVariableType().set(value,globals));
-				globals.put("timer", new DoubleType(time));
-			} catch (TerminateException exc) {
-				globals.put("timer", new DoubleType());
-				throw new BreakException(0);
-			}
+		try {
+			time = checkTime(time-0.001);
+			this.setDone(true);
+			globals.put("timer", new DoubleType(time));
+			globals.put(getVariableName(), getVariableType().set(value,globals));
+		} catch (TerminateException exc) {
+			globals.put("timer", new DoubleType());
+			throw new BreakException(0);
 		}
 		return time;
 	}

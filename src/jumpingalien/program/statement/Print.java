@@ -19,23 +19,23 @@ public class Print extends Statement {
 	public Expression getExpression() {
 		return this.expr;
 	}
-
+	
+	public void resetDone() {
+		this.setDone(false);
+	}
+	
 	@Override
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+	public double evaluate(Map<String,Type> globals) throws BreakException {
 		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter())
-		{
-			try {
-				time = checkTime(time-0.001,this);
-				resetCounter();
-				globals.put("timer", new DoubleType(time));
-				System.out.println(getExpression().evaluate(globals));
-			} catch (TerminateException exc) {
-				globals.put("timer", new DoubleType());
-				throw new BreakException(0);
-			}
+		try {
+			time = checkTime(time-0.001);
+			this.setDone(true);
+			globals.put("timer",new DoubleType(time));
+			System.out.println(getExpression().evaluate(globals));
+		} catch (TerminateException exc) {
+			globals.put("timer",new DoubleType());
+			throw new BreakException(0);
 		}
 		return time;
 	}
-
 }

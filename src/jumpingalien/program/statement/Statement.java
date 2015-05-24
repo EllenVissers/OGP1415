@@ -9,11 +9,13 @@ public abstract class Statement{
 	public Statement(SourceLocation location) {
 		this.sourceLocation = location;
 		this.SCounter = 0;
+		this.done = false;
 	}
 	
 	private SourceLocation sourceLocation;
 	private Program program;
 	private int SCounter;
+	private boolean done;
 	
 	public SourceLocation getSourceLocation() {
 		return this.sourceLocation;
@@ -27,27 +29,31 @@ public abstract class Statement{
 		this.SCounter = c;
 	}
 	
-	public double checkTime(double time, Statement s) throws TerminateException {
-		if (time > 0)
+	public boolean isDone() {
+		return this.done;
+	}
+	
+	protected void setDone(boolean bool) {
+		this.done = bool;
+	}
+	
+	public abstract void resetDone();
+	
+	public double checkTime(double time) throws TerminateException {
+		if (time >= 0)
 			return time;
 		else
-		{
-			if (getStatementCounter() == 0)
-				s.setStatementCounter(1);
-			else
-				s.setStatementCounter(0);
 			throw new TerminateException();
-		}
 	}
 	
-	protected void resetCounter() {
-		if (getStatementCounter() == 0)
-			setStatementCounter(1);
+	protected void resetCounter(Statement s) {
+		if (s.getStatementCounter() == 0)
+			s.setStatementCounter(1);
 		else
-			setStatementCounter(0);
+			s.setStatementCounter(0);
 	}
 	
-	public abstract double evaluate(Map<String,Type> globals, int counter) throws BreakException;
+	public abstract double evaluate(Map<String,Type> globals) throws BreakException;
 	
 	protected Program getProgram() {
 		return program;

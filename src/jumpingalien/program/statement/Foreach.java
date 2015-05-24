@@ -82,6 +82,11 @@ public class Foreach extends Statement {
 		this.forEachCounter = c;
 	}
 	
+	public void resetDone() {
+		this.setDone(false);
+		getBody().resetDone();
+	}
+	
 	private void evalWhere(Type t, Expression exp, List<Type> l, Map<String,Type> globals) {
 		Type old = globals.get("this");
 		globals.put("this",t);
@@ -126,57 +131,61 @@ public class Foreach extends Statement {
 			l.add(t);
 	}
 	
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+	@Override
+	public double evaluate(Map<String,Type> globals) throws BreakException {
 		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter()) {
-			ArrayList<Type> all = new ArrayList<Type>(globals.values());
-			Kind kind = getVariableKind();
-			ArrayList<Type> newall = new ArrayList<Type>();
-			all.forEach(t->checkKind(t,kind,newall));
-			all = newall;
-			if (getWhere() != null)
-			{
-				ArrayList<Type> where = new ArrayList<Type>();
-				all.forEach(t->evalWhere(t,getWhere(),where,globals));
-				all = where;
-			}
-			if (getSort() != null)
-			{
-				Type old = globals.get("this");
-				Map<Double,List<Type>> unsorted = new HashMap<Double,List<Type>>();
-				all.forEach(t->evalSort(t,getSort(),unsorted,globals));
-				Map<Double,List<Type>> sorted = sort(unsorted,getSortDirection());
-				ArrayList<Type> sortlist = new ArrayList<Type>();
-				for (List<Type> l : sorted.values())
-					for (Type t : l)
-						sortlist.add(t);
-				all = sortlist;
-			}
-			Type old = globals.get(name);
-			all = new ArrayList(all.subList(getForEachCounter(), all.size()));
-			for (Type t : all)
-			{
-				try {
-					globals.put(name, t);
-					getBody().setStatementCounter(counter);
-					time = getBody().evaluate(globals,counter);
-				} catch (BreakException exc) {
-					time = exc.getTime();
-				}
-				try {
-					time = checkTime(time,getBody());
-					globals.put("timer", new DoubleType(time));
-					resetCounter();
-					setForEachCounter(0);
-				} catch (TerminateException exc) {
-					setForEachCounter(all.indexOf(t));
-					globals.put("timer",new DoubleType());
-					globals.put(name,old);
-					throw new BreakException(0);
-				}
-			}
-			globals.put(name,old);
+		ArrayList<Type> all = new ArrayList<Type>(globals.values());
+		Kind kind = getVariableKind();
+		final ArrayList<Type> newall = new ArrayList<Type>();
+		all.forEach(t->checkKind(t,kind,newall));
+		all = newall;
+		if (getWhere() != null)
+		{
+			ArrayList<Type> where = new ArrayList<Type>();
+			all.forEach(t->evalWhere(t,getWhere(),where,globals));
+			all = where;
 		}
+		if (getSort() != null)
+		{
+			Type old = globals.get("this");
+			Map<Double,List<Type>> unsorted = new HashMap<Double,List<Type>>();
+			all.forEach(t->evalSort(t,getSort(),unsorted,globals));
+			Map<Double,List<Type>> sorted = sort(unsorted,getSortDirection());
+			ArrayList<Type> sortlist = new ArrayList<Type>();
+			for (List<Type> l : sorted.values())
+				for (Type t : l)
+					sortlist.add(t);
+			all = sortlist;
+		}
+		String name = getVariableName();
+		Type old = globals.get(name);
+		ArrayList<Type> sublist = new ArrayList(all.subList(getForEachCounter(), all.size()));
+		for (Type t : sublist)
+		{
+			if (getBody().isDone())
+				getBody().resetDone();
+			try {
+				globals.put(name, t);
+				time = getBody().evaluate(globals);
+				globals.put(name,old);
+			} catch (BreakException exc) {
+				time = exc.getTime();
+				globals.put(name,old);
+				if (time == 0)
+					throw new BreakException(0);
+			}
+			try {
+				time = checkTime(time);
+				globals.put(name,old);
+				globals.put("timer",new DoubleType(time));
+			} catch (TerminateException exc) {
+				globals.put(name,old);
+				setForEachCounter(all.indexOf(t));
+				globals.put("timer",new DoubleType());
+				throw new BreakException(0);
+			}
+		}
+		this.setDone(true);
 		return time;
 	}
 }

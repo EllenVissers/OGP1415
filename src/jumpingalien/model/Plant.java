@@ -4,8 +4,6 @@ import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
 import jumpingalien.program.program.Program;
-
-
 /**
  * A class of Plants involving a horizontal and vertical position, velocity and acceleration, a list of images, an orientation, 
  * a number of hitpoints, a world and a terminated state.
@@ -184,10 +182,10 @@ public class Plant extends GameObject {
 	 * 			| Move(t)
 	 */
 	private void advance(double t) {
-//		if ( (! isTerminated()) && (t != 0)) {
-//			Move(t);
-//		}
-		Move(t);
+		if ( (! isTerminated()) && (t != 0)) {
+			Move(t);
+		}
+		//Move(t);
 	}
 	
 	/**
@@ -230,11 +228,14 @@ public class Plant extends GameObject {
 					startMove(Orientation.LEFT);
 					setOrientation(Orientation.LEFT);
 				}
+				setTimer(t2);
 				advanceWithDT(t2);
 			}
 			else
+			{
+				setTimer(getTimer()+time);
 				advanceWithDT(time);
-			setTimer(getTimer()+time);
+			}
 		}
 	}
 	

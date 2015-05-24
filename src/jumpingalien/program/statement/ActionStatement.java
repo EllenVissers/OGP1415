@@ -9,6 +9,7 @@ import jumpingalien.program.expression.Constant;
 import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.Orientation;
+import jumpingalien.model.Plant;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.part3.programs.IProgramFactory;
@@ -44,6 +45,10 @@ public class ActionStatement<GameObject,Void> extends Statement {
 		return this.bifunction;
 	}
 	
+	public void resetDone() {
+		this.setDone(false);
+	}
+	
 	public Orientation getDirection(Map<String,Type> globals) {
 		Direction dir;
 		if (this.direction.evaluate(globals) instanceof Type)
@@ -58,11 +63,13 @@ public class ActionStatement<GameObject,Void> extends Statement {
 	}
 
 	@Override
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+	public double evaluate(Map<String,Type> globals) throws BreakException {
 		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter())
-		{
-			GameObject obj = (GameObject)((ObjectType)globals.get("this")).getValue();
+		GameObject obj = (GameObject) ((ObjectType)globals.get("this")).getValue();
+		try {
+			time = checkTime(time-0.001);
+			globals.put("timer", new DoubleType(time));
+			this.setDone(true);
 			if (getBiFunction() == null) {
 				Function<GameObject,Void> f = getFunction();
 				f.apply(obj);
@@ -73,14 +80,9 @@ public class ActionStatement<GameObject,Void> extends Statement {
 				BiFunction<GameObject,Orientation,Void> f = getBiFunction();
 				f.apply(obj,d);
 			}
-			try {
-				time = checkTime(time-0.001,this);
-				resetCounter();
-				globals.put("timer", new DoubleType(time));
-			} catch (TerminateException exc) {
-				globals.put("timer", new DoubleType());
-				throw new BreakException(0);
-			}
+		} catch (TerminateException exc) {
+			globals.put("timer", new DoubleType());
+			throw new BreakException(0);
 		}
 		return time;
 	}

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import jumpingalien.program.statement.*;
 import jumpingalien.model.AllObjects;
+import jumpingalien.model.GameObject;
+import jumpingalien.model.Plant;
 import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.ObjectType;
 import jumpingalien.program.type.Type;
@@ -13,17 +15,10 @@ public class Program {
 	public Program(Statement mainStatement, Map<String, Type> globalVariables) {
 		this.main = mainStatement;
 		this.global = globalVariables;
-		this.counter = 0;
 		if (! checkWellFormed(main))
 			setWellFormed(false);
 		else
 			setWellFormed(true);
-//		if (mainStatement instanceof Break)
-//			setWellFormed(false);
-//		if (mainStatement instanceof Sequence)
-//			for (Statement s : ((Sequence) mainStatement).getStatements())
-//				if (s instanceof Break)
-//					setWellFormed(false);
 	}
 	
 	public boolean checkWellFormed(Statement main) {
@@ -94,7 +89,6 @@ public class Program {
 
 	private Statement main;
 	private Map<String,Type> global;
-	private int counter;
 	private AllObjects gameObject;
 	
 	public Statement getMainStatement() {
@@ -103,14 +97,6 @@ public class Program {
 	
 	public Map<String,Type> getGlobalVariables() {
 		return this.global;
-	}
-	
-	public int getCounter() {
-		return this.counter;
-	}
-	
-	public void setCounter(int c) {
-		this.counter = c;
 	}
 	
 	public void addVariable(String key, Type value) {
@@ -132,17 +118,30 @@ public class Program {
 		globals.put("timer", new DoubleType(time));
 		while (((DoubleType)globals.get("timer")).getValue() > 0)
 		{
+			if (getMainStatement().isDone())
+				getMainStatement().resetDone();
 			try {
-				time = getMainStatement().evaluate(globals,getCounter());
-				if (getCounter() == 0)
-					setCounter(1);
-				else
-					setCounter(0);
-				globals.put("timer",new DoubleType(time));
+				time = getMainStatement().evaluate(globals);
 			} catch (BreakException exc) {
 				globals.put("timer",new DoubleType());
 			}
+//			try {
+//				time = getMainStatement().evaluate(globals,getCounter());
+//				if (getCounter() == 0)
+//					setCounter(1);
+//				else
+//					setCounter(0);
+//				globals.put("timer",new DoubleType(time));
+//			} catch (BreakException exc) {
+//				globals.put("timer",new DoubleType());
+//			}
 		}
+		if (globals.get("this").getValue() instanceof Plant)
+		{
+			System.out.println("loop ended");
+			System.out.println("vx " + ((GameObject) globals.get("this").getValue()).getXVelocity());
+		}
+		
 	}
 
 }
