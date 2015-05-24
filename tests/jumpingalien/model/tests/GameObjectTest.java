@@ -1,14 +1,10 @@
 package jumpingalien.model.tests;
-import jumpingalien.model.Shark;
-import jumpingalien.model.Plant;
-import jumpingalien.model.Slime;
+import jumpingalien.model.*;
 import static org.junit.Assert.*;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
-import jumpingalien.model.World;
-import jumpingalien.model.Orientation;
-import jumpingalien.model.School;
 import jumpingalien.part2.internal.Resources;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,6 +14,7 @@ public class GameObjectTest {
 	private static Plant g1, g4, g7;
 	private static Shark g2, g5;
 	private static Slime g3, g6;
+	private static Mazub g8;
 	private static World w1, w2;
 	private static Sprite[] s1, s2, s3;
 	private static School school;
@@ -42,13 +39,14 @@ public class GameObjectTest {
 		school = new School();
 		
 		//double x, y, vx, vy, ax, ay, Orientation, sprites, hitPoints, world, terminated, terminatedTime, program
-		g1 = new Plant(49, 49, s2 ,null);
+		g1 = new Plant(49, 49, s1 ,null);
 		g2 = new Shark(580, 49, s2, null);
 		g3 = new Slime(1200, 49,s3,school,null);
 		g4 = new Plant(413, 49, s1,null);
 		g5 = new Shark(864, 49, s2,null);
 		g6 = new Slime(864, 162, s3, school,null);
 		g7 = new Plant(49, 49, s1,null);
+		g8 = new Mazub(469,49,1.0,4.3,0.9,-10,Orientation.RIGHT,Resources.ALIEN_SPRITESET,150,w2,0,1.0,3.0,false,true,0.6,false);
 		w2.addPlant(g7);
 		w2.addPlant(g4);
 		w2.addPlant(g1);
@@ -62,12 +60,12 @@ public class GameObjectTest {
 	public void Constructor_LegalCase() {
 		assertEquals(49,g1.getXPosition(),delta);
 		assertEquals(49,g1.getYPosition(),delta);
-		assertEquals(0,g1.getXVelocity(),delta);
+		assertEquals(-0.5,g1.getXVelocity(),delta);
 		assertEquals(0,g1.getYVelocity(),delta);
 		assertEquals(0,g1.getXAcc(),delta);
 		assertEquals(0,g1.getYAcc(),delta);
-		assertTrue(Orientation.NONE == g1.getOrientation());
-		assertEquals(100,g1.getHitPoints());
+		assertTrue(Orientation.LEFT == g1.getOrientation());
+		assertEquals(1,g1.getHitPoints());
 		assertTrue(w2 == g1.getWorld());
 		assertFalse(g1.isTerminated());
 		assertTrue(s1 == g1.getSprites());
@@ -93,26 +91,26 @@ public class GameObjectTest {
 
 	@Test
 	public void getXVelocity_SingleCase() {
-		assertEquals(1.6,g2.getXVelocity(),delta);
-		assertEquals(-2.14,g3.getXVelocity(),delta);
+		assertEquals(-0.5,g4.getXVelocity(),delta);
+		assertEquals(1,g8.getXVelocity(),delta);
 	}
 
 	@Test
 	public void getYVelocity_SingleCase() {
 		assertEquals(0,g5.getYVelocity(),delta);
-		assertEquals(5.3,g6.getYVelocity(),delta);
+		assertEquals(4.3,g8.getYVelocity(),delta);
 	}
 
 	@Test
 	public void getXAcc_SingleCase() {
-		assertEquals(0.9,g4.getXAcc(),delta);
-		assertEquals(-0.9,g5.getXAcc(),delta);
+		assertEquals(0,g4.getXAcc(),delta);
+		assertEquals(-0.7,g6.getXAcc(),delta);
 	}
 
 	@Test
 	public void getYAcc_SingleCase() {
 		assertEquals(0,g1.getYAcc(),delta);
-		assertEquals(-10,g6.getYAcc(),delta);
+		assertEquals(-10,g8.getYAcc(),delta);
 	}
 
 	@Test
@@ -123,14 +121,14 @@ public class GameObjectTest {
 
 	@Test
 	public void getOrientation_SingleCase() {
-		assertTrue(Orientation.RIGHT == g2.getOrientation());
+		assertTrue(Orientation.RIGHT == g8.getOrientation());
 		assertTrue(Orientation.LEFT == g5.getOrientation());
 	}
 
 	@Test
 	public void getHitPoints_SingleCase() {
-		assertEquals(170,g3.getHitPoints());
-		assertEquals(40,g5.getHitPoints());
+		assertEquals(100,g5.getHitPoints());
+		assertEquals(1,g7.getHitPoints());
 	}
 
 	@Test
@@ -146,19 +144,19 @@ public class GameObjectTest {
 
 	@Test
 	public void getYSize_SingleCase() {
-		assertEquals(g4.getCurrentSprite().getHeight(),g4.getXSize());
-		assertEquals(g6.getCurrentSprite().getHeight(),g6.getXSize());
+		assertEquals(g4.getCurrentSprite().getHeight(),g4.getYSize());
+		assertEquals(g6.getCurrentSprite().getHeight(),g6.getYSize());
 	}
 	
 	@Test
 	public void getTerminatedTime_SingleCase() {
 		assertEquals(0,g4.getTerminatedTime(),delta);
-		assertEquals(0.8,g7.getTerminatedTime(),delta);
+		assertEquals(0.0,g8.getTerminatedTime(),delta);
 	}
 	
 	@Test
 	public void IsTerminated_SingleCase() {
-		assertTrue(g7.isTerminated());
+		assertFalse(g7.isTerminated());
 		assertFalse(g1.isTerminated());
 	}
 
@@ -170,7 +168,8 @@ public class GameObjectTest {
 	
 	@Test
 	public void getCurrentSprite_One() {
-		assertTrue(g2.getSprites()[1] == g2.getCurrentSprite());
+		for (int i = 0; i<5; i++)
+			g4.advanceTime(0.1);
 		assertTrue(g4.getSprites()[1] == g4.getCurrentSprite());
 	}
 }

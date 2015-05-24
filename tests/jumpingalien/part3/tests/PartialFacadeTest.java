@@ -6,7 +6,6 @@ import jumpingalien.part3.facade.Facade;
 import jumpingalien.part3.facade.IFacadePart3;
 import jumpingalien.part3.programs.ParseOutcome;
 import jumpingalien.program.program.Program;
-
 import org.junit.Test;
 
 public class PartialFacadeTest {

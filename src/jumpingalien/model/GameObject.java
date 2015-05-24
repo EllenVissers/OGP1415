@@ -148,7 +148,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The horizontal velocity.
 	 * 			|this.vx
 	 */
-	@Basic @Override
+	@Basic
 	public double getXVelocity() {
 		return this.vx;
 	}
@@ -169,7 +169,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The vertical velocity.
 	 * 			| this.vy
 	 */
-	@Basic @Override
+	@Basic
 	public double getYVelocity() {
 		return this.vy;
 	}
@@ -190,7 +190,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The horizontal acceleration.
 	 * 			|this.ax
 	 */
-	@Basic @Override
+	@Basic
 	public double getXAcc() {
 		return this.ax;
 	}
@@ -211,7 +211,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return	The vertical acceleration.
 	 * 			| this.ay
 	 */
-	@Basic @Override
+	@Basic
 	public double getYAcc() {
 		return this.ay;
 	}
@@ -262,7 +262,7 @@ public abstract class GameObject extends AllObjects {
 	 * @return 	The current number of hitpoints.
 	 * 			|this.hitPoints
 	 */
-	@Basic @Override
+	@Basic
 	public int getHitPoints() {
 		return this.hitPoints;
 	}
@@ -446,27 +446,6 @@ public abstract class GameObject extends AllObjects {
 		return true;
 	}
 	
-	@Override
-	public boolean isPassable() {
-		return false;
-	}
-	
-	@Override
-	public boolean isMagma() {
-		return false;
-	}
-	
-	@Override
-	public boolean isAir() {
-		return false;
-	}
-	
-	@Override
-	public boolean isWater() {
-		return false;
-	}
-	
-	@Override
 	public boolean isMoving(IProgramFactory.Direction direction) {
 		if (direction == IProgramFactory.Direction.RIGHT)
 			if ((getOrientation() == Orientation.RIGHT) && (getXVelocity() > 0))
@@ -477,10 +456,11 @@ public abstract class GameObject extends AllObjects {
 		return false;
 	}
 	
-	@Override
 	public boolean isJumping() {
 		return (getYVelocity() > 0);
 	}
+	
+	public abstract boolean isDucking();
 	
 	@Override
 	public double getWidth() {

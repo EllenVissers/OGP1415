@@ -1,11 +1,15 @@
 package jumpingalien.program.program;
-
+import java.util.List;
 import java.util.Map;
 
+import jumpingalien.program.statement.*;
 import jumpingalien.model.AllObjects;
+<<<<<<< HEAD
 import jumpingalien.program.statement.Break;
 import jumpingalien.program.statement.BreakException;
 import jumpingalien.program.statement.Statement;
+=======
+>>>>>>> origin/master
 import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.ObjectType;
 import jumpingalien.program.type.Type;
@@ -16,6 +20,74 @@ public class Program {
 		this.main = mainStatement;
 		this.global = globalVariables;
 		this.counter = 0;
+		if (! checkWellFormed(main))
+			setWellFormed(false);
+		else
+			setWellFormed(true);
+//		if (mainStatement instanceof Break)
+//			setWellFormed(false);
+//		if (mainStatement instanceof Sequence)
+//			for (Statement s : ((Sequence) mainStatement).getStatements())
+//				if (s instanceof Break)
+//					setWellFormed(false);
+	}
+	
+	public boolean checkWellFormed(Statement main) {
+		if (main instanceof Foreach)
+		{
+			Statement body = ((Foreach)main).getBody();
+			if (body instanceof Break)
+				return false;
+			return (! containsActionStatement(body));
+		}
+		if ((! (main instanceof Foreach)) && (! (main instanceof While)))
+			return (! containsBreak(main));
+		return true;
+	}
+	
+	public boolean containsActionStatement(Statement s) {
+		if (s instanceof If)
+		{
+			Statement ifBody = ((If)s).getIfBody();
+			Statement elseBody = ((If)s).getElseBody();
+			return (containsActionStatement(ifBody) || containsActionStatement(elseBody));
+		}
+		else if (s instanceof While)
+		{
+			Statement body = ((While)s).getBody();
+			return (containsActionStatement(body));
+		}
+		else if (s instanceof Sequence)
+		{
+			List<Statement> l = ((Sequence) s).getStatements();
+			for (Statement ls : l)
+				if (containsActionStatement(ls))
+					return true;
+			return false;
+		}
+		else if (s instanceof ActionStatement)
+			return true;
+		return false;
+	}
+	
+	public boolean containsBreak(Statement s) {
+		if (s instanceof Break)
+			return true;
+		if (s instanceof If)
+		{
+			Statement ifBody = ((If)s).getIfBody();
+			Statement elseBody = ((If)s).getElseBody();
+			return (containsBreak(ifBody) || containsBreak(elseBody));
+		}
+		if (s instanceof Sequence)
+		{
+			List<Statement> l = ((Sequence) s).getStatements();
+			for (Statement ls : l)
+				if (containsBreak(ls))
+					return true;
+			return false;
+		}
+		return false;
 	}
 	
 	public AllObjects getGameObject() {

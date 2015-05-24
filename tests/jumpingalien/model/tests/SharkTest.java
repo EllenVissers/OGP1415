@@ -62,6 +62,7 @@ public class SharkTest {
 		double oldy = s2.getYPosition();
 		double oldvx = s2.getXVelocity();
 		double oldvy = s2.getYVelocity();
+		s2.startJump();
 		s2.advanceTime(0.15);
 		assertTrue(oldx != s2.getXPosition());
 		assertTrue(oldvx != s2.getXVelocity());

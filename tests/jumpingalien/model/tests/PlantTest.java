@@ -55,10 +55,11 @@ public class PlantTest {
 		assertEquals(0,p1.getTerminatedTime(),delta);
 	}
 
+	//641,247
+	//1547,138
 	@Test
 	public void advanceTime_SingleCase() {
 		p2.advanceTime(0.1);
-		System.out.println(p2.getXPosition());
 		assertEquals(636,p2.getXPosition(),delta);
 		assertEquals(247,p2.getYPosition(),delta);
 		assertEquals(-Plant.speed,p2.getXVelocity(),delta);
@@ -66,9 +67,9 @@ public class PlantTest {
 		assertEquals(0,p2.getXAcc(),delta);
 		assertEquals(0,p2.getYAcc(),delta);
 		assertTrue(Orientation.LEFT == p2.getOrientation());
-		for (int i = 0; i<7; i++)
+		for (int i = 0; i<5; i++)
 			p3.advanceTime(0.1);
-		assertEquals(1532,p3.getXPosition(),delta);
+		assertEquals(1542,p3.getXPosition(),delta);
 		assertEquals(138,p3.getYPosition(),delta);
 		assertEquals(Plant.speed,p3.getXVelocity(),delta);
 		assertEquals(0,p3.getYVelocity(),delta);

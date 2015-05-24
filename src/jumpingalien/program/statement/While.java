@@ -24,7 +24,7 @@ public class While extends Statement {
 		return this.condition;
 	}
 	
-	private Statement getBody() {
+	public Statement getBody() {
 		return this.body;
 	}
 	

@@ -5,10 +5,10 @@ import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.*;
 import jumpingalien.model.*;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class Foreach extends Statement {
 		return this.direction;
 	}
 	
-	private Statement getBody() {
+	public Statement getBody() {
 		return this.body;
 	}
 	
@@ -82,99 +82,82 @@ public class Foreach extends Statement {
 		this.forEachCounter = c;
 	}
 	
-	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
-		if (getBody() instanceof Break)
-			this.getProgram().setWellFormed(false);
-		if (getBody() instanceof Sequence){
-			List<Statement> statements = ((Sequence) getBody()).getStatements();
-			for (Statement s : statements){
-				if (s instanceof Break)
-					this.getProgram().setWellFormed(false);
-			}
-		}
-		if (getBody() instanceof ActionStatement)
-			this.getProgram().setWellFormed(false);
-		if (getBody() instanceof Sequence){
-			List<Statement> statements = ((Sequence) getBody()).getStatements();
-			for (Statement s : statements){
-				if (s instanceof ActionStatement)
-					this.getProgram().setWellFormed(false);
-			}
-		}
-		double time = (double) globals.get("timer").getValue();
-		if (counter == getStatementCounter())
+	private void evalWhere(Type t, Expression exp, List<Type> l, Map<String,Type> globals) {
+		Type old = globals.get("this");
+		globals.put("this",t);
+		if ((boolean) exp.evaluate(globals))
+			l.add(t);
+		globals.put("this", old);
+	}
+	
+	private void evalSort(Type t, Expression exp, Map<Double,List<Type>> m, Map<String,Type> globals) {
+		Type old = globals.get("this");
+		globals.put("this",t);
+		double key = (double) getSort().evaluate(globals);
+		if (m.containsKey(key))
 		{
-			String name = getVariableName();
-			Kind kind = getVariableKind();
+			List<Type> value = m.get(key);
+			value.add(t);
+			m.put(key,value);
+		}
+		else
+		{
+			List<Type> l = new ArrayList<Type>();
+			l.add(t);
+			m.put(key, l);
+		}
+		globals.put("this", old);
+	}
+	
+	private Map<Double,List<Type>> sort(Map<Double,List<Type>> unsorted, SortDirection dir) {
+		if (dir == SortDirection.ASCENDING)
+			return new TreeMap<Double,List<Type>>(unsorted);
+		else
+		{
+			Map<Double,List<Type>> s;
+			s =  new TreeMap<Double,List<Type>>(Collections.reverseOrder());
+			s.putAll(unsorted);
+			return s;
+		}
+	}
+	
+	private void checkKind(Type t, Kind k, ArrayList<Type> l) {
+		if ((t.getValue() instanceof AllObjects) && (((AllObjects) t.getValue()).isKind(kind)))
+			l.add(t);
+	}
+	
+	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
+		double time = (double) globals.get("timer").getValue();
+		if (counter == getStatementCounter()) {
 			ArrayList<Type> all = new ArrayList<Type>(globals.values());
-			ArrayList<Type> list = new ArrayList<Type>();
-			for (Type t : all)
-			{
-				if ((t instanceof ObjectType) && ((AllObjects)t.getValue()).isKind(kind))
-					list.add(t);
-			}
+			Kind kind = getVariableKind();
+			ArrayList<Type> newall = new ArrayList<Type>();
+			all.forEach(t->checkKind(t,kind,newall));
+			all = newall;
 			if (getWhere() != null)
 			{
-				Type oldthis = globals.get("this");
-				ArrayList<Type> wherelist = new ArrayList<Type>();
-				for (Type o : list)
-				{
-					globals.put("this", o);
-					if ((Boolean)(getWhere().evaluate(globals)))
-						wherelist.add(o);
-				}
-				list = wherelist;
-				globals.put("this",oldthis);
+				ArrayList<Type> where = new ArrayList<Type>();
+				all.forEach(t->evalWhere(t,getWhere(),where,globals));
+				all = where;
 			}
 			if (getSort() != null)
 			{
-				Type oldthis = globals.get("this");
-				ArrayList<Double> values = new ArrayList<Double>();
-				for (Type o : list)
-				{
-					globals.put("this", o);
-					double val = (double) getSort().evaluate(globals);
-					values.add(val);
-				}
+				Type old = globals.get("this");
 				Map<Double,List<Type>> unsorted = new HashMap<Double,List<Type>>();
-				for (int i = 0; i<values.size(); i++)
-				{
-					Double key = values.get(i);
-					List<Type> l;
-					if (unsorted.containsKey(key))
-						l = unsorted.get(key);
-					else
-						l = new ArrayList<Type>();
-					l.add(list.get(i));
-					unsorted.put(key, l);
-				}
-				Map<Double,List<Type>> sorted;
-				if (unsorted.size() > 1)
-					sorted = new TreeMap<Double,List<Type>>(unsorted);
-				else
-					sorted = unsorted;
-				List<List<Type>> sortedlist = new ArrayList<List<Type>>(sorted.values());
-				list = new ArrayList<Type>();
-				if (getSortDirection() == SortDirection.ASCENDING)
-				{
-					for (int i = 0; i<sorted.size(); i++)
-						for (int j = 0; j<sortedlist.get(i).size(); j++)
-							list.add(sortedlist.get(i).get(j));
-				}
-				else
-				{
-					for (int i = sorted.size()-1; i>=0; i--)
-						for (int j = sortedlist.get(i).size()-1; j>=0; j--)
-							list.add(sortedlist.get(i).get(j));
-				}
-				globals.put("this",oldthis);
+				all.forEach(t->evalSort(t,getSort(),unsorted,globals));
+				Map<Double,List<Type>> sorted = sort(unsorted,getSortDirection());
+				ArrayList<Type> sortlist = new ArrayList<Type>();
+				for (List<Type> l : sorted.values())
+					for (Type t : l)
+						sortlist.add(t);
+				all = sortlist;
 			}
 			Type old = globals.get(name);
-			ArrayList<Type> newall = new ArrayList(list.subList(getForEachCounter(), list.size()));
-			for (Type o : newall)
+			all = new ArrayList(all.subList(getForEachCounter(), all.size()));
+			for (Type t : all)
 			{
 				try {
-					globals.put(name, o);
+					globals.put(name, t);
 					getBody().setStatementCounter(counter);
 					time = getBody().evaluate(globals,counter);
 				} catch (BreakException exc) {
@@ -186,7 +169,7 @@ public class Foreach extends Statement {
 					resetCounter();
 					setForEachCounter(0);
 				} catch (TerminateException exc) {
-					setForEachCounter(all.indexOf(o));
+					setForEachCounter(all.indexOf(t));
 					globals.put("timer",new DoubleType());
 					globals.put(name,old);
 					throw new BreakException(0);

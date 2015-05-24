@@ -78,7 +78,7 @@ public class StatementTest {
 		s3 = new Foreach(sl, "name", Kind.SHARK,
 				(Expression)new BinaryExpression<Double,Double,Boolean>(sl,new UnaryExpression<AllObjects,Double>(sl,null,t->t.getXPosition()),new Constant<Double>(sl,(double)35),(a,b)->(a<b)), 
 				(Expression)new UnaryExpression<AllObjects,Double>(sl,null,t->t.getXPosition()), 
-				SortDirection.ASCENDING,
+				SortDirection.DESCENDING,
 				(Statement) new Print(sl,new Constant<String>(sl,"print line in foreach statement")));
 		// foreach shark where xpos < 35 sorted by xpos (ascending) do print(this)
 		s4 = new If(sl, (Expression)new UnaryExpression<AllObjects,Boolean>(sl,new Constant<AllObjects>(sl,sh2),t->(t instanceof Shark)),
@@ -98,7 +98,7 @@ public class StatementTest {
 		sh3.endMove(Orientation.RIGHT);
 		sh3.endMove(Orientation.LEFT);
 		globals.put("this", new ObjectType(sh3));
-		s9 = new While(sl,(Expression)new BinaryExpression<Double,Double,Boolean>(sl,new UnaryExpression<AllObjects,Double>(sl,new Constant<AllObjects>(sl,sh3),t->t.getXAcc()),new Constant<Double>(sl,1.0),(a,b)->(a<b)),
+		s9 = new While(sl,(Expression)new BinaryExpression<Double,Double,Boolean>(sl,new UnaryExpression<GameObject,Double>(sl,new Constant<GameObject>(sl,sh3),t->t.getXAcc()),new Constant<Double>(sl,1.0),(a,b)->(a<b)),
 				(Statement)new ActionStatement<GameObject,Void>(sl,new Constant<Direction>(sl,Direction.RIGHT),(t,d)->t.startMove(d)));
 		// While (sh3.getXAcc()<1) do this.startMove(right);
 		globals.put("this", new ObjectType(sh4));
@@ -110,6 +110,12 @@ public class StatementTest {
 	public void Constructor_LegalCase() {
 		assertTrue(s6.getSourceLocation() == sl);
 		assertTrue(((Print)s6).getExpression().evaluate(globals) == new Constant<String>(sl,"print").evaluate(globals));
+		for (Statement s : ((Sequence)s7).getStatements())
+			assertTrue(s instanceof Print);
+		assertTrue(((Foreach)s3).getBody() instanceof Print);
+		assertTrue(((If)s4).getIfBody() instanceof Print);
+		assertTrue(((If)s4).getElseBody() instanceof Print);
+		assertTrue(((While)s9).getBody() instanceof ActionStatement);
 	}
 	
 	@Test

@@ -29,8 +29,7 @@ public class Buzam extends Mazub {
 	 * @throws 	Throws a ModelException if sprites is an emty array.
 	 * 			| sprites == null
 	 */
-	public Buzam(double pos_x, double pos_y, Sprite[] sprites)
-			throws ModelException {
+	public Buzam(double pos_x, double pos_y, Sprite[] sprites) throws ModelException {
 		super(pos_x, pos_y, sprites);
 		setHitPoints(startHitPoints);
 	}
@@ -48,8 +47,7 @@ public class Buzam extends Mazub {
 	 * @throws 	Throws a ModelException if sprites is an emty array.
 	 * 			| sprites == null
 	 */
-	public Buzam(double pos_x, double pos_y, Sprite[] sprites, Program program)
-			throws ModelException {
+	public Buzam(double pos_x, double pos_y, Sprite[] sprites, Program program) throws ModelException {
 		super(pos_x, pos_y, sprites);
 		setHitPoints(startHitPoints);
 		setProgram(program);
@@ -79,8 +77,10 @@ public class Buzam extends Mazub {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
 		if (getProgram() != null)
+		{
 			getProgram().setGameObject(this);
 			getProgram().execute(getProgram().getGlobalVariables(), time);
+		}
 		advanceWithDT(time);
 	}
 	

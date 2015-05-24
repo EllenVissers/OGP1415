@@ -33,11 +33,11 @@ public class If extends Statement {
 		return this.condition;
 	}
 	
-	private Statement getIfBody() {
+	public Statement getIfBody() {
 		return this.ifBody;
 	}
 	
-	private Statement getElseBody() {
+	public Statement getElseBody() {
 		return this.elseBody;
 	}
 
