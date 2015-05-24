@@ -20,16 +20,7 @@ public class If extends Statement {
 	private Expression condition;
 	private Statement ifBody;
 	private Statement elseBody;
-	//private boolean result;
 	private Statement bodyToDo;
-	
-//	protected boolean getResult() {
-//		return result;
-//	}
-//
-//	protected void setResult(boolean result) {
-//		this.result = result;
-//	}
 	
 	private Expression getCondition() {
 		return this.condition;
@@ -51,6 +42,7 @@ public class If extends Statement {
 		this.bodyToDo = body;
 	}
 	
+	@Override
 	public void resetDone() {
 		this.setDone(false);
 		getIfBody().resetDone();

@@ -35,8 +35,7 @@ public class Shark extends GameObject {
 	 * 			| setMaxVel(-maxSpeed)
 	 */
 	public Shark(double posx, double posy, Sprite[] sprites) throws ModelException {
-		super(posx,posy,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints,null,false,0,null);
-		setMaxVel(-maxSpeed);
+		this(posx,posy,sprites,null);
 	}
 	
 	/**
@@ -57,6 +56,11 @@ public class Shark extends GameObject {
 	public Shark(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
 		super(posx,posy,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints,null,false,0,program);
 		setMaxVel(-maxSpeed);
+		this.timer = 0;
+		this.timerAir = 0;
+		this.timerMagma = 0;
+		this.lastJump = 0;
+		this.timeslot = randomTime();
 	}
 	
 	//VARIABLES
@@ -99,23 +103,63 @@ public class Shark extends GameObject {
 	/**
 	 * Variable registering the time a shark is touching magma.
 	 */
-	private double timerMagma = 0;
+	private double timerMagma;
 	/**
 	 * Variable registering the time a shark is touching air.
 	 */
-	private double timerAir = 0;
+	private double timerAir;
 	/**
 	 * Variable registering the time durations since the last jump.
 	 */
-	private int lastJump = 0;
+	private int lastJump;
 	/**
 	 * Variable registering the time a shark is doing the same movement.
 	 */
-	private double timer = 0;
+	private double timer;
 	/**
 	 * Variable registering the length of the current movement.
 	 */
-	private double timeslot = randomTime();
+	private double timeslot;
+	
+	private double getTimer() {
+		return this.timer;
+	}
+	
+	private void setTimer(double t) {
+		this.timer = t;
+	}
+	
+	private double getTimerAir() {
+		return this.timerAir;
+	}
+	
+	private void setTimerAir(double t) {
+		this.timerAir = t;
+	}
+	
+	private double getTimerMagma() {
+		return this.timerMagma;
+	}
+	
+	private void setTimerMagma(double t) {
+		this.timerMagma = t;
+	}
+	
+	private double getTimeSlot() {
+		return this.timeslot;
+	}
+	
+	private void resetTimeSlot() {
+		this.timeslot = randomTime();
+	}
+	
+	private int getLastJump() {
+		return this.lastJump;
+	}
+	
+	private void setLastJump(int t) {
+		this.lastJump = t;
+	}
 	
 	//GETTERS AND SETTERS
 	/**
@@ -196,7 +240,7 @@ public class Shark extends GameObject {
 	 *			| timer+time >= timeslot
 	 */
 	private boolean reachesTimeSlot(double time) {
-		return (timer+time >= timeslot);
+		return (getTimer()+time >= getTimeSlot());
 	}	
 	
 //	/**
@@ -462,7 +506,7 @@ public class Shark extends GameObject {
 	 */
 	@Override
 	public Void startJump() {
-		lastJump = 5;
+		setLastJump(5);
 		setYVelocity(startVelY);
 		setYAcc(accy);
 		return null;
@@ -547,7 +591,7 @@ public class Shark extends GameObject {
 				s = (this.getXPosition() + 100*(time*this.getXVelocity() + 0.5*time*time*this.getXAcc()));
 				this.setXVelocity(this.getXVelocity() + time*this.getXAcc());
 			}
-			timer = timer + time;
+			setTimer(getTimer()+time);
 		}
 		try {
 			CheckWorldH(s);
@@ -579,9 +623,9 @@ public class Shark extends GameObject {
 	 * 			| timerAir -= times*0.2;
 	 */
 	private void touchAir(double time) {
-		timerAir += time;
-		int times = (int) Math.floor(timerAir*5);
-		timerAir -= times*0.2;
+		setTimerAir(getTimerAir()+time);
+		int times = (int) Math.floor(getTimerAir()*5);
+		setTimerAir(getTimerAir()-times*0.2);
 		reduceHitPoints(times*6);
 	}
 	
@@ -603,13 +647,13 @@ public class Shark extends GameObject {
 	 * 			| timerMagma -= times*0.2;
 	 */
 	private void touchMagma(double time) {
-		if (timerMagma == 0)
+		if (getTimerMagma() == 0)
 			reduceHitPoints(50);
 		else
 		{
-			timerMagma += time;
-			int times = (int) Math.floor(timerMagma*5);
-			timerMagma -= times*0.2;
+			setTimerMagma(getTimerMagma()+time);
+			int times = (int) Math.floor(getTimerMagma()*5);
+			setTimerMagma(getTimerMagma() - times*0.2);
 			reduceHitPoints(times*50);
 		}
 	}
@@ -624,7 +668,7 @@ public class Shark extends GameObject {
 	 */
 	private void endOfTimeSlot() {
 		endMovement();
-		timeslot = randomTime();
+		resetTimeSlot();
 		startMovement();
 	}
 	
@@ -653,11 +697,11 @@ public class Shark extends GameObject {
 			if (medium.contains(0))
 				touchAir(time);
 			else
-				timerAir = 0;
+				setTimerAir(0);
 			if (medium.contains(3))
 				touchMagma(time);
 			else
-				timerMagma = 0;
+				setTimerMagma(0);
 		}
 	}
 	
@@ -678,9 +722,9 @@ public class Shark extends GameObject {
 	private void startMovement() {
 		startMove();
 		int signal = randomSignal();
-		if (lastJump > 0)
-			lastJump -= 1;
-		if ((SharkcanJump()) && (lastJump == 0) && (signal == 1) )
+		if (getLastJump() > 0)
+			setLastJump(getLastJump()-1);
+		if ((SharkcanJump()) && (getLastJump() == 0) && (signal == 1) )
 			startJump();
 		else if (isSubmerged())
 			startSwim();
@@ -715,7 +759,7 @@ public class Shark extends GameObject {
 	 */
 	private void UpdatePositions(double time) {
 		Move(time);
-		if ( (lastJump == 5) && ( ( (isJumping()) && (! isSubmerged()) ) || ( (isSubmerged()) && (getYVelocity() <= (-(getYAcc()/2)*time)) ) ) )
+		if ( (getLastJump() == 5) && ( ( (isJumping()) && (! isSubmerged()) ) || ( (isSubmerged()) && (getYVelocity() <= (-(getYAcc()/2)*time)) ) ) )
 			Jump(time);
 		else if (! isSubmerged())
 			Fall(time);
@@ -747,8 +791,8 @@ public class Shark extends GameObject {
 		{
 			if (reachesTimeSlot(time))
 			{
-				double t1 = timeslot - timer;
-				double t2 = (timer+time) - timeslot;
+				double t1 = getTimeSlot() - getTimer();
+				double t2 = (getTimer()+time) - getTimeSlot();
 				advanceWithDT(t1);
 				endOfTimeSlot();
 				advanceWithDT(t2);

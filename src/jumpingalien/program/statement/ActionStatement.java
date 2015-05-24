@@ -24,6 +24,7 @@ public class ActionStatement<GameObject,Void> extends Statement {
 		super(location);
 		this.function = lambda;
 		this.bifunction = null;
+		this.direction = null;
 	}
 	
 	public ActionStatement(SourceLocation location, Expression direction,BiFunction<GameObject,Orientation,Void> lambda) {
@@ -45,11 +46,12 @@ public class ActionStatement<GameObject,Void> extends Statement {
 		return this.bifunction;
 	}
 	
+	@Override
 	public void resetDone() {
 		this.setDone(false);
 	}
 	
-	public Orientation getDirection(Map<String,Type> globals) {
+	private Orientation getDirection(Map<String,Type> globals) {
 		Direction dir;
 		if (this.direction.evaluate(globals) instanceof Type)
 			dir = (Direction) ((Type) this.direction.evaluate(globals)).getValue();

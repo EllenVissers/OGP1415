@@ -202,10 +202,6 @@ public abstract class AllObjects {
 		return true;
 	}
 
-	//public abstract double getXVelocity();
-	//public abstract double getYVelocity();
-	//public abstract double getXAcc();
-	//public abstract double getYAcc();
 	public abstract double getWidth();
 	public abstract double getHeight();
 }

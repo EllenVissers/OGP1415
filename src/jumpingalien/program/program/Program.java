@@ -19,9 +19,15 @@ public class Program {
 			setWellFormed(false);
 		else
 			setWellFormed(true);
+		setGameObject(null);
 	}
 	
-	public boolean checkWellFormed(Statement main) {
+	private Statement main;
+	private Map<String,Type> global;
+	private AllObjects gameObject;
+	private boolean isWellFormed;
+	
+	private boolean checkWellFormed(Statement main) {
 		if (main instanceof Foreach)
 		{
 			Statement body = ((Foreach)main).getBody();
@@ -34,7 +40,7 @@ public class Program {
 		return true;
 	}
 	
-	public boolean containsActionStatement(Statement s) {
+	private boolean containsActionStatement(Statement s) {
 		if (s instanceof If)
 		{
 			Statement ifBody = ((If)s).getIfBody();
@@ -59,7 +65,7 @@ public class Program {
 		return false;
 	}
 	
-	public boolean containsBreak(Statement s) {
+	private boolean containsBreak(Statement s) {
 		if (s instanceof Break)
 			return true;
 		if (s instanceof If)
@@ -79,17 +85,13 @@ public class Program {
 		return false;
 	}
 	
-	public AllObjects getGameObject() {
+	private AllObjects getGameObject() {
 		return this.gameObject;
 	}
 	
 	public void setGameObject(AllObjects obj){
 		this.gameObject = obj;
 	}
-
-	private Statement main;
-	private Map<String,Type> global;
-	private AllObjects gameObject;
 	
 	public Statement getMainStatement() {
 		return this.main;
@@ -103,9 +105,7 @@ public class Program {
 		getGlobalVariables().put(key,value);
 	}
 	
-	public boolean isWellFormed = true;
-	
-	public void setWellFormed(boolean bool){
+	private void setWellFormed(boolean bool){
 		this.isWellFormed = bool;
 	}
 	

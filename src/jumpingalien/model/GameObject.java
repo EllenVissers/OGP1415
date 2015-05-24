@@ -866,8 +866,8 @@ public abstract class GameObject extends AllObjects {
 				((Slime)this).getSchool().addSlime(slime);
 			}
 		}
-		Slime.timer = 0;
-		Slime.timeslot = Slime.randomTime();
+		((Slime)this).setTimer(0);
+		((Slime)this).resetTimeSlot();
 	}
 	
 	/**

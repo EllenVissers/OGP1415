@@ -41,10 +41,7 @@ public class Slime extends GameObject {
 	 * 			| setMaxVel(-maxSpeed)
 	 */
 	public Slime(double pos_x, double pos_y, Sprite[] sprites, School school) throws ModelException {
-		super(pos_x,pos_y,0,0,-accx,0,Orientation.LEFT,sprites,startHitPoints, null,false,0,null);
-		setSchool(school);
-		school.addSlime(this);
-		setMaxVel(-maxSpeed);
+		this(pos_x,pos_y,sprites,school,null);
 	}
 	
 	/**
@@ -70,6 +67,10 @@ public class Slime extends GameObject {
 		setSchool(school);
 		school.addSlime(this);
 		setMaxVel(-maxSpeed);
+		this.timer = 0;
+		this.timerMagma = 0;
+		this.timerWater = 0;
+		this.timeslot = randomTime();
 	}
 	
 	/**
@@ -103,11 +104,11 @@ public class Slime extends GameObject {
 	/**
 	 * Variable registering the time a slime is doing the same movement.
 	 */
-	protected static double timer = 0;
+	protected double timer;
 	/**
 	 * Variable registering the length of the current movement.
 	 */
-	protected static double timeslot = randomTime();
+	protected double timeslot;
 	/**
 	 * The default value of the amount of hitpoints of a newly created Slime.
 	 */
@@ -115,11 +116,43 @@ public class Slime extends GameObject {
 	/**
 	 * Variable registering the time the slime has been in water.
 	 */
-	private double timerWater = 0;
+	private double timerWater;
 	/**
 	 * Variable registering the time the slime has been in magma.
 	 */
-	private double timerMagma = 0;
+	private double timerMagma;
+	
+	private double getTimer() {
+		return this.timer;
+	}
+	
+	public void setTimer(double t) {
+		this.timer = t;
+	}
+	
+	private double getTimerWater() {
+		return this.timerWater;
+	}
+	
+	private void setTimerWater(double t) {
+		this.timerWater = t;
+	}
+	
+	private double getTimerMagma() {
+		return this.timerMagma;
+	}
+	
+	private void setTimerMagma(double t) {
+		this.timerMagma = t;
+	}
+	
+	private double getTimeSlot() {
+		return this.timeslot;
+	}
+	
+	public void resetTimeSlot() {
+		this.timeslot = randomTime();
+	}
 	
 	/**
 	 * Method returning the maximum speed of this slime.
@@ -196,9 +229,9 @@ public class Slime extends GameObject {
 	 * 			| int times = (int) Math.floor(timerWater*5)
 	 */
 	private void touchWater(double time) {
-		timerWater += time;
-		int times = (int) Math.floor(timerWater*5);
-		timerWater -= times*0.2;
+		setTimerWater(getTimerWater() + time);
+		int times = (int) Math.floor(getTimerWater()*5);
+		setTimerWater(getTimerWater() - times*0.2);
 		reduceHitPoints(times*2);
 	}
 	
@@ -220,13 +253,13 @@ public class Slime extends GameObject {
 	 * 			| timerMagma -= times*0.2;
 	 */
 	private void touchMagma(double time) {
-		if (timerMagma == 0)
+		if (getTimerMagma() == 0)
 			reduceHitPoints(50);
 		else
 		{
-			timerMagma += time;
-			int times = (int) Math.floor(timerMagma*5);
-			timerMagma -= times*0.2;
+			setTimerMagma(getTimerMagma()+time);
+			int times = (int) Math.floor(getTimerMagma()*5);
+			setTimerMagma(getTimerMagma()-times*0.2);
 			reduceHitPoints(times*50);
 		}
 	}
@@ -314,7 +347,7 @@ public class Slime extends GameObject {
 	}
 	
 	private boolean reachesTimeSlot(double time) {
-		return ((timer+time)>=timeslot);
+		return ((getTimer()+time)>=getTimeSlot());
 	}
 	
 	/**
@@ -352,7 +385,7 @@ public class Slime extends GameObject {
 			s = (getXPosition() + 100*(time*getXVelocity() + 0.5*time*time*getXAcc()));
 			setXVelocity(getXVelocity()+time*getXAcc());
 		}
-		timer += time;
+		setTimer(getTimer()+time);
 		try {
 			CheckWorldH(s);
 		} catch (CollisionException exc) {
@@ -415,11 +448,11 @@ public class Slime extends GameObject {
 			if (medium.contains(2))
 				touchWater(t);
 			else
-				timerWater = 0;
+				setTimerWater(0);
 			if (medium.contains(3))
 				touchMagma(t);
 			else
-				timerMagma = 0;	
+				setTimerMagma(0);	
 		}
 	}
 	
@@ -448,10 +481,11 @@ public class Slime extends GameObject {
 		else
 		{
 			if (reachesTimeSlot(time)) {
-				double t1 = timeslot - timer;
+				double t1 = getTimeSlot() - getTimer();
 				double t2 = time - t1;
 				advanceWithDT(t1);
 				endMove(getOrientation());
+				resetTimeSlot();
 				startMove();
 				advanceWithDT(t2);
 			}
@@ -492,7 +526,7 @@ public class Slime extends GameObject {
 		if (getOrientation() == orientation) {
 			setXAcc(0);
 			setXVelocity(0);
-			timer = 0;
+			setTimer(0);
 		}
 		return null;
 	}

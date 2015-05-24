@@ -23,17 +23,11 @@ public class Sequence extends Statement {
 		return this.statements;
 	}
 	
+	@Override
 	public void resetDone() {
 		this.setDone(false);
 		for (Statement s : getStatements())
 			s.resetDone();
-	}
-
-	protected Statement getStatementAt(int i) throws IndexOutOfBoundsException{
-		if((i<0 || i >= getStatements().size()))
-			throw new IndexOutOfBoundsException();
-		else
-			return getStatements().get(i);
 	}
 	
 	@Override
@@ -65,43 +59,4 @@ public class Sequence extends Statement {
 		this.setDone(true);
 		return time;
 	}
-	
-//	@Override
-//	public double evaluate(Map<String,Type> globals, int counter) throws BreakException {
-//		double time = (double) globals.get("timer").getValue();
-////		if (counter == getStatementCounter())
-////		{
-//			ArrayList<Statement> list = new ArrayList<Statement>(getStatements().subList(getSequenceCounter(), getStatements().size()));
-//			for (Statement s : list)
-//			{
-//				if (! s.isDone())
-//				{
-//					try {
-//						time = s.evaluate(globals,counter);
-//					} catch (BreakException exc) {
-//						time = exc.getTime();
-//					}
-//					try {
-//						time = checkTime(time,s);
-//						resetCounter(this);
-//						setSequenceCounter(0);
-//						//s.setDone(true);
-//						globals.put("timer", new DoubleType(time));
-//						if (globals.get("this").getValue() instanceof Plant)
-//							System.out.println(globals.get("this").getValue() + " finished: " + s);
-//					} catch (TerminateException exc) {
-//						setSequenceCounter(getStatements().indexOf(s));
-//						globals.put("timer", new DoubleType());
-//						if (globals.get("this").getValue() instanceof Plant)
-//							System.out.println(globals.get("this").getValue() + " not finished: " + s);
-//						throw new BreakException(0);
-//					}
-//				}
-//				s.setDone(true);
-//			}
-//			this.setDone(true);
-////		}
-//		return time;
-//	}
-
 }

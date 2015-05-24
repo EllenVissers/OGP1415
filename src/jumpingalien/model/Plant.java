@@ -33,8 +33,7 @@ public class Plant extends GameObject {
 	 * 			| sprites == null
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites) throws ModelException {
-		super(posx,posy,/*-*/speed,0,0,0,Orientation.RIGHT/*LEFT*/,sprites,1,null,false,0,null);
-		this.timer = 0;
+		this(posx,posy,sprites,null);
 	}
 	
 	/**
@@ -52,6 +51,7 @@ public class Plant extends GameObject {
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
 		super(posx,posy,/*-*/speed,0,0,0,Orientation.RIGHT/*LEFT*/,sprites,1,null,false,0,program);
+		this.timer = 0;
 	}
 	
 	/**
@@ -112,11 +112,11 @@ public class Plant extends GameObject {
 		removeFromAll(this);
 	}
 	
-	public double getTimer() {
+	private double getTimer() {
 		return this.timer;
 	}
 	
-	public void setTimer(double t) {
+	private void setTimer(double t) {
 		this.timer = t;
 	}
 	

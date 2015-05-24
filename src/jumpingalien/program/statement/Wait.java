@@ -14,34 +14,25 @@ public class Wait extends Statement {
 	public Wait(SourceLocation loc, Expression duration) {
 		super(loc);
 		this.duration = duration;
-		this.breakCounter = 0;
 		this.timeLeft = duration;
 	}
 	
 	private Expression duration;
-	private int breakCounter;
 	private Expression timeLeft;
 	
 	private Expression getDuration() {
 		return this.duration;
 	}
 	
-	private int getBreakCounter() {
-		return this.breakCounter;
-	}
-	
 	private Expression getTimeLeft() {
 		return this.timeLeft;
-	}
-	
-	private void setBreakCounter(int c) {
-		this.breakCounter = c;
 	}
 	
 	private void setTimeLeft(Expression t) {
 		this.timeLeft = t;
 	}
 	
+	@Override
 	public void resetDone() {
 		this.setDone(false);
 	}

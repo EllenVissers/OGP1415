@@ -1,7 +1,9 @@
 package jumpingalien.program.expression;
 import java.util.ArrayList;
 import java.util.Map;
+
 import jumpingalien.program.type.Type;
+import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
@@ -23,7 +25,7 @@ public class SearchObj extends Expression {
 		return this.direction;
 	}
 	
-	public Object evaluate(Map<String,Type> globals) {
+	public AllObjects evaluate(Map<String,Type> globals) {
 		GameObject obj = (GameObject) ((ObjectType)globals.get("this")).getValue();
 		World world = obj.getWorld();
 		double xmin = obj.getXPosition();
