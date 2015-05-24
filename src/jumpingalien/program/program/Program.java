@@ -3,6 +3,7 @@ package jumpingalien.program.program;
 import java.util.Map;
 
 import jumpingalien.model.AllObjects;
+import jumpingalien.program.statement.Break;
 import jumpingalien.program.statement.BreakException;
 import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.DoubleType;
@@ -63,6 +64,8 @@ public class Program {
 	public void execute(Map<String,Type> globals, double time) {
 		globals.put("this", new ObjectType(getGameObject()));
 		globals.put("timer", new DoubleType(time));
+		if (getMainStatement() instanceof Break)
+			setWellFormed(false);
 		while (((DoubleType)globals.get("timer")).getValue() > 0)
 		{
 			try {
