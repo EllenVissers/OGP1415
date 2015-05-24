@@ -1,11 +1,11 @@
 package jumpingalien.program.program;
 import java.util.List;
 import java.util.Map;
-
 import jumpingalien.program.statement.*;
 import jumpingalien.model.AllObjects;
-import jumpingalien.model.GameObject;
-import jumpingalien.model.Plant;
+import jumpingalien.program.statement.Break;
+import jumpingalien.program.statement.BreakException;
+import jumpingalien.program.statement.Statement;
 import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.ObjectType;
 import jumpingalien.program.type.Type;
@@ -116,6 +116,8 @@ public class Program {
 	public void execute(Map<String,Type> globals, double time) {
 		globals.put("this", new ObjectType(getGameObject()));
 		globals.put("timer", new DoubleType(time));
+		if (getMainStatement() instanceof Break)
+			setWellFormed(false);
 		while (((DoubleType)globals.get("timer")).getValue() > 0)
 		{
 			if (getMainStatement().isDone())
@@ -125,23 +127,7 @@ public class Program {
 			} catch (BreakException exc) {
 				globals.put("timer",new DoubleType());
 			}
-//			try {
-//				time = getMainStatement().evaluate(globals,getCounter());
-//				if (getCounter() == 0)
-//					setCounter(1);
-//				else
-//					setCounter(0);
-//				globals.put("timer",new DoubleType(time));
-//			} catch (BreakException exc) {
-//				globals.put("timer",new DoubleType());
-//			}
 		}
-		if (globals.get("this").getValue() instanceof Plant)
-		{
-			System.out.println("loop ended");
-			System.out.println("vx " + ((GameObject) globals.get("this").getValue()).getXVelocity());
-		}
-		
 	}
 
 }

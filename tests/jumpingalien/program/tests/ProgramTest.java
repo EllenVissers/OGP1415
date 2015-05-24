@@ -23,11 +23,12 @@ public class ProgramTest {
 	private static SourceLocation loc;
 	private static Print s1;
 	private static Program p1;
+	private static Map<String,Type> globals;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		loc = new SourceLocation(5,3);
-		Map<String,Type> globals = new HashMap<String,Type>();
+		globals = new HashMap<String,Type>();
 		
 		s1 = new Print(loc,new Constant<Double>(loc,2.9));
 		p1 = new Program(s1,globals);
@@ -36,7 +37,9 @@ public class ProgramTest {
 	
 	@Test
 	public void Constructor(){
-		
+		assertEquals(p1.getMainStatement(),s1);
+		assertEquals(p1.getCounter(),0);
+		assertEquals(p1.getGlobalVariables(),globals);
 	}
 
 	@Test
