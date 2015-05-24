@@ -1,7 +1,6 @@
 package jumpingalien.program.tests;
 
 import static org.junit.Assert.*;
-<<<<<<< HEAD
 import jumpingalien.model.AllObjects;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Plant;
@@ -12,20 +11,14 @@ import jumpingalien.program.expression.Constant;
 import jumpingalien.program.expression.GetTile;
 import jumpingalien.program.expression.SearchObj;
 import jumpingalien.program.expression.UnaryExpression;
-=======
 import jumpingalien.model.*;
-import jumpingalien.program.expression.*;
-//import jumpingalien.program.expression.GetTile;
->>>>>>> origin/master
 import jumpingalien.program.type.*;
 import jumpingalien.part2.internal.Resources;
 import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.util.Sprite;
-
 import java.util.HashMap;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -50,15 +43,8 @@ public class ExpressionTests {
 	private static World w1;
 	private static UnaryExpression<GameObject, Boolean> e11,e12,e13;
 	private static Tile t1;
-<<<<<<< HEAD
-	private static UnaryExpression<AllObjects, Boolean> e14;
-	private static UnaryExpression<AllObjects, Boolean> e15;
-	private static UnaryExpression<AllObjects, Boolean> e16;
+	private static UnaryExpression<Tile, Boolean> e14, e15, e16;
 	private static SearchObj e17;
-=======
-	private static UnaryExpression<Tile, Boolean> e14,e15,e16;
-//	private static SearchObj e17;
->>>>>>> origin/master
 	private static Constant<Direction> c3;
 	private static GetTile e18;
 
@@ -103,26 +89,14 @@ public class ExpressionTests {
 		e8 = new UnaryExpression<AllObjects,Double>(loc,c1,t->t.getWidth());
 		e9 = new UnaryExpression<GameObject,Double>(loc,c1,t->(double)t.getHitPoints());
 		e10 = new BinaryExpression<Boolean,Boolean,Boolean>(loc,e6,e7,(a,b)->(a&&b));
-<<<<<<< HEAD
-		e11 = new UnaryExpression<AllObjects,Boolean>(loc,c1,t->(t instanceof Plant));
-		e12 = new UnaryExpression<AllObjects,Boolean>(loc,c1,t->(t instanceof Mazub));
-		e13 = new UnaryExpression<AllObjects,Boolean>(loc,c1,t->t.isTerminated());
-		e14 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isMagma());
-		e15 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isWater());
-		e16 = new UnaryExpression<AllObjects,Boolean>(loc,c2,t->t.isPassable());
 		e17 = new SearchObj(loc,c3);
 		e18 = new GetTile(loc,new Constant<Double>(loc,0.0),new Constant<Double>(loc,0.0));
-=======
 		e11 = new UnaryExpression<GameObject,Boolean>(loc,c1,t->(t instanceof Plant));
 		e12 = new UnaryExpression<GameObject,Boolean>(loc,c1,t->(t instanceof Mazub));
 		e13 = new UnaryExpression<GameObject,Boolean>(loc,c1,t->t.isTerminated());
 		e14 = new UnaryExpression<Tile,Boolean>(loc,c2,t->t.isMagma());
 		e15 = new UnaryExpression<Tile,Boolean>(loc,c2,t->t.isWater());
 		e16 = new UnaryExpression<Tile,Boolean>(loc,c2,t->t.isPassable());
-//		e17 = new SearchObj(loc,c3);
-//		System.out.println(t1);
-//		e18 = new GetTile(loc,new Constant<Double>(loc,0.0),new Constant<Double>(loc,0.0));
->>>>>>> origin/master
 		
 	}
 

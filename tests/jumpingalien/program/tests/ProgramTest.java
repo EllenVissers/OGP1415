@@ -38,7 +38,6 @@ public class ProgramTest {
 	@Test
 	public void Constructor(){
 		assertEquals(p1.getMainStatement(),s1);
-		assertEquals(p1.getCounter(),0);
 		assertEquals(p1.getGlobalVariables(),globals);
 	}
 
