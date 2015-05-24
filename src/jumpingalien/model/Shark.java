@@ -629,11 +629,17 @@ public class Shark extends GameObject {
 	}
 	
 	/**
-	 * Method to update the new position after a certain time duration.
-	 * @param 	time
-	 * 			The time duration in which the object moves 1 pixel.
+	 * Method to update the positions and velocity of this shark after the given time duration.
+	 * @param 	t
+	 * 			The time after which the new values are computed.
+	 * @effect	If the shark is touching air, its hitpoints are updated with touchWater.
+	 * 			| if (medium.contains(2))
+	 * 			| then touchWater(time)
+	 * @effect	If the shark is touching magma, its hitpoints are updated with touchMagma.
+	 * 			| if (medium.contains(3))
+	 * 			| then touchMagma(time)
 	 */
-	private void advance(double time) {
+	protected void advance(double time) {
 		if (isTerminated())
 		{
 			setTerminatedTime(getTerminatedTime()+time);
@@ -749,18 +755,6 @@ public class Shark extends GameObject {
 			}
 			else
 				advanceWithDT(time);
-		}
-	}
-	
-	public void advanceWithDT(double time) {
-		while (time > 0)
-		{
-			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
-			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
-				advance(dt);
-			else
-				advance(time);
-			time -= dt;
 		}
 	}
 

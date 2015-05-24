@@ -2,10 +2,12 @@ package jumpingalien.model;
 import be.kuleuven.cs.som.annotate.Basic;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 import jumpingalien.model.World;
 import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.type.ObjectType;
+
 import java.util.ArrayList;
 
 
@@ -424,6 +426,32 @@ public abstract class GameObject extends AllObjects {
 		setTerminated(true);
 		removeFromAll(this);
 	}
+	
+	/**
+	 * Update the position of the object after a given time duration using its current position and velocity.
+	 * @param 	time
+	 * 			The time duration after which the new position is calculated.
+	 * @effect	The time it takes to move 1 pixel is computed with getDT.
+	 * 			| getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc())
+	 * @effect	The new position and velocity are computed with the method advance.
+	 * 			| advance(dt)
+	 * @throws	ModelException
+	 * 			The given time is not valid (between 0 and 0.2)
+	 * 			| ! isValidTime(time)
+	 */
+	public void advanceWithDT(double time) {
+		while (time > 0)
+		{
+			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
+			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
+				advance(dt);
+			else
+				advance(time);
+			time -= dt;
+		}
+	}
+	
+	protected abstract void advance(double time);
 	
 	/**
 	 * Check whether the game object is standing on impassable terrain.

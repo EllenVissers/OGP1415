@@ -921,7 +921,7 @@ public class Mazub extends GameObject {
 	 * 			| if (medium.contains(3))
 	 * 			| then touchMagma(time)
 	 */
-	private void advance(double t) {
+	protected void advance(double t) {
 		if (isTerminated())
 		{
 			setTerminatedTime(getTerminatedTime() + t);
@@ -998,18 +998,6 @@ public class Mazub extends GameObject {
 		if (! (isValidTime(time)))
 			throw new ModelException("Invalid time");
 		advanceWithDT(time);
-	}
-	
-	public void advanceWithDT(double time) {
-		while (time > 0)
-		{
-			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
-			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
-				advance(dt);
-			else
-				advance(time);
-			time -= dt;
-		}
 	}
 	
 	/**

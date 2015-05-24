@@ -33,7 +33,7 @@ public class Plant extends GameObject {
 	 * 			| sprites == null
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites) throws ModelException {
-		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,null);
+		super(posx,posy,/*-*/speed,0,0,0,Orientation.RIGHT/*LEFT*/,sprites,1,null,false,0,null);
 		this.timer = 0;
 	}
 	
@@ -51,7 +51,7 @@ public class Plant extends GameObject {
 	 * 			| sprites == null
 	 */
 	public Plant(double posx, double posy, Sprite[] sprites, Program program) throws ModelException {
-		super(posx,posy,-speed,0,0,0,Orientation.LEFT,sprites,1,null,false,0,program);
+		super(posx,posy,/*-*/speed,0,0,0,Orientation.RIGHT/*LEFT*/,sprites,1,null,false,0,program);
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class Plant extends GameObject {
 	/**
 	 * Variable registering the time duration for the movement in 1 direction.
 	 */
-	private final double timeSwitch = 0.5;
+	private static final double timeSwitch = 0.5;
 
 	/**
 	 * Variable registering the time a Plant is moving in the same direction.
@@ -127,7 +127,7 @@ public class Plant extends GameObject {
 	 * @return	True if the time switch is reached.
 	 */
 	private boolean reachesTimeSwitch(double time) {
-		return ((getTimer() + time) >= timeSwitch);
+		return Util.fuzzyGreaterThanOrEqualTo(getTimer()+time,timeSwitch);
 	}
 	
 	/**
@@ -156,7 +156,6 @@ public class Plant extends GameObject {
 		double s;
 		if (! isTerminated()) {
 			s = getXPosition() + 100*time*getXVelocity();
-			setTimer(getTimer()+time);
 			try {
 				CheckWorldH(s);
 			} catch (CollisionException exc) {
@@ -181,21 +180,25 @@ public class Plant extends GameObject {
 	 * @effect 	As long as the Plant is not terminated, its position is updated with Move.
 	 * 			| Move(t)
 	 */
-	private void advance(double t) {
+	protected void advance(double t) {
 		if ( (! isTerminated()) && (t != 0)) {
 			Move(t);
 		}
-		//Move(t);
+	}
+	
+	private Orientation otherDirection() {
+		if (getOrientation() == Orientation.RIGHT)
+			return Orientation.LEFT;
+		else
+			return Orientation.RIGHT;
 	}
 	
 	/**
 	 * Update the position of the Plant after a given time duration using its current position and velocity.
 	 * @param 	time
 	 * 			The time duration after which the new position is calculated.
-	 * @effect	The time it takes to move 1 pixel is computed with getDT.
-	 * 			| getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc())
-	 * @effect	The new position and velocity are computed with the method advance.
-	 * 			| advance(dt)
+	 * @effect	The new position and velocity are computed with the method advanceWithDT.
+	 * 			| advanceWithDT(dt)
 	 * @throws	ModelException
 	 * 			The given time is not valid (between 0 and 0.2)
 	 * 			| ! isValidTime(time)
@@ -218,16 +221,7 @@ public class Plant extends GameObject {
 				double t2 = ((time+getTimer()) - timeSwitch);
 				advanceWithDT(t1);
 				endMove(getOrientation());
-				if (getOrientation() == Orientation.LEFT)
-				{
-					startMove(Orientation.RIGHT);
-					setOrientation(Orientation.RIGHT);
-				}
-				else
-				{
-					startMove(Orientation.LEFT);
-					setOrientation(Orientation.LEFT);
-				}
+				startMove(otherDirection());
 				setTimer(t2);
 				advanceWithDT(t2);
 			}
@@ -236,18 +230,6 @@ public class Plant extends GameObject {
 				setTimer(getTimer()+time);
 				advanceWithDT(time);
 			}
-		}
-	}
-	
-	public void advanceWithDT(double time) {
-		while (time > 0)
-		{
-			double dt = getDT(time,getXVelocity(),getYVelocity(),getXAcc(),getYAcc());
-			if (Util.fuzzyGreaterThanOrEqualTo(time, dt))
-				advance(dt);
-			else
-				advance(time);
-			time -= dt;
 		}
 	}
 
@@ -264,7 +246,6 @@ public class Plant extends GameObject {
 	@Override
 	public Void endMove(Orientation orientation) {
 		setXVelocity(0);
-		setTimer(0);
 		return null;
 	}
 
