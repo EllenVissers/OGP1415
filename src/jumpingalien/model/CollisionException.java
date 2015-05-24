@@ -1,5 +1,4 @@
 package jumpingalien.model;
-
 import jumpingalien.model.GameObject;
 
 /**

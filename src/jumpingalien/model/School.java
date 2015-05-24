@@ -1,9 +1,6 @@
 package jumpingalien.model;
-
 import jumpingalien.model.Slime;
-
 import java.util.ArrayList;
-
 import be.kuleuven.cs.som.annotate.Raw;
 
 /**

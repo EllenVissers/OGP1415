@@ -1,11 +1,8 @@
 package jumpingalien.program.tests;
-
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import jumpingalien.part3.facade.Facade;
 import jumpingalien.part3.facade.IFacadePart3;
 import jumpingalien.part3.programs.ParseOutcome;
@@ -14,7 +11,6 @@ import jumpingalien.program.expression.Constant;
 import jumpingalien.program.program.Program;
 import jumpingalien.program.statement.Print;
 import jumpingalien.program.type.Type;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 

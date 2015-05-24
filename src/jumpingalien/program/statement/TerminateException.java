@@ -4,7 +4,6 @@ package jumpingalien.program.statement;
 public class TerminateException extends Exception {
 	
 	public TerminateException() {
-		
 	}
 
 }

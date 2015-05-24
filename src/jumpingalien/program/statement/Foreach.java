@@ -1,10 +1,8 @@
 package jumpingalien.program.statement;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.*;
 import jumpingalien.model.*;
-
 import java.util.stream.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,18 +12,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeMap;
-
 import static java.util.stream.Collectors.toList;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.part3.programs.IProgramFactory.SortDirection;
 
-/**
- * A statement that executes the given body 
- * with the given variable set to all objects of the given kind 
- * for which the where-expression evaluates to true, 
- * sorted by the result of the given sort expression in the given direction. 
- * The where- and sort-expressions are optional, and can be null;
- * */
 @SuppressWarnings("all")
 public class Foreach extends Statement {
 	

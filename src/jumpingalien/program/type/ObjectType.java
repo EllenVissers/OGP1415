@@ -1,6 +1,5 @@
 package jumpingalien.program.type;
 import java.util.Map;
-
 import jumpingalien.model.AllObjects;
 import jumpingalien.program.expression.Expression;
 

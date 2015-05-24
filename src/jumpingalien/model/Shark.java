@@ -5,9 +5,11 @@ import jumpingalien.program.program.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Util;
+
 /**
  * A class of sharks involving a horizontal and vertical position, velocity and acceleration, a list of images, an orientation, 
- * a number of hitpoints, a world, a maximum velocity,a variable registering whether the shark is terminated, and the time it has been terminated.
+ * a number of hitpoints, a world, a maximum velocity,a variable registering whether the shark is terminated, the time it has 
+ * been terminated and a program.
  * @invar A shark will never move faster than a given maximum velocity
  * 			| this.getXVelocity() <= maxSpeed
  * @invar The shark will always stay within the boundaries of the game world
@@ -464,56 +466,43 @@ public class Shark extends GameObject {
 	 * 			|	setXAcc(-accx);
 	 * 			|	setMaxVel(-maxSpeed);
 	 */
-	private void startMove() {
-		if (randomSignal() == 1)
-		{
-			if (getOrientation() == Orientation.LEFT)
-				setXVelocity(0);
-			setOrientation(Orientation.RIGHT);
-			setXAcc(accx);
-			setMaxVel(maxSpeed);
-		}
-		else
-		{
-			if (getOrientation() == Orientation.RIGHT)
-				setXVelocity(0);
-			setXAcc(-accx);
-			setOrientation(Orientation.LEFT);
-			setMaxVel(-maxSpeed);
-		}
-	}
 	
+	/**
+	 * Starts movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation of the new movement.
+	 * @effect	If the shark isn't already moving in the given direction, the orientation, acceleration and max velocity
+	 * 			are set with setOrientation, setXAcc, setXVelocity and setMaxVel.
+	 * 			| setOrientation(orientation)
+	 * 			| setXAcc(+/- accx);
+	 * 			| setXVelocity(0)
+	 * 			| setMaxVel(+/- maxSpeed)
+	 */
 	@Override
 	public Void startMove(Orientation orientation) {
-//		if (getProgram() != null)
-//		{
-//			System.out.println("in startMove " + orientation);
-//			System.out.println(getOrientation() != orientation);
-//			System.out.println(((getOrientation() == orientation) && (getXVelocity() == 0)));
-//		}
-		if ((getOrientation() != orientation) || ((getOrientation() == orientation) && (getXVelocity() == 0))) {
-//			if (getProgram() != null)
-//				System.out.println("hier");
+		if (getOrientation() != orientation) {
 			if (orientation == Orientation.RIGHT)
+			{
+				setMaxVel(maxSpeed);
 				setXAcc(accx);
+			}
 			else
+			{
+				setMaxVel(-maxSpeed);
 				setXAcc(-accx);
+			}
+				
 			setXVelocity(0);
 			setOrientation(orientation);
 		}
 		return null;
 	}
-	
-	/**
-	 * A method to stop movement of the shark
-	 * @effect	The horizontal acceleration is set to zero with setXAcc.
-	 * 			| setXAcc(0) 
-	 */
-	private void endMove() {
-		setXAcc(0);
-		setXVelocity(0);
-	}
 
+	/**
+	 * Ends movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation in which the movement has to be stopped.
+	 */
 	@Override
 	public Void endMove(Orientation orientation) {
 		if (getOrientation() == orientation) {
@@ -523,11 +512,17 @@ public class Shark extends GameObject {
 		return null;
 	}
 
+	/**
+	 * Starts ducking (not possible for sharks).
+	 */
 	@Override
 	public Void startDuck() {
 		return null;
 	}
 
+	/**
+	 * Ends ducking (not possible for sharks).
+	 */
 	@Override
 	public Void endDuck() {
 		return null;
@@ -757,7 +752,10 @@ public class Shark extends GameObject {
 	 * 			|	startSwim()
 	 */
 	private void startMovement() {
-		startMove();
+		if (10*Math.random() < 5)
+			startMove(Orientation.RIGHT);
+		else
+			startMove(Orientation.LEFT);
 		int signal = randomSignal();
 		if (getLastJump() > 0)
 			setLastJump(getLastJump()-1);
@@ -775,7 +773,7 @@ public class Shark extends GameObject {
 	 * 			| endSwim()
 	 */
 	private void endMovement() {
-		endMove();
+		endMove(getOrientation());
 		endJump();
 		endSwim();
 	}
@@ -840,6 +838,9 @@ public class Shark extends GameObject {
 		}
 	}
 
+	/**
+	 * Checks wheter the shark is ducking (impossible for sharks).
+	 */
 	@Override
 	public boolean isDucking() {
 		return false;

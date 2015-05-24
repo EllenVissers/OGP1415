@@ -1,7 +1,5 @@
 package jumpingalien.program.expression;
-
 import java.util.Map;
-
 import jumpingalien.model.GameObject;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.type.Type;

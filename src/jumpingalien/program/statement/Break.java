@@ -2,7 +2,6 @@ package jumpingalien.program.statement;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.type.DoubleType;
 import jumpingalien.program.type.Type;
-
 import java.util.Map;
 
 public class Break extends Statement {

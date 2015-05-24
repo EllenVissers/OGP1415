@@ -4,9 +4,10 @@ import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import jumpingalien.model.Orientation;
 import jumpingalien.program.program.Program;
+
 /**
  * A class of Plants involving a horizontal and vertical position, velocity and acceleration, a list of images, an orientation, 
- * a number of hitpoints, a world and a terminated state.
+ * a number of hitpoints, a world, a terminated state and a program.
  * @invar 	A Plant's bottom-left position stays within the bounds of the world.
  * 			| this.isValidXPosition(this.getXPosition()) && this.isValidYPosition(this.getYPosition())
  * @invar 	A Plant's vertical velocity will always be zero.
@@ -38,6 +39,7 @@ public class Plant extends GameObject {
 	
 	/**
 	 * Initialize a new Plant with given position, sprites and program.
+	 * @param	posx
 	 * 			The horizontal position of the Plant corresponding to the position of the leftmost pixel of it's image.
 	 * @param 	posy
 	 * 			The vertical position of the Plant corresponding to the position of the lowest pixel of it's image.
@@ -112,10 +114,18 @@ public class Plant extends GameObject {
 		removeFromAll(this);
 	}
 	
+	/**
+	 * Return the value of the timer.
+	 */
 	private double getTimer() {
 		return this.timer;
 	}
 	
+	/**
+	 * Set the value of the timer to the given time.
+	 * @param 	t
+	 * 			The new value of the timer.
+	 */
 	private void setTimer(double t) {
 		this.timer = t;
 	}
@@ -186,6 +196,9 @@ public class Plant extends GameObject {
 		}
 	}
 	
+	/**
+	 * Returns the opposite of the current orientation of the plant.
+	 */
 	private Orientation otherDirection() {
 		if (getOrientation() == Orientation.RIGHT)
 			return Orientation.LEFT;
@@ -233,6 +246,11 @@ public class Plant extends GameObject {
 		}
 	}
 
+	/**
+	 * Starts movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation of the new movement.
+	 */
 	@Override
 	public Void startMove(Orientation orientation) {
 		if (orientation == Orientation.RIGHT)
@@ -243,32 +261,52 @@ public class Plant extends GameObject {
 		return null;
 	}
 
+	/**
+	 * Ends movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation in which the movement has to be stopped.
+	 */
 	@Override
 	public Void endMove(Orientation orientation) {
 		setXVelocity(0);
 		return null;
 	}
 
+	/**
+	 * Starts jumping (not possible for plants).
+	 */
 	@Override
 	public Void startJump() {
 		return null;
 	}
 
+	/**
+	 * Ends jumping (not possible for plants).
+	 */
 	@Override
 	public Void endJump() {
 		return null;
 	}
 
+	/**
+	 * Starts ducking (not possible for plants).
+	 */
 	@Override
 	public Void startDuck() {
 		return null;
 	}
 
+	/**
+	 * Ends ducking (not possible for plants).
+	 */
 	@Override
 	public Void endDuck() {
 		return null;
 	}
 
+	/**
+	 * Checks whether the plant is ducking (not possible).
+	 */
 	@Override
 	public boolean isDucking() {
 		return false;

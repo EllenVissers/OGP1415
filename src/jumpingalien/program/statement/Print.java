@@ -1,7 +1,5 @@
 package jumpingalien.program.statement;
-
 import java.util.Map;
-
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
 import jumpingalien.program.type.DoubleType;

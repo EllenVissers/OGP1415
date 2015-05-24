@@ -11,11 +11,10 @@ import jumpingalien.program.type.ObjectType;
 
 import java.util.ArrayList;
 
-
 /**
  * A class of game objects involving a horizontal and vertical position, velocity and acceleration, an orientation,
- * a list of images, a number of hitpoints, a world, a variable registering whether the object is terminated and the time
- * the object has already been terminated.
+ * a list of images, a number of hitpoints, a world, a variable registering whether the object is terminated, the time
+ * the object has already been terminated and a program.
  * @invar	The horizontal and vertical position are always valid.
  * 			| isValidXPosition(getXPosition()) && isValidYPosition(getYPosition())
  * @invar 	The horizontal speed will never be greater than the maximum speed.
@@ -452,6 +451,14 @@ public abstract class GameObject extends AllObjects {
 		}
 	}
 	
+	/**
+	 * Advance the timers and update the object's new position, velocity and hitpoints after the given time duration,
+	 * according to the state the object is in.
+	 * @param 	time
+	 * 			The time after which the new values are computed.
+	 * @effect	The position and velocity are updated with Move, Jump, Fall and Swim (according to the specific object).
+	 * @effect	The hitpoints are updated with touchWater, touchMagma and touchAir (specified for each game object).
+	 */
 	protected abstract void advance(double time);
 	
 	/**
@@ -475,6 +482,12 @@ public abstract class GameObject extends AllObjects {
 		return true;
 	}
 	
+	/**
+	 * Converts the given direction to an orientation.
+	 * @param 	dir
+	 * 			Direction that needs to be converted.
+	 * @return	The orientation that corresponds to the given direction.
+	 */
 	private Orientation setToOrientation(IProgramFactory.Direction dir) {
 		if (dir == Direction.RIGHT)
 			return Orientation.RIGHT;
@@ -483,6 +496,12 @@ public abstract class GameObject extends AllObjects {
 		return Orientation.NONE;
 	}
 	
+	/**
+	 * Check whether the object is moving in the given direction.
+	 * @param 	direction
+	 * 			The direction that needs to be checked.
+	 * @return	True if the object is moving in the given direction.
+	 */
 	public boolean isMoving(IProgramFactory.Direction direction) {
 		Orientation or = setToOrientation(direction);
 		if ((or == Orientation.RIGHT) && (getXVelocity() > 0))
@@ -492,17 +511,31 @@ public abstract class GameObject extends AllObjects {
 		return false;
 	}
 	
+	/**
+	 * Check whether the object is jumping.
+	 * @return	True if the object is jumping.
+	 */
 	public boolean isJumping() {
 		return (getYVelocity() > 0);
 	}
 	
+	/**
+	 * Check whether the object is ducking.
+	 * @return	True if the object is ducking.
+	 */
 	public abstract boolean isDucking();
 	
+	/**
+	 * Return the width of the object.
+	 */
 	@Override
 	public double getWidth() {
 		return (getCurrentSprite().getWidth());
 	}
 	
+	/**
+	 * Return the height of the object.
+	 */
 	@Override
 	public double getHeight() {
 		return (getCurrentSprite().getHeight());
@@ -1245,11 +1278,33 @@ public abstract class GameObject extends AllObjects {
 			return getSprites()[1];
 	}
 	
+	/**
+	 * Starts the movement in the given direction.
+	 * @param 	orientation
+	 * 			The orientation of the movement.
+	 */
 	public abstract Void startMove(Orientation orientation);
+	/**
+	 * Ends the movement in the given direction.
+	 * @param 	orientation
+	 * 			The direction of the movement that needs to be ended.
+	 */
 	public abstract Void endMove(Orientation orientation);
+	/**
+	 * Starts jumping.
+	 */
 	public abstract Void startJump();
+	/**
+	 * Ends jumping.
+	 */
 	public abstract Void endJump();
+	/**
+	 * Starts ducking.
+	 */
 	public abstract Void startDuck();
+	/**
+	 * Ends ducking.
+	 */
 	public abstract Void endDuck();
 	
 	/**

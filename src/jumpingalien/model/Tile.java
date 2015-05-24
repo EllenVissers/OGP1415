@@ -1,7 +1,7 @@
 package jumpingalien.model;
+
 /**
  * A class of Tiles involving a horizontal and vertical position, a world and a feature.
- * 
  * @author Ellen Vissers, Nina Versin
  * @version 1.0
  */

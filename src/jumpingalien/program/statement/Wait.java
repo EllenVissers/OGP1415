@@ -2,9 +2,7 @@ package jumpingalien.program.statement;
 import jumpingalien.model.Plant;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.program.expression.Expression;
-
 import java.util.Map;
-
 import jumpingalien.program.type.*;
 import jumpingalien.program.expression.Constant;
 

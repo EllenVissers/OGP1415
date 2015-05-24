@@ -1,7 +1,6 @@
 package jumpingalien.program.expression;
 import java.util.ArrayList;
 import java.util.Map;
-
 import jumpingalien.program.type.Type;
 import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;
@@ -25,6 +24,7 @@ public class SearchObj extends Expression {
 		return this.direction;
 	}
 	
+	@Override
 	public AllObjects evaluate(Map<String,Type> globals) {
 		GameObject obj = (GameObject) ((ObjectType)globals.get("this")).getValue();
 		World world = obj.getWorld();

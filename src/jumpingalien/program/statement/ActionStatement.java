@@ -1,10 +1,8 @@
 package jumpingalien.program.statement;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-
 import jumpingalien.program.expression.Constant;
 import jumpingalien.model.AllObjects;
 import jumpingalien.model.GameObject;

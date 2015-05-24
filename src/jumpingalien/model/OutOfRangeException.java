@@ -5,9 +5,8 @@ package jumpingalien.model;
  * @author Ellen Vissers, Nina Versin
  * @version	2.0
  */
+@SuppressWarnings("all")
 public class OutOfRangeException extends Exception {
-
-	private static final long serialVersionUID = 111601815794403609L;
 	
 	private final double low;
 	private final double high;

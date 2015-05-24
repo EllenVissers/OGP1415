@@ -1,18 +1,13 @@
 package jumpingalien.program.tests;
-
 import static org.junit.Assert.*;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import jumpingalien.common.sprites.JumpingAlienSprites;
 import jumpingalien.model.*;
 import jumpingalien.program.expression.Constant;
 import jumpingalien.program.type.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import jumpingalien.part2.internal.Resources;
 import jumpingalien.part3.programs.SourceLocation;
 import jumpingalien.part3.programs.IProgramFactory.Direction;

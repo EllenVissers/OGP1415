@@ -208,6 +208,13 @@ public abstract class AllObjects {
 		return true;
 	}
 
+	/**
+	 * Return the width of the object
+	 */
 	public abstract double getWidth();
+	/**
+	 * Return the height of the object.
+	 * @return
+	 */
 	public abstract double getHeight();
 }

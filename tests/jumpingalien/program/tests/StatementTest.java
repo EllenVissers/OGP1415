@@ -1,5 +1,4 @@
 package jumpingalien.program.tests;
-
 import static org.junit.Assert.*;
 import jumpingalien.model.*;
 import jumpingalien.part2.internal.Resources;
@@ -12,11 +11,9 @@ import jumpingalien.part3.programs.IProgramFactory.SortDirection;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 

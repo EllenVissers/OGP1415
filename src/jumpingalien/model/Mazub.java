@@ -10,7 +10,7 @@ import jumpingalien.model.CollisionException;
 /* TEAM INFORMATION
 * Ellen Vissers: 2e bachelor Burgerlijk ingenieur, CW-ELT
 * Nina Versin: 2e bachelor Burgerlijk ingenieur, ELT-CW
-* Repository: https://gitlab.com/EllenVissers/JumpingAlien_OGP1415
+* Repository: https://github.com/EllenVissers/OGP1415/
 */
 
 /**
@@ -363,15 +363,6 @@ public class Mazub extends GameObject {
 	private boolean isMoving() {
 		return (isMovingLeft() || isMovingRight());
 	}
-	
-//	/**
-//	 * Check whether Mazub is jumping.
-//	 * @return 	True when Mazub is moving upwards.
-//	 * 			| this.vel_y > 0
-//	 */
-//	private boolean isJumping() {
-//		return (this.getYVelocity() > 0);
-//	}
 	
 	/**
 	 * Check whether Mazub is falling.
@@ -963,7 +954,6 @@ public class Mazub extends GameObject {
 			else
 				timerMagma = 0;
 		}
-		//TODO
 		if (! (this instanceof Buzam))
 			checkWon();
 	}

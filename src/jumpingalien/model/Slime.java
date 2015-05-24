@@ -1,5 +1,4 @@
 package jumpingalien.model;
-
 import jumpingalien.model.School;
 import jumpingalien.program.program.Program;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import jumpingalien.util.Util;
 
 /**
  * A class of Slimes involving a horizontal and vertical position, velocity and acceleration, a list of images, an orientation,
- * a number of hitpoints, a world, whether or not the slime is terminated and the time it has been terminated.
+ * a number of hitpoints, a world, whether or not the slime is terminated, the time it has been terminated and a program.
  * @invar A slime will never move faster than a given maximum velocity
  * 			| this.getXVelocity() <= maxSpeed
  * @invar The slime will always stay within the boundaries of the game world
@@ -18,7 +17,6 @@ import jumpingalien.util.Util;
  * 			| this.getYPosition() >= 0 && this.getYPosition() <= this.getWorld().getWorldHeight()
  * @invar The orientation of a slime will never be NONE
  * 			| this.Orientation != Orientation.NONE
- * 
  * @author Ellen Vissers, Nina Versin
  * @version 2.0
  */
@@ -122,34 +120,65 @@ public class Slime extends GameObject {
 	 */
 	private double timerMagma;
 	
+	/**
+	 * Return the value of the timer
+	 */
 	private double getTimer() {
 		return this.timer;
 	}
 	
+	/**
+	 * Set the timer to the given value;
+	 * @param 	t
+	 * 			The new value of the timer;
+	 */
 	public void setTimer(double t) {
 		this.timer = t;
 	}
 	
+	/**
+	 * Return the value of the timer for air.
+	 */
 	private double getTimerWater() {
 		return this.timerWater;
 	}
 	
+	/**
+	 * Set the timer for air to the given value.
+	 * @param 	t
+	 * 			The new value of the timer.
+	 */
 	private void setTimerWater(double t) {
 		this.timerWater = t;
 	}
 	
+	/**
+	 * Return the value of the timer for magma.
+	 */
 	private double getTimerMagma() {
 		return this.timerMagma;
 	}
 	
+	/**
+	 * Set the timer for magma to the given value.
+	 * @param 	t
+	 * 			The new value of the timer.
+	 */
 	private void setTimerMagma(double t) {
 		this.timerMagma = t;
 	}
 	
+	/**
+	 * Return the value of the timeslot.
+	 */
 	private double getTimeSlot() {
 		return this.timeslot;
 	}
 	
+	/**
+	 * Reset the timeslot to a random time within the marges.
+	 * @effect	The timeslot is set to a random time evaluated by randomTime().
+	 */
 	public void resetTimeSlot() {
 		this.timeslot = randomTime();
 	}
@@ -346,6 +375,13 @@ public class Slime extends GameObject {
 		setYVelocity(getYVelocity() + accy*time);
 	}
 	
+	/**
+	 * Checks whether the timeslot is reached within the given time duration.
+	 * @param 	time
+	 * 			The time duration.
+	 * @return  True if the timeslot is reached.
+	 * 			| (getTimer()+time) >= getTimeSlot()
+	 */
 	private boolean reachesTimeSlot(double time) {
 		return ((getTimer()+time)>=getTimeSlot());
 	}
@@ -486,7 +522,10 @@ public class Slime extends GameObject {
 				advanceWithDT(t1);
 				endMove(getOrientation());
 				resetTimeSlot();
-				startMove();
+				if (Math.random()*10 < 5)
+					startMove(Orientation.RIGHT);
+				else
+					startMove(Orientation.LEFT);
 				advanceWithDT(t2);
 			}
 			else
@@ -494,6 +533,17 @@ public class Slime extends GameObject {
 		}
 	}
 
+	/**
+	 * Starts movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation of the new movement.
+	 * @effect	If the slime isn't already moving in the given direction, the orientation, acceleration and max velocity
+	 * 			are set with setOrientation, setXAcc, setXVelocity and setMaxVel.
+	 * 			| setOrientation(orientation)
+	 * 			| setXAcc(+/- accx);
+	 * 			| setXVelocity(0)
+	 * 			| setMaxVel(+/- maxSpeed)
+	 */
 	@Override
 	public Void startMove(Orientation orientation) {
 		if (getOrientation() != orientation) {
@@ -512,15 +562,15 @@ public class Slime extends GameObject {
 		}
 		return null;
 	}
-	
-	public void startMove() {
-		int val = (int) Math.round(Math.random()*10);
-		if (val%2 == 0)
-			startMove(Orientation.RIGHT);
-		else
-			startMove(Orientation.LEFT);
-	}
 
+	/**
+	 * Ends movement in the given direction.
+	 * @param	orientation
+	 * 			The orientation in which the movement has to be stopped.
+	 * @effect	If the orientation of the object equals the given orientation, the movement is ended with setXAcc and setXVelocity.
+	 * 			| setXAcc(0)
+	 *			| setXVelocity(0)
+	 */
 	@Override
 	public Void endMove(Orientation orientation) {
 		if (getOrientation() == orientation) {
@@ -531,26 +581,41 @@ public class Slime extends GameObject {
 		return null;
 	}
 
+	/**
+	 * Start jumping (not possible for slimes).
+	 */
 	@Override
 	public Void startJump() {
 		return null;
 	}
 
+	/**
+	 * End jumping (not possible for slimes).
+	 */
 	@Override
 	public Void endJump() {
 		return null;
 	}
 
+	/**
+	 * Start ducking (not possible for slimes).
+	 */
 	@Override
 	public Void startDuck() {
 		return null;
 	}
 
+	/**
+	 * End ducking (not possible for slimes).
+	 */
 	@Override
 	public Void endDuck() {
 		return null;
 	}
 
+	/**
+	 * Checks whether the object is ducking (impossible for slimes).
+	 */
 	@Override
 	public boolean isDucking() {
 		return false;

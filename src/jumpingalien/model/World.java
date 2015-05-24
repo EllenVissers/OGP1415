@@ -1,13 +1,5 @@
 package jumpingalien.model;
-
 import java.util.ArrayList;
-//import java.util.Collection;
-//import java.util.List;
-
-
-
-
-
 import jumpingalien.part3.programs.IProgramFactory;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -24,7 +16,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 		| visibleWindowWidth <= getWorldWidth()
  * @invar The game world is not full
  * 		| ! gameWorldFull()
- * 
  * @author Nina Versin, Ellen Vissers
  * @version 2.0
  */
@@ -626,10 +617,19 @@ public class World {
 			}
 		}
 
+		/**
+		 * A method that returns all the buzams in this world.
+		 * @return 	All buzams in this world.
+		 * 			| this.buzams
+		 */
 		public ArrayList<Buzam> getAllBuzams(){
 			return buzams;
 		}
 		
+		/**
+		 * Return a list of all the object in this world.
+		 * @return	All game object in the world.
+		 */
 		public ArrayList<GameObject> getAllGameObjects(){
 			ArrayList<GameObject> all = new ArrayList<GameObject>();
 			all.addAll(aliens);
@@ -640,6 +640,11 @@ public class World {
 			return all;
 		}
 		
+		/**
+		 * Return a list of all game objects in the world of the given kind.
+		 * @param 	kind
+		 * 			The type of objects that is asked for.
+		 */
 		public ArrayList<? extends GameObject> getAll(IProgramFactory.Kind kind) {
 			if (kind == IProgramFactory.Kind.BUZAM)
 				return buzams;
@@ -768,6 +773,9 @@ public class World {
 		 * @effect	If the current object is an alien, its position and velocity is calculated with advanceTime.
 		 * 			| for (alien :aliens)
 		 * 			|	alien.advanceTime(time)
+		 * @effect	If the current object is an alien, its position and velocity is calculated with advanceTime.
+		 * 			| for (buzam :buzams)
+		 * 			|	buzam.advanceTime(time)
 		 */
 		public void advanceTime(double time) {
 			collided.clear();
